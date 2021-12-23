@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace App\Tabula;
+namespace Janborg\H4aGamestats\Tabula;
 
 use Symfony\Component\Process\Exception\InvalidArgumentException;
 use Symfony\Component\Process\Exception\RuntimeException;
@@ -59,7 +59,7 @@ class TabulaConverter
     /**
      * Path to jar file.
      */
-    private $jarArchive = __DIR__.'/../../lib/tabula-1.0.5-jar-with-dependencies.jar';
+    private $jarArchive = __DIR__.'/lib/tabula-1.0.5-jar-with-dependencies.jar';
 
     /**
      * Tabula constructor.

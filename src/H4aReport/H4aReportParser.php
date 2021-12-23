@@ -10,9 +10,9 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace App\H4aReport;
+namespace Janborg\H4aGamestats\H4aReport;
 
-use App\Tabula\TabulaConverter;
+use Janborg\H4aGamestats\Tabula\TabulaConverter;
 use Contao\FilesModel;
 use Contao\System;
 

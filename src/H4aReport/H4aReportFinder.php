@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace App\H4aReport;
+namespace Janborg\H4aGamestats\H4aReport;
 
 use Symfony\Component\DomCrawler\Crawler;
 
