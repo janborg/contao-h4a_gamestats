@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Contao\Backend;
+
 /*
  * This file is part of contao-h4a_gamestats.
  *
@@ -29,15 +31,11 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
     'list' => [
         'sorting' => [
             'mode' => 4,
-            'flag' => 12,
-            'headerFields' => ['title', 'startDate', 'endDate'],
-            'fields' => ['reportNo', 'gameNo', 'team_name'],
-            'panelLayout' => 'sort,filter;search,limit',
-        ],
-
-        'label' => [
-            'fields' => ['team_name', 'name', 'reportNo', 'gameNo'],
-            'format' => '%s - %s (Report %s / Game %s)',
+            'headerFields' => ['title', 'startDate', 'starttime', 'sGID', 'gHomeGoals', 'gGuestGoals'],
+            'fields' => ['team_name'],
+            'panelLayout' => 'sort;filter',
+            'child_record_callback' => ['tl_h4a_playerscores', 'listPlayerScores',
+            ],
         ],
 
         'global_operations' => [
@@ -45,6 +43,12 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
                 'label' => &$GLOBALS['TL_LANG']['MSC']['all'],
                 'href' => 'act=select',
                 'class' => 'header_edit_all',
+                'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
+            ],
+            'lookup_scores' => [
+                'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['lookup_scores'],
+                'href' => 'key=lookup_scores',
+                'icon' => 'lookup.svg', //noch ergänzen
                 'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
             ],
         ],
@@ -72,7 +76,7 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{title_legend},gClassID,reportNo,gameNo,team_name;{player_legend},name,goals,penalty_goals,penalty_tries,yellow_card,suspensions,red_card,blue_card',
+        'default' => '{player_legend},team_name,name;{score_legend},goals,penalty_goals,penalty_tries,yellow_card,suspensions,red_card,blue_card',
     ],
 
     // Fields
@@ -85,17 +89,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
         ],
         'tstamp' => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
-        ],
-
-        'reportNo' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['reportNo'],
-            'exclude' => true,
-            'sorting' => true,
-            'filter' => true,
-            'search' => true,
-            'inputType' => 'text',
-            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => "varchar(255) NOT NULL default ''",
         ],
 
         'team_name' => [
@@ -176,3 +169,17 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
         ],
     ],
 ];
+
+class tl_h4a_playerscores extends Backend
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->import('BackendUser', 'User');
+    }
+
+    public function listPlayerScores($arrRow)
+    {
+        return '<div class="tl_content_left">' . $arrRow['name']. ' <span style="color:#999;padding-left:3px"> (Tore: '.$arrRow['goals'].' | 7m:'.$arrRow['penalty_goals'].'/'.$arrRow['penalty_tries'].' | G:'.$arrRow['yellow_card'].' | 2m:'.$arrRow['suspensions'].' | R:'.$arrRow['red_card'] .')</span>' . "</div>\n";
+    }
+}
