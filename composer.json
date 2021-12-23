@@ -1,0 +1,50 @@
+{
+    "name":"janborg/contao-h4a_gamestats",
+    "description":"Spielberichte von handball4all in Contao CMS integrieren",
+    "keywords":["Handball","H4a","Ergebnisse","Statistik","Torschützen"],
+    "type":"contao-bundle",
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Jan Lünborg",
+            "homepage":"https://github.com/janborg"
+        }
+    ],
+    "require":{
+        "php":"^7.4|^8.0",
+        "codefog/contao-haste": "^4.17",
+        "janborg/contao-h4a_tabellen": "^0.5"
+    },
+    "require-dev": {
+        "contao/manager-bundle":"^4.9",
+        "contao/manager-plugin": "^2.0",
+        "doctrine/doctrine-cache-bundle": "^1.3",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "php-http/guzzle6-adapter": "^2.0",
+        "php-http/message-factory": "^1.0.2",
+        "phpunit/phpunit": "^9.5.1",
+        "symfony/phpunit-bridge": "^6.0",
+        "contao/easy-coding-standard": "^4.0"
+    },
+    "conflict": {
+         "contao/manager-plugin": "<2.0 || >=3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Janborg\\H4aGamestats\\": "src/"
+          }
+      },
+    "autoload-dev": {
+      "psr-4": {
+          "Janborg\\H4aGamestats\\Tests\\": "tests/"
+          }
+      },
+    "extra":{
+      "contao-manager-plugin": "Janborg\\H4aGamestats\\ContaoManager\\Plugin"
+    },
+    "support": {
+        "issues": "https://github.com/janborg/contao-h4a_gamestats/issues",
+        "source": "https://github.com/janborg/contao-h4a_gamestats"
+    }
+
+}
