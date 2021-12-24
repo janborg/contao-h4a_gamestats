@@ -27,10 +27,11 @@ class LookupScoresController extends Backend
 
         $objCalendarEvent = CalendarEventsModel::findById($id);
 
-        //check if sGID is set
-        if (isset($objCalendarEvent->sGID)) {
+        //check if sGID is set and not empty
+        if (isset($objCalendarEvent->sGID) && $objCalendarEvent->sGID !=="") {
             $sGID = $objCalendarEvent->sGID;
         } else {
+            $this->redirect($this->getReferer());
             return;
         }
 

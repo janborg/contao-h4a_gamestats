@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\H4aReport;
 
 use Janborg\H4aGamestats\Tabula\TabulaConverter;
+use Contao\File;
 use Contao\FilesModel;
 use Contao\System;
 
@@ -36,7 +37,7 @@ class H4aReportParser
     {
         $projectDir = System::getContainer()->getParameter('kernel.project_dir');
         $outfilename = 'report_'.$this->reportID.'.pdf';
-        $outputPath = $projectDir.'/'.'files/reports/'.$outfilename;
+        $outputPath = $projectDir.'/'.'files/'.$outfilename;
 
         $ch = curl_init($this->reportUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -44,29 +45,37 @@ class H4aReportParser
         $data = curl_exec($ch);
 
         curl_close($ch);
+        
+        if ($data !== "") {
+            file_put_contents($outputPath, $data);
+        
+            $tabula = new TabulaConverter();
 
-        file_put_contents($outputPath, $data);
+            $this->jsonReport = $tabula->setPdf($outputPath)
+                ->setOptions(
+                    [
+                        'format' => 'json',
+                        'pages' => 'all',
+                        'lattice' => true,
+                        'stream' => true,
+                    ]
+                )
+                ->convert()
+            ;
 
-        $tabula = new TabulaConverter();
+            $this->arrReport = json_decode($this->jsonReport, true);
 
-        $this->jsonReport = $tabula->setPdf($outputPath)
-            ->setOptions(
-                [
-                    'format' => 'json',
-                    'pages' => 'all',
-                    'lattice' => true,
-                    'stream' => true,
-                ]
-            )
-            ->convert()
-        ;
-
-        $this->arrReport = json_decode($this->jsonReport, true);
+            unlink($outputPath);
+        }
+        else {
+            throw new \Exception('Report is empty.');
+        }
     }
 
     public function parseReport()
     {
         $this->convertPdfReport();
+         
         //gameInfo
         $gameInfo = $this->parseGameInfo();
         $this->gameNo = $gameInfo['SpielNr'];
