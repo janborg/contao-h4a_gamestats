@@ -7,4 +7,9 @@ services:
             calls:
                 - ['setFramework', ['@contao.framework']]
 
-    
+    h4a.command.updatePlayerscores:
+        class: Janborg\H4aGamestats\Command\UpdateH4aScoresCommand
+        arguments:
+            - '@contao.framework'
+        tags: 
+            - "console.command"
