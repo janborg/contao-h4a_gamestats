@@ -52,6 +52,7 @@ class H4aPlayerscoresModel extends Model
             $objPlayerscore->pid = $pid;
             $objPlayerscore->tstamp = time();
             $objPlayerscore->team_name = $teamname;
+            $objPlayerscore->nummer = $player['nummer'];
             $objPlayerscore->name = $player['name'];
             $objPlayerscore->goals = $player['goals'];
             $objPlayerscore->penalty_goals = $player['penalty_goals'];
