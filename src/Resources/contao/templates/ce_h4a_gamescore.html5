@@ -1,0 +1,38 @@
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<div class="gamestats hometeam mt-5">
+    <p>
+        <h5>Für <?= $this->team_1_name?> spielten:</h5>
+    </p>
+    <p>
+        <?= $this->team_1_players; ?>
+    </p>
+
+    <p>
+        <b>Gelbe Karten: </b><?= $this->team_1_yellow_cards; ?>
+    </p>
+
+    <p>
+        <b>Zeitstrafen:</b> <?= $this->team_1_suspensions; ?>
+    </p>
+</div>
+<div class="gamestats guestteam mt-5">
+    <p>
+        <h5>Für <?= $this->team_2_name?> spielten:</h5>
+    </p>
+
+    <p>
+        <?= $this->team_2_players; ?>
+    </p>
+    <p>
+        <b>Gelbe Karten: </b><?= $this->team_2_yellow_cards; ?>
+    </p>
+
+    <p>
+        <b>Zeitstrafen: </b><?= $this->team_2_suspensions; ?>
+    </p>
+</div>
+
+<?php $this->endblock(); ?>
