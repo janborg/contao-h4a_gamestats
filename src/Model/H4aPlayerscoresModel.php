@@ -64,4 +64,38 @@ class H4aPlayerscoresModel extends Model
             $objPlayerscore->save();
         }
     }
+
+    /**
+     * @var string
+     *
+     * @return array
+     */
+    public static function findScoresByCalendarEvent($pid)
+    {
+        $db = System::getContainer()->get('database_connection');
+
+        $stmt = $db->executeQuery(
+            'SELECT 
+                `team_name`
+                ,`name`
+                , SUM(`goals`) AS `goals`
+                , SUM(`penalty_goals`) AS `penalty_goals`
+                , SUM(`penalty_tries`) AS `penalty_tries`
+                , SUM(`yellow_card`) AS `yellow_cards`
+                , SUM(`suspensions`) AS `suspensions`
+                , SUM(`red_card`) AS `red_cards`
+                , SUM(`blue_card`) AS `blue_cards` 
+            FROM 
+                `tl_h4a_playerscores` 
+            WHERE 
+                `pid` = ?  
+            GROUP BY 
+                `team_name`
+                ,`name` 
+            ORDER BY 
+                `team_name`,`name`', 
+            [$pid]); 
+
+        return $stmt->fetchAll();
+    }
 }
