@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autoconfigure: true
+
+    _instanceof:
+        Contao\CoreBundle\Framework\FrameworkAwareInterface:
+            calls:
+                - [setFramework, ['@contao.framework']]
+
+    h4agamestats.content.options.callback:
+        class: Janborg\H4aGamestats\EventListener\DataContainer\ContentListener   
+        arguments:
+            - '@contao.framework'
+            - '@database_connection'

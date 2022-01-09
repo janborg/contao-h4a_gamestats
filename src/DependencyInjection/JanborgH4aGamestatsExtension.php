@@ -31,5 +31,6 @@ class JanborgH4aGamestatsExtension extends Extension
 
         $loader->load('commands.yml');
         $loader->load('services.yml');
+        $loader->load('listener.yml');
     }
 }
