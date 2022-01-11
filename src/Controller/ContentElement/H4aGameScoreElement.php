@@ -30,7 +30,7 @@ class H4aGameScoreElement extends AbstractContentElementController
 {
     public function getResponse(Template $template, ContentModel $model, Request $request): ?Response
     {
-        $playerscores = H4aPlayerscoresModel::findScoresByCalendarEvent($model->gGameNo);
+        $playerscores = H4aPlayerscoresModel::findScoresByCalendarEvent($model->h4a_event_id);
 
         $team_1_players = "";
         $team_2_players = "";

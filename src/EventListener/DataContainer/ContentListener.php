@@ -20,21 +20,21 @@ class ContentListener
 
 
     /**
-     * @Callback(table="tl_content", target="fields.gGameNo.options")
+     * @Callback(table="tl_content", target="fields.h4a_event_id.options")
      *
      * @param $dc
      */
-    public function gGameNoOptionsCallback(DataContainer $dc): array
+    public function H4aEventIdOptionsCallback(DataContainer $dc): array
     {
  
-        $stmt = $this->connection->executeQuery('SELECT `title`, `gGameNo`, `startDate` FROM `tl_calendar_events` WHERE `pid` = ? ORDER BY `startDate`', [$dc->activeRecord->team_calendar]);
+        $stmt = $this->connection->executeQuery('SELECT `id`, `title`, `startDate` FROM `tl_calendar_events` WHERE `pid` = ? AND `h4a_season` = ? ORDER BY `startDate`', [$dc->activeRecord->team_calendar, $dc->activeRecord->h4a_season]);
 
         $result = $stmt->fetchAll();
 
         $options = [];
 
         foreach ($result as $row) {
-            $options[$row['gGameNo']] = date('d.m.Y', (int) ($row['startDate'])).' / '.$row['title'];
+            $options[$row['id']] = date('d.m.Y', (int) ($row['startDate'])).' / '.$row['title'];
         }
 
         return $options;
