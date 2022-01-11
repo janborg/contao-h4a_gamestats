@@ -17,8 +17,8 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['team_calendar'] = [
     'search' => true,
     'inputType' => 'select',
     'foreignKey' => 'tl_calendar.title',
-    'eval' => ['includeBlankOption'=>true, 'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50', 'chosen' => true, 'submitOnChange' => true],
-    'sql' => "varchar(255) NOT NULL default ''"
+    'eval' => ['includeBlankOption'=>true, 'mandatory' => true, 'maxlength' => 10, 'tl_class' => 'w50', 'chosen' => true, 'submitOnChange' => true],
+    'sql' => "varchar(10) NOT NULL default ''"
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['h4a_season'] = [
@@ -26,8 +26,9 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['h4a_season'] = [
     'exclude' => true,
     'search' => true,
     'inputType' => 'select',
-    'eval' => ['includeBlankOption'=>true, 'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50', 'chosen' => true],
-    'sql' => "varchar(255) NOT NULL default ''"
+    'foreignKey' => 'tl_h4a_seasons.season',
+    'eval' => ['includeBlankOption'=>true, 'mandatory' => true, 'maxlength' => 10, 'tl_class' => 'w50', 'chosen' => true, 'submitOnChange' => true],
+    'sql' => "varchar(10) NOT NULL default ''"
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['gGameNo'] = [
