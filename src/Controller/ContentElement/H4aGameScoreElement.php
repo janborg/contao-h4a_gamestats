@@ -103,8 +103,6 @@ class H4aGameScoreElement extends AbstractContentElementController
         $template->team_1_yellow_cards = null !== $team_1_yellow_cards ? substr($team_1_yellow_cards, 0, -2) : '';
         $template->team_2_yellow_cards = null !== $team_2_yellow_cards ? substr($team_2_yellow_cards, 0, -2) : '';
 
-        $template->class = 'ce_h4a_gamescore';
-
         return $template->getResponse();
     }
 }
