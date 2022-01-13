@@ -16,3 +16,5 @@ services:
                 - ['setContainer', ['@service_container']]
 
     Janborg\H4aGamestats\Controller\ContentElement\H4aGameScoreElement: ~
+
+    Janborg\H4aGamestats\Controller\ContentElement\H4aSeasonScoreElement: ~
