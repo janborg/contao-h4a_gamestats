@@ -2,9 +2,9 @@
 
 <?php $this->block('content'); ?>
 
-<div class="gamestats hometeam mt-5">
+<div class="gamescore hometeam">
     <p>
-        <h5>Für <?= $this->team_1_name?> spielten:</h5>
+        <h3>Für <?= $this->team_1_name?> spielten:</h3>
     </p>
     <p>
         <?= $this->team_1_players; ?>
@@ -18,9 +18,9 @@
         <b>Zeitstrafen:</b> <?= $this->team_1_suspensions; ?>
     </p>
 </div>
-<div class="gamestats guestteam mt-5">
+<div class="gamescore guestteam">
     <p>
-        <h5>Für <?= $this->team_2_name?> spielten:</h5>
+        <h3>Für <?= $this->team_2_name?> spielten:</h3>
     </p>
 
     <p>
