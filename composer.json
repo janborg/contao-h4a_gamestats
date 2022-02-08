@@ -12,8 +12,7 @@
     ],
     "require":{
         "php":"^7.4|^8.0",
-        "codefog/contao-haste": "^4.17",
-        "janborg/contao-h4a_tabellen": "^0.5"
+        "codefog/contao-haste": "^4.17"
     },
     "require-dev": {
         "contao/manager-bundle":"^4.9",
