@@ -27,13 +27,16 @@ class ContentListener
     public function H4aEventIdOptionsCallback(DataContainer $dc): array
     {
  
-        $stmt = $this->connection->executeQuery('SELECT `id`, `title`, `startDate` FROM `tl_calendar_events` WHERE `pid` = ? AND `h4a_season` = ? ORDER BY `startDate`', [$dc->activeRecord->team_calendar, $dc->activeRecord->h4a_season]);
+        $stmt = $this->connection->prepare('SELECT `id`, `title`, `startDate` FROM `tl_calendar_events` WHERE `pid` = ? AND `h4a_season` = ? ORDER BY `startDate`', [$dc->activeRecord->team_calendar, $dc->activeRecord->h4a_season]);
 
-        $result = $stmt->fetchAll();
+        $stmt->bindParam(1, $dc->activeRecord->team_calendar);
+        $stmt->bindParam(2, $dc->activeRecord->h4a_season);
+
+        $result = $stmt->execute();
 
         $options = [];
 
-        foreach ($result as $row) {
+        while ($row = $result->fetchAssociative()) {
             $options[$row['id']] = date('d.m.Y', (int) ($row['startDate'])).' / '.$row['title'];
         }
 
@@ -48,13 +51,13 @@ class ContentListener
     public function h4aSeasonOptionsCallback(DataContainer $dc): array
     {
  
-        $stmt = $this->connection->executeQuery('SELECT `id`, `season` FROM `tl_h4a_seasons` ORDER BY `season` DESC', [$dc->activeRecord->team_calendar]);
+        $stmt = $this->connection->prepare('SELECT `id`, `season` FROM `tl_h4a_seasons` ORDER BY `season` DESC');
 
-        $result = $stmt->fetchAll();
+        $result = $stmt->execute();
 
         $options = [];
 
-        foreach ($result as $row) {
+        while ($row = $result->fetchAssociative()) {
             $options[$row['id']] = $row['season'];
         }
 
