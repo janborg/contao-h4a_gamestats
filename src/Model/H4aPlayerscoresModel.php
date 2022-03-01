@@ -15,6 +15,8 @@ namespace Janborg\H4aGamestats\Model;
 use Contao\Model;
 use Contao\System;
 use Contao\CalendarModel;
+use Doctrine\DBAL\Connection;
+
 
 /**
  * add properties for IDE support.
@@ -131,9 +133,9 @@ class H4aPlayerscoresModel extends Model
                 ce.`gClassID` = ? AND 
                 ps.`team_name`= ? 
             GROUP BY 
-                `name` 
+                ps.`name` 
             ORDER BY 
-                `name` '
+                ps.`name` ASC'
             , [$classId, $team_name]);
 
         return $stmt->fetchAll();
