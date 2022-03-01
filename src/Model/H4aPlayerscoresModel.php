@@ -15,8 +15,6 @@ namespace Janborg\H4aGamestats\Model;
 use Contao\Model;
 use Contao\System;
 use Contao\CalendarModel;
-use Doctrine\DBAL\Connection;
-
 
 /**
  * add properties for IDE support.
