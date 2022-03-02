@@ -31,6 +31,7 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
     'list' => [
         'sorting' => [
             'mode' => 4,
+            'flag' => 11,
             'headerFields' => ['title', 'startDate', 'starttime', 'sGID', 'gHomeGoals', 'gGuestGoals'],
             'fields' => ['team_name'],
             'panelLayout' => 'sort;filter',
@@ -48,7 +49,8 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
             'lookup_scores' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['lookup_scores'],
                 'href' => 'key=lookup_scores',
-                'icon' => 'lookup.svg', //noch ergänzen
+                'class' => 'header_lookup_scores',
+                //'icon' => 'lookup.svg', //noch ergänzen
                 'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
             ],
         ],
