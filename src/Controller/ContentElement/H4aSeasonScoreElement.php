@@ -30,7 +30,7 @@ class H4aSeasonScoreElement extends AbstractContentElementController
 {
     public function getResponse(Template $template, ContentModel $model, Request $request): ?Response
     {
-        $playerscores = H4aPlayerscoresModel::findScoresByClassIdAndTeamName($model->h4a_liga_ID, $model->my_team_name);
+        $playerscores = H4aPlayerscoresModel::findScoresBySeasonAndTeamName($model->h4a_season, $model->my_team_name);
 
         $template->playerscores = $playerscores;
 

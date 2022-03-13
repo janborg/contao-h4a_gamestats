@@ -5,7 +5,7 @@
  */
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['h4a_gamescore'] = '{type_legend},type,headline;{h4a_legend},team_calendar,h4a_season, h4a_event_id;{expert_legend:hide},cssID';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['h4a_seasonscore'] = '{type_legend},type,headline;{h4a_legend},team_calendar,h4a_season, h4a_liga_ID, my_team_name;{expert_legend:hide},cssID';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['h4a_seasonscore'] = '{type_legend},type,headline;{h4a_legend},team_calendar,h4a_season, my_team_name;{expert_legend:hide},cssID';
 
 /*
  * Fields
@@ -36,7 +36,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['h4a_event_id'] = [
     'exclude' => true,
     'search' => true,
     'inputType' => 'select',
-    //'foreignKey' => 'tl_calendar_events.title', // options_callback needed?!
     'eval' => ['includeBlankOption'=>true, 'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50', 'chosen' => true],
     'sql' => "int(10) unsigned NOT NULL default 0"
 ];

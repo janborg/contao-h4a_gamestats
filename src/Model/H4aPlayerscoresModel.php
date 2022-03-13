@@ -138,4 +138,40 @@ class H4aPlayerscoresModel extends Model
 
         return $stmt->fetchAll();
     }
+    /**
+     * @return array
+     */
+    
+    public static function findScoresBySeasonAndTeamName($season, $team_name)
+    {
+        $db = System::getContainer()->get('database_connection');
+
+        $stmt = $db->executeQuery(
+            'SELECT 
+                ps.`name`
+                , COUNT(ce.`gGameID`) AS `games`
+                , SUM(ps.`goals`) AS `goals`
+                , SUM(ps.`penalty_goals`) AS `penalty_goals`
+                , SUM(ps.`penalty_tries`) AS `penalty_tries`
+                , SUM(ps.`yellow_card`) AS `yellow_cards`
+                , SUM(ps.`suspensions`) AS `suspensions`
+                , SUM(ps.`red_card`) AS `red_cards`
+                , SUM(ps.`blue_card`) AS `blue_cards` 
+            FROM 
+                `tl_h4a_playerscores` ps
+            JOIN 
+                `tl_calendar_events` ce
+            ON
+                ps.`pid` = ce.`id`
+            WHERE 
+                ce.`h4a_season` = ? AND 
+                ps.`team_name`= ? 
+            GROUP BY 
+                ps.`name` 
+            ORDER BY 
+                ps.`name` ASC'
+            , [$season, $team_name]);
+
+        return $stmt->fetchAllAssociative();
+    }
 }
