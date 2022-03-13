@@ -12,6 +12,7 @@ use Contao\System;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Psr\Log\LogLevel;
+use Janborg\H4aTabellen\Helper\Helper;
 
 class LookupScoresController extends Backend
 {
@@ -26,6 +27,11 @@ class LookupScoresController extends Backend
         $id = [Input::get('id')];
 
         $objCalendarEvent = CalendarEventsModel::findById($id);
+
+        if (isset($objCalendarEvent->sGID) && $objCalendarEvent->sGID =="") {
+            $objCalendarEvent->sGID = Helper::getReportNo($objCalendarEvent->gClassID, $objCalendarEvent->gGameNo);
+            $objCalendarEvent->save();
+        }
 
         //check if sGID is set and not empty
         if (isset($objCalendarEvent->sGID) && $objCalendarEvent->sGID !=="") {

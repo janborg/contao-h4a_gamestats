@@ -20,6 +20,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Janborg\H4aTabellen\Helper\Helper;
 
 class UpdateH4aScoresCommand extends Command
 {
@@ -55,8 +56,8 @@ class UpdateH4aScoresCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
 
         $objEvents = CalendarEventsModel::findby(
-            ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'h4a_resultComplete = ?', 'sGID != ?'],
-            [date('Y-m-d'), true, '']
+            ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'h4a_resultComplete = ?'],
+            [date('Y-m-d'), true]
         );
 
         if (null === $objEvents) {
@@ -68,6 +69,11 @@ class UpdateH4aScoresCommand extends Command
         $this->io->text('Es wurden '.\count($objEvents).' H4a-Events mit ReportNo (sGID) gefunden. Versuche ReportNo abzurufen ...');
 
         foreach ($objEvents as $objEvent) {
+            if (isset($objEvent->sGID) && $objEvent->sGID =="") {
+                $objEvent->sGID = Helper::getReportNo($objEvent->gClassID, $objEvent->gGameNo);
+                $objEvent->save();
+            }
+            
             $this->io->text('Playerscores aus Spielbericht '.$objEvent->sGID.' abrufen...');
 
             //check, ob bereits Scores zum H4a-Event vorhanden sind: 
