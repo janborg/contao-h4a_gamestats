@@ -37,7 +37,7 @@ class H4aReportParser
     {
         $projectDir = System::getContainer()->getParameter('kernel.project_dir');
         $outfilename = 'report_'.$this->reportID.'.pdf';
-        $outputPath = $projectDir.'/'.'files/'.$outfilename;
+        $outputPath = $projectDir.'/'.$outfilename;
 
         $ch = curl_init($this->reportUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
