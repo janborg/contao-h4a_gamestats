@@ -18,3 +18,12 @@ services:
     Janborg\H4aGamestats\Controller\ContentElement\H4aGameScoreElement: ~
 
     Janborg\H4aGamestats\Controller\ContentElement\H4aSeasonScoreElement: ~
+
+    Janborg\H4aGamestats\Cron\UpdateH4aScoresCron:
+        arguments:
+            - '@contao.framework'
+        tags:
+            -
+                name: contao.cronjob
+                interval: 'hourly'
+                method: updateScores
