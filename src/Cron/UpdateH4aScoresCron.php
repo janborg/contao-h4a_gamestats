@@ -42,11 +42,16 @@ class UpdateH4aScoresCron
 
         foreach ($objEvents as $objEvent) {
             if (isset($objEvent->sGID) && $objEvent->sGID =="") {
-                $objEvent->sGID = Helper::getReportNo($objEvent->gClassID, $objEvent->gGameNo);
-                $objEvent->save();
+                $sGID = Helper::getReportNo($objEvent->gClassID, $objEvent->gGameNo);
+                if (null !== $sGID) {
+                    $objEvent->sGID = $sGID;
+                    $objEvent->save();
+                }
+                else {
+                    continue;
+                }
             }
         
-
             $objPlayerscores = H4aPlayerscoresModel::findBy('pid', $objEvent->id);
 
             if (null !== $objPlayerscores) {
