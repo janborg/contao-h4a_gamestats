@@ -16,6 +16,8 @@ use Contao\Model;
 use Contao\System;
 use Contao\CalendarModel;
 
+use function PHPUnit\Framework\isNan;
+
 /**
  * add properties for IDE support.
  */
@@ -27,8 +29,9 @@ class H4aPlayerscoresModel extends Model
      * @param array $players
      * @param string $pid
      * @param string $teamname
+     * @param int $home_guest
      */
-    public static function savePlayerscores($players, $pid, $teamname): void
+    public static function savePlayerscores($players, $pid, $teamname, $home_guest): void
     {
         foreach ($players as $player) {
             if (!empty($player['3rd_suspension'])) {
@@ -53,6 +56,7 @@ class H4aPlayerscoresModel extends Model
             $objPlayerscore->pid = $pid;
             $objPlayerscore->tstamp = time();
             $objPlayerscore->team_name = $teamname;
+            $objPlayerscore->is_home_or_guest = $home_guest;
             $objPlayerscore->nummer = $player['nummer'];
             $objPlayerscore->name = $player['name'];
             $objPlayerscore->goals = $player['goals'];
@@ -77,6 +81,7 @@ class H4aPlayerscoresModel extends Model
 
         $stmt = $db->executeQuery(
             'SELECT 
+                `is_home_or_guest`,
                 `team_name`
                 ,`name`
                 , SUM(`goals`) AS `goals`
@@ -91,10 +96,11 @@ class H4aPlayerscoresModel extends Model
             WHERE 
                 `pid` = ?  
             GROUP BY 
-                `team_name`
+                `is_home_or_guest`
+                ,`team_name`
                 ,`name` 
             ORDER BY 
-                `team_name`,`name`', 
+                `is_home_or_guest`,`team_name`,`name`', 
             [$pid]); 
 
         return $stmt->fetchAll();

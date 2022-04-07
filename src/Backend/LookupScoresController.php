@@ -46,10 +46,10 @@ class LookupScoresController extends Backend
         $h4areportparser->parseReport();
 
         //Spieler der Heimmannschaft speichern
-        H4aPlayerscoresModel::savePlayerscores($h4areportparser->heim_players, $objCalendarEvent->id, $h4areportparser->heim_name);
+        H4aPlayerscoresModel::savePlayerscores($h4areportparser->heim_players, $objCalendarEvent->id, $h4areportparser->heim_name, $home_guest = 1);
 
         //Spieler der Gastmannschaft speichern
-        H4aPlayerscoresModel::savePlayerscores($h4areportparser->gast_players, $objCalendarEvent->id, $h4areportparser->gast_name);
+        H4aPlayerscoresModel::savePlayerscores($h4areportparser->gast_players, $objCalendarEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
         System::getContainer()
                 ->get('monolog.logger.contao')

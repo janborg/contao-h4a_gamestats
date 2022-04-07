@@ -70,8 +70,14 @@ class UpdateH4aScoresCommand extends Command
 
         foreach ($objEvents as $objEvent) {
             if (isset($objEvent->sGID) && $objEvent->sGID =="") {
-                $objEvent->sGID = Helper::getReportNo($objEvent->gClassID, $objEvent->gGameNo);
-                $objEvent->save();
+                $sGID = Helper::getReportNo($objEvent->gClassID, $objEvent->gGameNo);
+                if (null !== $sGID) {
+                    $objEvent->sGID = $sGID;
+                    $objEvent->save();
+                }
+                else {
+                    continue;
+                }
             }
             
             $this->io->text('Playerscores aus Spielbericht '.$objEvent->sGID.' abrufen...');
@@ -88,12 +94,12 @@ class UpdateH4aScoresCommand extends Command
             $h4areportparser->parseReport();
 
             //Spieler der Heim Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($h4areportparser->heim_players, $objEvent->id, $h4areportparser->heim_name);
+            H4aPlayerscoresModel::savePlayerscores($h4areportparser->heim_players, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
 
             $this->io->text('Playerscores für '.$h4areportparser->heim_name.' in Spiel '.$objEvent->gGameNo.' gespeichert.');
 
             //Spieler der Gast Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($h4areportparser->gast_players, $objEvent->id, $h4areportparser->gast_name);
+            H4aPlayerscoresModel::savePlayerscores($h4areportparser->gast_players, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
             $this->io->text('Playerscores für '.$h4areportparser->gast_name.' in Spiel '.$objEvent->gGameNo.' gespeichert.');
         }

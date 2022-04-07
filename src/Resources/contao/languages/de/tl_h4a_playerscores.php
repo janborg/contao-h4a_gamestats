@@ -44,3 +44,7 @@ $GLOBALS['TL_LANG']['tl_h4a_playerscores']['red_card'][1] = '';
 
 $GLOBALS['TL_LANG']['tl_h4a_playerscores']['blue_card'][0] = 'Blaue Karte';
 $GLOBALS['TL_LANG']['tl_h4a_playerscores']['blue_card'][1] = '';
+
+$GLOBALS['TL_LANG']['tl_h4a_playerscores']['is_home_or_guest'][0] = 'Heim oder Gast Team';
+$GLOBALS['TL_LANG']['tl_h4a_playerscores']['is_home_or_guest'][1] = '';
+

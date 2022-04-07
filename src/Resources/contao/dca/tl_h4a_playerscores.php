@@ -33,7 +33,7 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
             'mode' => 4,
             'flag' => 11,
             'headerFields' => ['title', 'startDate', 'starttime', 'sGID', 'gHomeGoals', 'gGuestGoals'],
-            'fields' => ['team_name'],
+            'fields' => ['is_home_or_guest'],
             'panelLayout' => 'sort;filter',
             'child_record_callback' => ['tl_h4a_playerscores', 'listPlayerScores',
             ],
@@ -78,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{player_legend},team_name,name,nummer;{score_legend},goals,penalty_goals,penalty_tries,yellow_card,suspensions,red_card,blue_card',
+        'default' => '{player_legend},team_name,name,is_home_or_guest,nummer;{score_legend},goals,penalty_goals,penalty_tries,yellow_card,suspensions,red_card,blue_card',
     ],
 
     // Fields
@@ -175,6 +175,17 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
             'eval' => ['maxlength' => 1, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(1) unsigned NOT NULL default '0'",
         ],
+
+       'is_home_or_guest' => array(
+           'label'                   => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['home_or_guest'],
+           'default'                 => 1,
+           'exclude'                 => true,
+           'search'                  => true,
+           'inputType'               => 'radio',
+           'options'                 => array(1 =>'Heim', 2 => 'Gast'),
+           'eval'                    => array('tl_class'=>'w50 cbx'),
+           'sql'                     => "char(200) NOT NULL default ''"
+       ),
     ],
 ];
 
