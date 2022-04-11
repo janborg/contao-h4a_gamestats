@@ -152,10 +152,12 @@ class H4aReportParser
     {
         if ('home_team' === $team) {
             $teamstats = $this->arrReport[2]['data'];
+            $players_team = $this->heim_name;
         }
 
         if ('guest_team' === $team) {
             $teamstats = $this->arrReport[3]['data'];
+            $players_team = $this->gast_name;
         }
 
         $teamstats = \array_slice($teamstats, 2);
@@ -168,6 +170,7 @@ class H4aReportParser
             }
             $penalties = explode('/', $teammember[6]['text']);
             $playerstats[$key] = [
+                'team' => $players_team,
                 'nummer' => $teammember[0]['text'],
                 'name' => $teammember[1]['text'],
                 'goals' => empty($teammember[5]['text']) ? 0 : $teammember[5]['text'],
@@ -201,12 +204,28 @@ class H4aReportParser
         $parsedTimeline = [];
 
         foreach ($timeline as $key => $value) {
-            $parsedTimeline[$key] = [
-                $header[0]['text'] => $value[0]['text'],
-                $header[1]['text'] => $value[1]['text'],
-                $header[2]['text'] => $value[2]['text'],
-                $header[3]['text'] => $value[3]['text'],
-            ];
+            
+            $matchTime = $value[1]['text'];
+            
+            $action = $value[3]['text'];
+
+            $parsedTimeline[$key]['matchTime'] = $this->parseMatchTime($matchTime);
+
+            $parsedTimeline[$key]['currentScore'] = $value[2]['text'];
+
+            $parsedTimeline[$key]['action_type'] = $this->parseActionType($action);
+
+            $arrplayer = $this->parseActionPlayer($action);
+
+            $parsedTimeline[$key]['action_team'] = $arrplayer['team'];
+            
+            if (isset($arrplayer['number']) && $arrplayer['number'] !== '') {
+                
+                $parsedTimeline[$key]['action_player'] = $this->parseActionPlayerName($arrplayer);
+            }
+            else {
+                $parsedTimeline[$key]['action_player'] = '';
+            }
         }
 
         return $parsedTimeline;
@@ -273,5 +292,107 @@ class H4aReportParser
                 return false;
             }
         );
+    }
+    
+    /*
+    * @param string $action
+    */
+
+    private function parseActionType(string $action) :string
+    {
+        $action_exploded = explode(' ', $action);
+        
+        #type of action
+        switch($action_exploded[0]) {
+            
+            case 'Tor':
+                $parsedactiontype = 'Tor';
+                break;
+            case '7m-Tor':
+                $parsedactiontype = '7m-Tor';
+                break;
+            case '7m,':
+                $parsedactiontype = '7m-Versuch';
+                break;
+            case 'Verwarnung':
+                $parsedactiontype = 'Verwarnung';
+                break;
+            case '2-min':
+                $parsedactiontype = '2-min';
+                break;
+            case 'Auszeit':
+                $parsedactiontype = 'Auszeit';
+                break;
+            case 'Disqualifikation':
+                $parsedactiontype = 'Disqualifikation';
+                break;
+        }
+        
+        return $parsedactiontype;
+    }
+
+    /*
+    * @param string $action
+    */
+    private function parseActionPlayer(string $action) :array
+    {   
+        
+        $action_exploded = explode(' ', $action);
+
+        if ($action_exploded[0] === 'Auszeit') {
+            $parsedPlayer['team'] = str_replace('Auszeit', '', $action);
+            $parsedPlayer['number'] = '';
+            $parsedPlayer['name'] = '';
+        } else {
+            # Spielernummer und Team (zwischen den Klammern) => (?:\((.*?)\))? 
+            preg_match('/
+            (?:\s*(.*?))?        # was vor den klammern ist
+            (?:\((.*?)\))?       # was in den klammern ist
+            (?:$)                 # ende des strings erwartet
+            /isx', $action, $matches);
+
+            $arrNumberAndTeam = explode(', ', $matches[2]);
+
+            $parsedPlayer['number'] = $arrNumberAndTeam[0];
+            
+            $parsedPlayer['team'] = $arrNumberAndTeam[1];
+            
+        }
+        return $parsedPlayer;
+    } 
+    /**
+     * @param string $matchtime
+     */
+    private function parseMatchTime($matchTime):int
+    {
+        $matchTime = explode(':', $matchTime);
+
+        return $matchTime[0] * 60 + $matchTime[1];
+    }
+
+    /**
+     * @param array $actionPlayer
+     * @param string $team home_team or guest_team
+     */
+    private function parseActionPlayerName($arrplayer) :string
+    {
+        $allplayers = array_merge($this->heim_players, $this->gast_players, $this->heim_officials, $this->gast_officials);
+        $player_name = array_filter(
+            $allplayers,
+            static function ($player) use ($arrplayer) {
+                if (# mehrstufiges filter_array
+                    $arrplayer['number'] == $player['nummer'] && 
+                        $arrplayer['team'] == $player['team']
+                ) {
+                    return true;
+                }
+
+                return false;
+            }
+        );
+        // Array neu ordnen
+        $player_name = array_values($player_name);
+
+        return $player_name[0]['name'];
     }
 }
