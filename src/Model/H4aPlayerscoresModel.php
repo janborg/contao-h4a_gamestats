@@ -14,9 +14,6 @@ namespace Janborg\H4aGamestats\Model;
 
 use Contao\Model;
 use Contao\System;
-use Contao\CalendarModel;
-
-use function PHPUnit\Framework\isNan;
 
 /**
  * add properties for IDE support.
@@ -57,7 +54,7 @@ class H4aPlayerscoresModel extends Model
             $objPlayerscore->tstamp = time();
             $objPlayerscore->team_name = $teamname;
             $objPlayerscore->is_home_or_guest = $home_guest;
-            $objPlayerscore->nummer = $player['nummer'];
+            $objPlayerscore->number = $player['number'];
             $objPlayerscore->name = $player['name'];
             $objPlayerscore->goals = $player['goals'];
             $objPlayerscore->penalty_goals = $player['penalty_goals'];

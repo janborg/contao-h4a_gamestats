@@ -33,7 +33,7 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
             'mode' => 4,
             'flag' => 11,
             'headerFields' => ['title', 'startDate', 'starttime', 'sGID', 'gHomeGoals', 'gGuestGoals'],
-            'fields' => ['is_home_or_guest'],
+            'fields' => ['is_home_or_guest','goals'],
             'panelLayout' => 'sort;filter',
             'child_record_callback' => ['tl_h4a_playerscores', 'listPlayerScores',
             ],
@@ -78,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{player_legend},team_name,name,is_home_or_guest,nummer;{score_legend},goals,penalty_goals,penalty_tries,yellow_card,suspensions,red_card,blue_card',
+        'default' => '{player_legend},team_name,name,is_home_or_guest,number;{score_legend},goals,penalty_goals,penalty_tries,yellow_card,suspensions,red_card,blue_card',
     ],
 
     // Fields
@@ -92,8 +92,8 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
         'tstamp' => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
-        'nummer' => [
-            'label'                   => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['nummer'],
+        'number' => [
+            'label'                   => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['number'],
             'sorting'                 => true,
             'inputType'               => 'text',
             'eval'                    => ['maxlength'=>2, 'tl_class'=>'w50'],
@@ -199,6 +199,6 @@ class tl_h4a_playerscores extends Backend
 
     public function listPlayerScores($arrRow)
     {
-        return '<div class="tl_content_left">' .$arrRow['nummer'].' - '. $arrRow['name']. ' <span style="color:#999;padding-left:3px"> (Tore: '.$arrRow['goals'].' | 7m:'.$arrRow['penalty_goals'].'/'.$arrRow['penalty_tries'].' | G:'.$arrRow['yellow_card'].' | 2m:'.$arrRow['suspensions'].' | R:'.$arrRow['red_card'] .')</span>' . "</div>\n";
+        return '<div class="tl_content_left">' .$arrRow['number'].' - '. $arrRow['name']. ' <span style="color:#999;padding-left:3px"> (Tore: '.$arrRow['goals'].' | 7m:'.$arrRow['penalty_goals'].'/'.$arrRow['penalty_tries'].' | G:'.$arrRow['yellow_card'].' | 2m:'.$arrRow['suspensions'].' | R:'.$arrRow['red_card'] .')</span>' . "</div>\n";
     }
 }

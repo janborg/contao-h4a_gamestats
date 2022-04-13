@@ -171,7 +171,7 @@ class H4aReportParser
             $penalties = explode('/', $teammember[6]['text']);
             $playerstats[$key] = [
                 'team' => $players_team,
-                'nummer' => $teammember[0]['text'],
+                'number' => $teammember[0]['text'],
                 'name' => $teammember[1]['text'],
                 'goals' => empty($teammember[5]['text']) ? 0 : $teammember[5]['text'],
                 'penalty_goals' => empty($penalties[1]) ? 0 : $penalties[1],
@@ -209,15 +209,17 @@ class H4aReportParser
             
             $action = $value[3]['text'];
 
-            $parsedTimeline[$key]['matchTime'] = $this->parseMatchTime($matchTime);
+            $parsedTimeline[$key]['matchtime'] = $this->parseMatchTime($matchTime);
 
-            $parsedTimeline[$key]['currentScore'] = $value[2]['text'];
+            $parsedTimeline[$key]['currentscore'] = $value[2]['text'];
 
             $parsedTimeline[$key]['action_type'] = $this->parseActionType($action);
 
             $arrplayer = $this->parseActionPlayer($action);
 
             $parsedTimeline[$key]['action_team'] = $arrplayer['team'];
+
+            $parsedTimeline[$key]['action_player_number'] = $arrplayer['number'];
             
             if (isset($arrplayer['number']) && $arrplayer['number'] !== '') {
                 
@@ -259,10 +261,10 @@ class H4aReportParser
             static function ($teammember) {
                 if (
                     '' !== $teammember['name'] && (
-                        'A' === $teammember['nummer'] ||
-                        'B' === $teammember['nummer'] ||
-                        'C' === $teammember['nummer'] ||
-                        'D' === $teammember['nummer']
+                        'A' === $teammember['number'] ||
+                        'B' === $teammember['number'] ||
+                        'C' === $teammember['number'] ||
+                        'D' === $teammember['number']
                     )
                 ) {
                     return false;
@@ -280,10 +282,10 @@ class H4aReportParser
             static function ($teammember) {
                 if (
                     '' !== $teammember['name'] && (
-                        'A' === $teammember['nummer'] ||
-                    'B' === $teammember['nummer'] ||
-                    'C' === $teammember['nummer'] ||
-                    'D' === $teammember['nummer']
+                        'A' === $teammember['number'] ||
+                    'B' === $teammember['number'] ||
+                    'C' === $teammember['number'] ||
+                    'D' === $teammember['number']
                     )
                 ) {
                     return true;
@@ -340,7 +342,7 @@ class H4aReportParser
         $action_exploded = explode(' ', $action);
 
         if ($action_exploded[0] === 'Auszeit') {
-            $parsedPlayer['team'] = str_replace('Auszeit', '', $action);
+            $parsedPlayer['team'] = str_replace('Auszeit ', '', $action);
             $parsedPlayer['number'] = '';
             $parsedPlayer['name'] = '';
         } else {
@@ -351,11 +353,18 @@ class H4aReportParser
             (?:$)                 # ende des strings erwartet
             /isx', $action, $matches);
 
-            $arrNumberAndTeam = explode(', ', $matches[2]);
+            if (null !== $matches[2]) {
+                $arrNumberAndTeam = explode(', ', $matches[2]);
 
-            $parsedPlayer['number'] = $arrNumberAndTeam[0];
+                $parsedPlayer['number'] = $arrNumberAndTeam[0];
+                
+                $parsedPlayer['team'] = $arrNumberAndTeam[1];
+            } else {
+                $parsedPlayer['number'] = '';
+                
+                $parsedPlayer['team'] = '';
+            }
             
-            $parsedPlayer['team'] = $arrNumberAndTeam[1];
             
         }
         return $parsedPlayer;
@@ -363,11 +372,12 @@ class H4aReportParser
     /**
      * @param string $matchtime
      */
-    private function parseMatchTime($matchTime):int
+    private function parseMatchTime($matchTime):string //int
     {
-        $matchTime = explode(':', $matchTime);
+        //$matchTime = explode(':', $matchTime);
 
-        return $matchTime[0] * 60 + $matchTime[1];
+        //return $matchTime[0] * 60 + $matchTime[1];
+        return $matchTime;
     }
 
     /**
@@ -381,7 +391,7 @@ class H4aReportParser
             $allplayers,
             static function ($player) use ($arrplayer) {
                 if (# mehrstufiges filter_array
-                    $arrplayer['number'] == $player['nummer'] && 
+                    $arrplayer['number'] == $player['number'] && 
                         $arrplayer['team'] == $player['team']
                 ) {
                     return true;
@@ -393,6 +403,11 @@ class H4aReportParser
         // Array neu ordnen
         $player_name = array_values($player_name);
 
-        return $player_name[0]['name'];
+        if (!empty($player_name)) {
+            return $player_name[0]['name'];
+        }
+        else {
+            return 'unbekannt';
+        }
     }
 }

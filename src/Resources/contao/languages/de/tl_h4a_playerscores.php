@@ -15,8 +15,8 @@ $GLOBALS['TL_LANG']['tl_h4a_playerscores']['score_legend'] = 'Tore, Strafen, Kar
 
 $GLOBALS['TL_LANG']['tl_h4a_playerscores']['lookup_scores'] = 'Playerscores abrufen';
 
-$GLOBALS['TL_LANG']['tl_h4a_playerscores']['nummer'][0] = 'Nummer des Spielers';
-$GLOBALS['TL_LANG']['tl_h4a_playerscores']['nummer'][1] = '';
+$GLOBALS['TL_LANG']['tl_h4a_playerscores']['number'][0] = 'Nummer des Spielers';
+$GLOBALS['TL_LANG']['tl_h4a_playerscores']['number'][1] = '';
 
 $GLOBALS['TL_LANG']['tl_h4a_playerscores']['team_name'][0] = 'Name des Teams';
 $GLOBALS['TL_LANG']['tl_h4a_playerscores']['team_name'][1] = '';
