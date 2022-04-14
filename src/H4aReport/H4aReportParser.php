@@ -196,7 +196,7 @@ class H4aReportParser
             $timeline = array_merge($timeline, $this->arrReport[5]['data']);
         }
 
-        $header = array_shift($timeline);
+        $timeline = \array_slice($timeline, 1);
 
         $parsedTimeline = [];
 
