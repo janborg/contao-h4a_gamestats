@@ -198,7 +198,8 @@ class TabulaConverter
         }
 
         if (!is_readable($path)) {
-            throw new InvalidArgumentException("Could not read `{$path}`");
+            throw new InvalidArgumentException(sprintf("Could not read `{%s}`", $path));
+            //throw new InvalidArgumentException("Could not read `{$path}`");
         }
 
         return true;
