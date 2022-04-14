@@ -78,8 +78,9 @@ class H4aPlayerscoresModel extends Model
 
         $stmt = $db->executeQuery(
             'SELECT 
-                `is_home_or_guest`,
-                `team_name`
+                `is_home_or_guest`
+                ,`team_name`
+                ,`number`
                 ,`name`
                 , SUM(`goals`) AS `goals`
                 , SUM(`penalty_goals`) AS `penalty_goals`
@@ -96,6 +97,7 @@ class H4aPlayerscoresModel extends Model
                 `is_home_or_guest`
                 ,`team_name`
                 ,`name` 
+                ,`number`
             ORDER BY 
                 `is_home_or_guest`,`team_name`,`name`', 
             [$pid]); 
@@ -132,7 +134,8 @@ class H4aPlayerscoresModel extends Model
                 ps.`pid` = ce.`id`
             WHERE 
                 ce.`gClassID` = ? AND 
-                ps.`team_name`= ? 
+                ps.`team_name`= ? AND
+                ps.`number` NOT IN ("A", "B", "C", "D")
             GROUP BY 
                 ps.`name` 
             ORDER BY 
