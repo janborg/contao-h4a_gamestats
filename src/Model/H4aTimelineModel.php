@@ -51,4 +51,33 @@ class H4aTimelineModel extends Model
             $objTimelineEvent->save();
         }
     }
+    /**
+     * @var string $pid
+     *
+     * @return array
+     */
+
+    public static function findAllGoalsByCalendarEvent($pid)
+    {
+        $db = System::getContainer()->get('database_connection');
+
+        $stmt = $db->executeQuery(
+            'SELECT 
+                `matchtime`
+                ,`currentscore`
+                ,`action_team`
+                ,`action_player`
+                ,`action_player_number`
+                ,`action_type`
+            FROM 
+                `tl_h4a_timeline` 
+            WHERE 
+                `pid` = ?  AND
+                `action_type` IN ("Tor", "7m-Tor")
+            ORDER BY 
+                `matchtime` ASC', 
+            [$pid]); 
+
+        return $stmt->fetchAll();
+    }
 }

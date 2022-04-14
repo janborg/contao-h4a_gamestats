@@ -1,0 +1,34 @@
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<div class="h4a_timeline">
+    <table border="0" width="100%" cellspacing="0" cellpadding="3" class="timelinetable">
+        <tbody>
+            <tr>
+                <th>Zeit</th>
+                <th><?=$this->home_team ?></th>
+                <th>Spielstand</th>
+                <th><?=$this->guest_team ?></th>
+            </tr>
+            <?php foreach($this->timeline as $timelineEvent): ?>
+                <tr>
+                    <td><?=$timelineEvent['matchtime'] ?></td>
+                    <td>
+                    <?php if ($timelineEvent['action_team'] == $this->home_team): ?>
+                        <?= $timelineEvent['action_type'].' durch '.$timelineEvent['action_player'] ?>
+                    <?php endif; ?>
+                    </td>
+                    <td><?=$timelineEvent['currentscore'] ?></td>
+                    <td>
+                    <?php if ($timelineEvent['action_team'] == $this->guest_team): ?> 
+                        <?=$timelineEvent['action_type'].' durch '.$timelineEvent['action_player'] ?>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<?php $this->endblock(); ?>
