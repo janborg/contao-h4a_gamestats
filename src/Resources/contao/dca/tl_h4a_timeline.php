@@ -78,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{timeline_legend},matchtime,currentscore,action_team,acion_player,acion_player_number,action_type',
+        'default' => '{timeline_legend},matchtime,currentscore,action_team,action_player,action_player_number,action_type',
     ],
 
     // Fields
