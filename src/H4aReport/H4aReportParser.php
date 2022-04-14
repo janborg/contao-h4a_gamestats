@@ -86,13 +86,10 @@ class H4aReportParser
         $this->schiedsrichter = $this->parseReferees();
 
         //heim_team
-        $home_team = $this->parsePlayerStats('home_team');
-        $this->heim_players = $this->isPlayer($home_team);
-        $this->heim_officials = $this->isOfficial($home_team);
+        $this->home_team = $this->parsePlayerStats('home_team');
+        
         //gast_team
-        $guest_team = $this->parsePlayerStats('guest_team');
-        $this->gast_players = $this->isPlayer($guest_team);
-        $this->gast_officials = $this->isOfficial($guest_team);
+        $this->guest_team = $this->parsePlayerStats('guest_team');
 
         $this->timeline = $this->parseTimeline();
 
@@ -386,7 +383,7 @@ class H4aReportParser
      */
     private function parseActionPlayerName($arrplayer) :string
     {
-        $allplayers = array_merge($this->heim_players, $this->gast_players, $this->heim_officials, $this->gast_officials);
+        $allplayers = array_merge($this->home_team, $this->guest_team);
         $player_name = array_filter(
             $allplayers,
             static function ($player) use ($arrplayer) {

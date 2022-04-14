@@ -94,12 +94,12 @@ class UpdateH4aScoresCommand extends Command
             $h4areportparser->parseReport();
 
             //Spieler der Heim Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($h4areportparser->heim_players, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
+            H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
 
             $this->io->text('Playerscores für '.$h4areportparser->heim_name.' in Spiel '.$objEvent->gGameNo.' gespeichert.');
 
             //Spieler der Gast Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($h4areportparser->gast_players, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
+            H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
             $this->io->text('Playerscores für '.$h4areportparser->gast_name.' in Spiel '.$objEvent->gGameNo.' gespeichert.');
         }

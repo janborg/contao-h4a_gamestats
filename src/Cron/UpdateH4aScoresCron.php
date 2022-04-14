@@ -62,10 +62,10 @@ class UpdateH4aScoresCron
             $h4areportparser->parseReport();
 
             //Spieler der Heim Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($h4areportparser->heim_players, $objEvent->id, $h4areportparser->heim_name);
+            H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
 
             //Spieler der Gast Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($h4areportparser->gast_players, $objEvent->id, $h4areportparser->gast_name);
+            H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
             System::getContainer()
                     ->get('monolog.logger.contao')
