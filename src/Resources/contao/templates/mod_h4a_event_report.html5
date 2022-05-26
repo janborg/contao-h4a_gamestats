@@ -1,0 +1,38 @@
+<?php $this->extend('block_unsearchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<div class="gamescore hometeam">
+    <p>
+    <h3>Für <?= $this->team_1_name ?> spielten:</h3>
+    </p>
+    <p>
+        <?= $this->team_1_players; ?>
+    </p>
+
+    <p>
+        <b>Gelbe Karten: </b><?= $this->team_1_yellow_cards; ?>
+    </p>
+
+    <p>
+        <b>Zeitstrafen:</b> <?= $this->team_1_suspensions; ?>
+    </p>
+</div>
+<div class="gamescore guestteam">
+    <p>
+    <h3>Für <?= $this->team_2_name ?> spielten:</h3>
+    </p>
+
+    <p>
+        <?= $this->team_2_players; ?>
+    </p>
+    <p>
+        <b>Gelbe Karten: </b><?= $this->team_2_yellow_cards; ?>
+    </p>
+
+    <p>
+        <b>Zeitstrafen: </b><?= $this->team_2_suspensions; ?>
+    </p>
+</div>
+
+<?php $this->endblock(); ?>

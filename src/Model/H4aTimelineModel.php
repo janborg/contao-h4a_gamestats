@@ -24,9 +24,9 @@ class H4aTimelineModel extends Model
 
     /**
      * @param array $timelineEvents
-     * @param string $pid
+     * @param int $pid
      */
-    public static function saveTimeline(array $timelineEvents, string $pid): void
+    public static function saveTimeline(array $timelineEvents, int $pid): void
     {
         foreach ($timelineEvents as $timelineEvent) {
             
