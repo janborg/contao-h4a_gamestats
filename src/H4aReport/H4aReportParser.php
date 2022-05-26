@@ -204,7 +204,12 @@ class H4aReportParser
             
             $matchTime = $value[1]['text'];
             
-            $action = $value[3]['text'];
+            if ($value[3]['text'] !== '') {
+                $action = $value[3]['text'];
+            } 
+            else {
+                continue;
+            }
 
             $parsedTimeline[$key]['matchtime'] = $this->parseMatchTime($matchTime);
 
@@ -350,7 +355,7 @@ class H4aReportParser
             (?:$)                 # ende des strings erwartet
             /isx', $action, $matches);
 
-            if (null !== $matches[2]) {
+            if (isset($matches[2]) && null !== $matches[2]) {
                 $arrNumberAndTeam = explode(', ', $matches[2]);
 
                 $parsedPlayer['number'] = $arrNumberAndTeam[0];

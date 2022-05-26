@@ -76,6 +76,7 @@ class UpdateH4aScoresCommand extends Command
                     $objEvent->save();
                 }
                 else {
+                    $this->io->text('Kein Spielbericht für '.$objEvent->gGameNo.' vorhanden... Skipped');
                     continue;
                 }
             }
