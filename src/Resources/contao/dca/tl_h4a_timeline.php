@@ -50,7 +50,7 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
                 'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['lookup_timeline'],
                 'href' => 'key=lookup_timeline',
                 'class' => 'header_lookup_timeline',
-                //'icon' => 'lookup.svg', //noch ergänzen
+                'icon' => 'bundles/janborgh4agamestats/icon/data-update.svg',
                 'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
             ],
         ],
