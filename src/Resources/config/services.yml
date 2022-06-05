@@ -1,6 +1,8 @@
 services:
     _defaults:
         autoconfigure: true
+        public: true
+        autowire: true
 
     _instanceof:
         Contao\CoreBundle\Framework\FrameworkAwareInterface:
@@ -15,14 +17,11 @@ services:
             calls:
                 - ['setContainer', ['@service_container']]
 
-    Janborg\H4aGamestats\Controller\ContentElement\H4aGameScoreElement: ~
+    Janborg\H4aGamestats\H4aEventGamestats: ~
 
-    Janborg\H4aGamestats\Controller\ContentElement\H4aSeasonScoreElement: ~
+    Janborg\H4aGamestats\Controller\:
+        resource: '../../Controller/*'
 
-    Janborg\H4aGamestats\Controller\ContentElement\H4aTimelineElement: ~
-
-    Janborg\H4aGamestats\Controller\FrontendModule\H4aEventReportController: ~
-    
     Janborg\H4aGamestats\Cron\UpdateH4aScoresCron:
         arguments:
             - '@contao.framework'
@@ -31,3 +30,4 @@ services:
                 name: contao.cronjob
                 interval: 'hourly'
                 method: updateScores
+    
