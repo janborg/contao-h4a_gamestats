@@ -180,4 +180,41 @@ class H4aPlayerscoresModel extends Model
 
         return $stmt->fetchAllAssociative();
     }
+
+        /**
+     * @var string $pid
+     * @var string $home_guest 1 = home, 2 = guest
+     *
+     * @return array
+     */
+    public static function findTeamScoresByCalendarEvent($pid, $home_guest)
+    {
+        $db = System::getContainer()->get('database_connection');
+
+        $stmt = $db->executeQuery(
+            'SELECT 
+                `team_name`
+                ,`number`
+                ,`name`
+                , SUM(`goals`) AS `goals`
+                , SUM(`penalty_goals`) AS `penalty_goals`
+                , SUM(`penalty_tries`) AS `penalty_tries`
+                , SUM(`yellow_card`) AS `yellow_cards`
+                , SUM(`suspensions`) AS `suspensions`
+                , SUM(`red_card`) AS `red_cards`
+                , SUM(`blue_card`) AS `blue_cards` 
+            FROM 
+                `tl_h4a_playerscores` 
+            WHERE 
+                `pid` = ? AND
+                `is_home_or_guest` = ?
+            GROUP BY 
+                `name` 
+                ,`number`
+            ORDER BY 
+                `number`,`name`', 
+            [$pid, $home_guest]); 
+
+        return $stmt->fetchAll();
+    }
 }
