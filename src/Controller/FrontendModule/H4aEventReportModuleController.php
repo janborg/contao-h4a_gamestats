@@ -42,7 +42,8 @@ class H4aEventReportModuleController extends AbstractFrontendModuleController
             return new Response();
         }
 
-        $this->h4aEventGamestats->addTemplateData($template, $event);
+        $this->h4aEventGamestats->addHomeStatsToTemplate($template, $event);
+        $this->h4aEventGamestats->addGuestStatsToTemplate($template, $event);
 
         return $template->getResponse();
 

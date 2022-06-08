@@ -22,21 +22,28 @@ class H4aEventGamestats
     }
 
     /**
-     * Adds some functions to the template. Also adds the data from the main record.
+     * Adds stats for Home Team Players and Officials to template
      */
-    public function addTemplateData(Template $template, CalendarEventsModel $event): void
+    public function addHomeStatsToTemplate(Template $template, CalendarEventsModel $event): void
     {
         $hometeamscores = H4aPlayerscoresModel::findTeamScoresByCalendarEvent($event->id, '1');
 
-        $guestteamscores = H4aPlayerscoresModel::findTeamScoresByCalendarEvent($event->id, '2');
-
         $template->homePlayers= $this->isPlayer($hometeamscores);
         
-        $template->guestPlayers= $this->isPlayer($guestteamscores);
-
         $template->homeOfficials= $this->isOfficial($hometeamscores);
 
-        $template->guestOfficials= $this->isOfficial($hometeamscores);
+    }
+
+    /**
+     * Adds stats for Guest Team Players and Officials to template
+     */
+    public function addGuestStatsToTemplate(Template $template, CalendarEventsModel $event): void
+    {
+        $guestteamscores = H4aPlayerscoresModel::findTeamScoresByCalendarEvent($event->id, '2');
+
+        $template->guestPlayers= $this->isPlayer($guestteamscores);
+
+        $template->guestOfficials= $this->isOfficial($guestteamscores);
     }
 
      /**

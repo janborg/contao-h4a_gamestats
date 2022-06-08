@@ -4,35 +4,87 @@
 
 <div class="gamescore hometeam">
     <p>
-        <h3>Für <?= $this->team_1_name?> spielten:</h3>
+    <h3>Für <?= $this->team_1_name ?> spielten:</h3>
     </p>
     <p>
-        <?= $this->team_1_players; ?>
+        <?php foreach ($this->homePlayers as $player) {
+            echo $player['name'];
+
+            if ("0" !== $player['goals']) {
+                echo " (" . $player['goals'];
+
+                if ("0" !== $player['penalty_goals']) {
+                    echo "/" . $player['penalty_goals'];
+                }
+
+                echo  "), ";
+            } else {
+                echo ", ";
+            }
+        } ?>
     </p>
 
     <p>
         <b>Gelbe Karten: </b><?= $this->team_1_yellow_cards; ?>
+        <?php foreach ($this->homePlayers as $player) {
+
+            if ("0" !== $player['yellow_cards']) {
+                echo $player['name'] . ' (' . $player['yellow_cards'] . '), ';
+            }
+        } ?>
     </p>
 
     <p>
-        <b>Zeitstrafen:</b> <?= $this->team_1_suspensions; ?>
+        <b>Zeitstrafen:</b>
+        <?php foreach ($this->homePlayers as $player) {
+
+            if ("0" !== $player['suspensions']) {
+                echo $player['name'] . ' (' . $player['suspensions'] . '), ';
+            }
+        } ?>
     </p>
 </div>
 <div class="gamescore guestteam">
     <p>
-        <h3>Für <?= $this->team_2_name?> spielten:</h3>
+    <h3>Für <?= $this->team_2_name ?> spielten:</h3>
+    <p>
+        <?php foreach ($this->guestPlayers as $player) {
+            echo $player['name'];
+
+            if ("0" !== $player['goals']) {
+                echo " (" . $player['goals'];
+
+                if ("0" !== $player['penalty_goals']) {
+                    echo "/" . $player['penalty_goals'];
+                }
+
+                echo  "), ";
+            } else {
+                echo ", ";
+            }
+        } ?>
     </p>
 
     <p>
-        <?= $this->team_2_players; ?>
-    </p>
-    <p>
-        <b>Gelbe Karten: </b><?= $this->team_2_yellow_cards; ?>
+        <b>Gelbe Karten: </b><?= $this->team_1_yellow_cards; ?>
+        <?php foreach ($this->guestPlayers as $player) {
+
+            if ("0" !== $player['yellow_cards']) {
+                echo $player['name'] . ' (' . $player['yellow_cards'] . '), ';
+            }
+        } ?>
     </p>
 
     <p>
-        <b>Zeitstrafen: </b><?= $this->team_2_suspensions; ?>
+        <b>Zeitstrafen:</b>
+        <?php foreach ($this->guestPlayers as $player) {
+
+            if ("0" !== $player['suspensions']) {
+                echo $player['name'] . ' (' . $player['suspensions'] . '), ';
+            }
+        } ?>
     </p>
+
 </div>
 
 <?php $this->endblock(); ?>
