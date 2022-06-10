@@ -10,5 +10,4 @@ declare(strict_types=1);
  * @license MIT
  */
 
-
 $GLOBALS['TL_LANG']['tl_calendar_events']['operationh4a_playerscores'] = 'Playerscores anzeigen';

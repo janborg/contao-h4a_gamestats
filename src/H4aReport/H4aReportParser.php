@@ -12,10 +12,9 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\H4aReport;
 
-use Janborg\H4aGamestats\Tabula\TabulaConverter;
-use Contao\File;
 use Contao\FilesModel;
 use Contao\System;
+use Janborg\H4aGamestats\Tabula\TabulaConverter;
 
 class H4aReportParser
 {
@@ -45,10 +44,10 @@ class H4aReportParser
         $data = curl_exec($ch);
 
         curl_close($ch);
-        
-        if ($data !== "") {
+
+        if ('' !== $data) {
             file_put_contents($outputPath, $data);
-        
+
             $tabula = new TabulaConverter();
 
             $this->jsonReport = $tabula->setPdf($outputPath)
@@ -66,8 +65,7 @@ class H4aReportParser
             $this->arrReport = json_decode($this->jsonReport, true);
 
             unlink($outputPath);
-        }
-        else {
+        } else {
             throw new \Exception('Report is empty.');
         }
     }
@@ -75,7 +73,7 @@ class H4aReportParser
     public function parseReport()
     {
         $this->convertPdfReport();
-         
+
         //gameInfo
         $gameInfo = $this->parseGameInfo();
         $this->gameNo = $gameInfo['SpielNr'];
@@ -87,7 +85,7 @@ class H4aReportParser
 
         //heim_team
         $this->home_team = $this->parsePlayerStats('home_team');
-        
+
         //gast_team
         $this->guest_team = $this->parsePlayerStats('guest_team');
 
@@ -201,13 +199,11 @@ class H4aReportParser
         $parsedTimeline = [];
 
         foreach ($timeline as $key => $value) {
-            
             $matchTime = $value[1]['text'];
-            
-            if ($value[3]['text'] !== '') {
+
+            if ('' !== $value[3]['text']) {
                 $action = $value[3]['text'];
-            } 
-            else {
+            } else {
                 continue;
             }
 
@@ -222,12 +218,10 @@ class H4aReportParser
             $parsedTimeline[$key]['action_team'] = $arrplayer['team'];
 
             $parsedTimeline[$key]['action_player_number'] = $arrplayer['number'];
-            
-            if (isset($arrplayer['number']) && $arrplayer['number'] !== '') {
-                
+
+            if (isset($arrplayer['number']) && '' !== $arrplayer['number']) {
                 $parsedTimeline[$key]['action_player'] = $this->parseActionPlayerName($arrplayer);
-            }
-            else {
+            } else {
                 $parsedTimeline[$key]['action_player'] = '';
             }
         }
@@ -297,18 +291,17 @@ class H4aReportParser
             }
         );
     }
-    
+
     /*
     * @param string $action
     */
 
-    private function parseActionType(string $action) :string
+    private function parseActionType(string $action): string
     {
         $action_exploded = explode(' ', $action);
-        
-        #type of action
-        switch($action_exploded[0]) {
-            
+
+        //type of action
+        switch ($action_exploded[0]) {
             case 'Tor':
                 $parsedactiontype = 'Tor';
                 break;
@@ -331,24 +324,23 @@ class H4aReportParser
                 $parsedactiontype = 'Disqualifikation';
                 break;
         }
-        
+
         return $parsedactiontype;
     }
 
     /*
     * @param string $action
     */
-    private function parseActionPlayer(string $action) :array
-    {   
-        
+    private function parseActionPlayer(string $action): array
+    {
         $action_exploded = explode(' ', $action);
 
-        if ($action_exploded[0] === 'Auszeit') {
+        if ('Auszeit' === $action_exploded[0]) {
             $parsedPlayer['team'] = str_replace('Auszeit ', '', $action);
             $parsedPlayer['number'] = '';
             $parsedPlayer['name'] = '';
         } else {
-            # Spielernummer und Team (zwischen den Klammern) => (?:\((.*?)\))? 
+            // Spielernummer und Team (zwischen den Klammern) => (?:\((.*?)\))?
             preg_match('/
             (?:\s*(.*?))?        # was vor den klammern ist
             (?:\((.*?)\))?       # was in den klammern ist
@@ -359,22 +351,22 @@ class H4aReportParser
                 $arrNumberAndTeam = explode(', ', $matches[2]);
 
                 $parsedPlayer['number'] = $arrNumberAndTeam[0];
-                
+
                 $parsedPlayer['team'] = $arrNumberAndTeam[1];
             } else {
                 $parsedPlayer['number'] = '';
-                
+
                 $parsedPlayer['team'] = '';
             }
-            
-            
         }
+
         return $parsedPlayer;
-    } 
+    }
+
     /**
-     * @param string $matchtime
+     * @param string $matchTime
      */
-    private function parseMatchTime($matchTime):string //int
+    private function parseMatchTime($matchTime): string //int
     {
         //$matchTime = explode(':', $matchTime);
 
@@ -383,18 +375,19 @@ class H4aReportParser
     }
 
     /**
-     * @param array $actionPlayer
-     * @param string $team home_team or guest_team
+     * @param array  $arrplayer
+     * @param string $team      home_team or guest_team
      */
-    private function parseActionPlayerName($arrplayer) :string
+    private function parseActionPlayerName($arrplayer): string
     {
         $allplayers = array_merge($this->home_team, $this->guest_team);
         $player_name = array_filter(
             $allplayers,
             static function ($player) use ($arrplayer) {
-                if (# mehrstufiges filter_array
-                    $arrplayer['number'] == $player['number'] && 
-                        $arrplayer['team'] == $player['team']
+                if (
+                    // mehrstufiges filter_array
+                    $arrplayer['number'] === $player['number'] &&
+                        $arrplayer['team'] === $player['team']
                 ) {
                     return true;
                 }
@@ -408,8 +401,7 @@ class H4aReportParser
         if (!empty($player_name)) {
             return $player_name[0]['name'];
         }
-        else {
-            return 'unbekannt';
-        }
+
+        return 'unbekannt';
     }
 }

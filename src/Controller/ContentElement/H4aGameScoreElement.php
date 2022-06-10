@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Controller\ContentElement;
 
+use Contao\CalendarEventsModel;
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
 use Contao\Template;
+use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Janborg\H4aGamestats\H4aEventGamestats;
-use Contao\CalendarEventsModel;
 
 /**
  * @ContentElement("h4a_gamescore",
@@ -32,7 +32,6 @@ class H4aGameScoreElement extends AbstractContentElementController
     /**
      * @var H4aEventGamestats
      */
-
     private $h4aEventGamestats;
 
     public function __construct(H4aEventGamestats $h4aEventGamestats)
@@ -40,7 +39,7 @@ class H4aGameScoreElement extends AbstractContentElementController
         $this->h4aEventGamestats = $h4aEventGamestats;
     }
 
-    public function getResponse(Template $template, ContentModel $model, Request $request): ?Response
+    public function getResponse(Template $template, ContentModel $model, Request $request): Response|null
     {
         $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
 

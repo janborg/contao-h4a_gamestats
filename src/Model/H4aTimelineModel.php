@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of hsg-heilbronn website.
+ * This file is part of contao-h4a_gamestats.
  *
  * (c) Jan Lünborg
  *
@@ -22,14 +22,9 @@ class H4aTimelineModel extends Model
 {
     protected static $strTable = 'tl_h4a_timeline';
 
-    /**
-     * @param array $timelineEvents
-     * @param int $pid
-     */
     public static function saveTimeline(array $timelineEvents, int $pid): void
     {
         foreach ($timelineEvents as $timelineEvent) {
-            
             $objTimelineEvent = self::findBy(
                 ['pid = ?', 'matchtime = ?'],
                 [$pid, $timelineEvent['matchtime']],
@@ -51,32 +46,33 @@ class H4aTimelineModel extends Model
             $objTimelineEvent->save();
         }
     }
+
     /**
-     * @var string $pid
+     * @var string
      *
      * @return array
      */
-
     public static function findAllGoalsByCalendarEvent($pid)
     {
         $db = System::getContainer()->get('database_connection');
 
         $stmt = $db->executeQuery(
-            'SELECT 
+            'SELECT
                 `matchtime`
                 ,`currentscore`
                 ,`action_team`
                 ,`action_player`
                 ,`action_player_number`
                 ,`action_type`
-            FROM 
-                `tl_h4a_timeline` 
-            WHERE 
+            FROM
+                `tl_h4a_timeline`
+            WHERE
                 `pid` = ?  AND
                 `action_type` IN ("Tor", "7m-Tor")
-            ORDER BY 
-                `matchtime` ASC', 
-            [$pid]); 
+            ORDER BY
+                `matchtime` ASC',
+            [$pid]
+        );
 
         return $stmt->fetchAll();
     }

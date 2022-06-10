@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of contao-h4a_gamestats.
+ *
+ * (c) Jan Lünborg
+ *
+ * @license MIT
+ */
+
 namespace Janborg\H4aGamestats\Backend;
 
 use Contao\Backend;
@@ -9,10 +17,10 @@ use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Monolog\ContaoContext;
 use Contao\Input;
 use Contao\System;
-use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
-use Psr\Log\LogLevel;
+use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aTabellen\Helper\Helper;
+use Psr\Log\LogLevel;
 
 class LookupScoresController extends Backend
 {
@@ -21,23 +29,24 @@ class LookupScoresController extends Backend
         parent::__construct();
         $this->import('BackendUser', 'User');
     }
-    
+
     public function lookupScores(): void
     {
         $id = [Input::get('id')];
 
         $objCalendarEvent = CalendarEventsModel::findById($id);
 
-        if (isset($objCalendarEvent->sGID) && $objCalendarEvent->sGID =="") {
+        if (isset($objCalendarEvent->sGID) && '' === $objCalendarEvent->sGID) {
             $objCalendarEvent->sGID = Helper::getReportNo($objCalendarEvent->gClassID, $objCalendarEvent->gGameNo);
             $objCalendarEvent->save();
         }
 
         //check if sGID is set and not empty
-        if (isset($objCalendarEvent->sGID) && $objCalendarEvent->sGID !=="") {
+        if (isset($objCalendarEvent->sGID) && '' !== $objCalendarEvent->sGID) {
             $sGID = $objCalendarEvent->sGID;
         } else {
             $this->redirect($this->getReferer());
+
             return;
         }
 
@@ -52,11 +61,10 @@ class LookupScoresController extends Backend
         H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objCalendarEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
         System::getContainer()
-                ->get('monolog.logger.contao')
-                ->log(LogLevel::INFO, 'Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.', ['contao' => new ContaoContext(__CLASS__.'::'.__FUNCTION__, TL_GENERAL)])
+            ->get('monolog.logger.contao')
+            ->log(LogLevel::INFO, 'Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.', ['contao' => new ContaoContext(__CLASS__.'::'.__FUNCTION__, TL_GENERAL)])
             ;
-    
 
-    $this->redirect($this->getReferer());
+        $this->redirect($this->getReferer());
     }
 }

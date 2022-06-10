@@ -12,15 +12,15 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Command;
 
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
-use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
+use Janborg\H4aTabellen\Helper\Helper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Janborg\H4aTabellen\Helper\Helper;
 
 class UpdateH4aScoresCommand extends Command
 {
@@ -49,7 +49,7 @@ class UpdateH4aScoresCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int|null
     {
         $this->framework->initialize();
 
@@ -69,21 +69,21 @@ class UpdateH4aScoresCommand extends Command
         $this->io->text('Es wurden '.\count($objEvents).' H4a-Events mit ReportNo (sGID) gefunden. Versuche ReportNo abzurufen ...');
 
         foreach ($objEvents as $objEvent) {
-            if (isset($objEvent->sGID) && $objEvent->sGID =="") {
+            if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
                 $sGID = Helper::getReportNo($objEvent->gClassID, $objEvent->gGameNo);
+
                 if (null !== $sGID) {
                     $objEvent->sGID = $sGID;
                     $objEvent->save();
-                }
-                else {
+                } else {
                     $this->io->text('Kein Spielbericht für '.$objEvent->gGameNo.' vorhanden... Skipped');
                     continue;
                 }
             }
-            
+
             $this->io->text('Playerscores aus Spielbericht '.$objEvent->sGID.' abrufen...');
 
-            //check, ob bereits Scores zum H4a-Event vorhanden sind: 
+            //check, ob bereits Scores zum H4a-Event vorhanden sind:
             $objPlayerscores = H4aPlayerscoresModel::findBy('pid', $objEvent->id);
 
             if (null !== $objPlayerscores) {

@@ -16,9 +16,9 @@ use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
 use Contao\Template;
+use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 
 /**
  * @ContentElement("h4a_seasonscore",
@@ -28,7 +28,7 @@ use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
  */
 class H4aSeasonScoreElement extends AbstractContentElementController
 {
-    public function getResponse(Template $template, ContentModel $model, Request $request): ?Response
+    public function getResponse(Template $template, ContentModel $model, Request $request): Response|null
     {
         $playerscores = H4aPlayerscoresModel::findScoresBySeasonAndTeamName($model->h4a_season, $model->my_team_name);
 

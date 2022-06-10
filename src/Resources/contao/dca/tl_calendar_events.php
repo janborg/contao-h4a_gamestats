@@ -1,12 +1,19 @@
 <?php
 
-/**
- * Add child table
+declare(strict_types=1);
+
+/*
+ * This file is part of contao-h4a_gamestats.
+ *
+ * (c) Jan Lünborg
+ *
+ * @license MIT
  */
+
 $GLOBALS['TL_DCA']['tl_calendar_events']['config']['ctable'][] = 'tl_h4a_playerscores';
 $GLOBALS['TL_DCA']['tl_calendar_events']['config']['ctable'][] = 'tl_h4a_timeline';
 
-/**
+/*
  * Add list operations
  */
 $GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['h4a_playerscores'] = [

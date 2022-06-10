@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 $GLOBALS['TL_LANG']['tl_h4a_timeline']['lookup_timeline'] = 'Spielverlauf abrufen';
 
-
 $GLOBALS['TL_LANG']['tl_h4a_timeline']['matchtime'][0] = 'Spielzeit';
 $GLOBALS['TL_LANG']['tl_h4a_timeline']['matchtime'][1] = 'Spielzeit der Aktion';
 

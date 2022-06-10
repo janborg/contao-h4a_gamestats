@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of contao-h4a_gamestats.
+ *
+ * (c) Jan Lünborg
+ *
+ * @license MIT
+ */
+
 use Contao\Backend;
 
 /*
@@ -33,7 +41,7 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
             'mode' => 4,
             'flag' => 11,
             'headerFields' => ['title', 'startDate', 'starttime', 'sGID', 'gHomeGoals', 'gGuestGoals'],
-            'fields' => ['is_home_or_guest','goals'],
+            'fields' => ['is_home_or_guest', 'goals'],
             'panelLayout' => 'sort;filter',
             'child_record_callback' => ['tl_h4a_playerscores', 'listPlayerScores',
             ],
@@ -93,11 +101,11 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
         'number' => [
-            'label'                   => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['number'],
-            'sorting'                 => true,
-            'inputType'               => 'text',
-            'eval'                    => ['maxlength'=>2, 'tl_class'=>'w50'],
-            'sql'                     => "varchar(255) NOT NULL default ''"
+            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['number'],
+            'sorting' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 2, 'tl_class' => 'w50'],
+            'sql' => "varchar(255) NOT NULL default ''",
         ],
         'team_name' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['team_name'],
@@ -176,16 +184,16 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
             'sql' => "int(1) unsigned NOT NULL default '0'",
         ],
 
-       'is_home_or_guest' => array(
-           'label'                   => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['home_or_guest'],
-           'default'                 => 1,
-           'exclude'                 => true,
-           'search'                  => true,
-           'inputType'               => 'radio',
-           'options'                 => array(1 =>'Heim', 2 => 'Gast'),
-           'eval'                    => array('tl_class'=>'w50 cbx'),
-           'sql'                     => "char(200) NOT NULL default ''"
-       ),
+        'is_home_or_guest' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['home_or_guest'],
+            'default' => 1,
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'radio',
+            'options' => [1 => 'Heim', 2 => 'Gast'],
+            'eval' => ['tl_class' => 'w50 cbx'],
+            'sql' => "char(200) NOT NULL default ''",
+        ],
     ],
 ];
 
@@ -199,6 +207,6 @@ class tl_h4a_playerscores extends Backend
 
     public function listPlayerScores($arrRow)
     {
-        return '<div class="tl_content_left">' .$arrRow['number'].' - '. $arrRow['name']. ' <span style="color:#999;padding-left:3px"> (Tore: '.$arrRow['goals'].' | 7m:'.$arrRow['penalty_goals'].'/'.$arrRow['penalty_tries'].' | G:'.$arrRow['yellow_card'].' | 2m:'.$arrRow['suspensions'].' | R:'.$arrRow['red_card'] .')</span>' . "</div>\n";
+        return '<div class="tl_content_left">'.$arrRow['number'].' - '.$arrRow['name'].' <span style="color:#999;padding-left:3px"> (Tore: '.$arrRow['goals'].' | 7m:'.$arrRow['penalty_goals'].'/'.$arrRow['penalty_tries'].' | G:'.$arrRow['yellow_card'].' | 2m:'.$arrRow['suspensions'].' | R:'.$arrRow['red_card'].')</span>'."</div>\n";
     }
 }

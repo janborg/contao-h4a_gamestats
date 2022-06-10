@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of contao-h4a_gamestats.
+ *
+ * (c) Jan Lünborg
+ *
+ * @license MIT
+ */
+
 use Contao\Backend;
 
 /*
@@ -92,52 +100,52 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
         'tstamp' => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
-        'matchtime' => array(
-            'label'                   => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['matchtime'],
-            'exclude'                 => true,
-            'inputType'               => 'text',
-            'eval'                    => array( 'tl_class'=>'w50'),
-            'sql'                     => "varchar(32) unsigned NOT NULL default ''"
-        ),
-        'currentscore' => array(
-            'label'                   => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['currentscore'],
-            'exclude'                 => true,
-            'inputType'               => 'text',
-            'eval'                    => array('maxlength'=>7,'tl_class'=>'w50'),
-            'sql'                     => "varchar(7) unsigned NOT NULL default ''"
-        ),
-        'action_team' => array(
-            'label'                   => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_team'],
-            'exclude'                 => true,
-            'filter'                  => true,
-            'inputType'               => 'text',
-            'eval'                    => array('maxlength'=>32,'tl_class'=>'w50'),
-            'sql'                     => "varchar(32) NOT NULL default ''"
-        ),
-        'action_player' => array(
-            'label'                   => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_player'],
-            'exclude'                 => true,
-            'filter'                  => true,
-            'inputType'               => 'text',
-            'eval'                    => array('maxlength'=>32,'tl_class'=>'w50'),
-            'sql'                     => "varchar(32) NOT NULL default ''"
-        ),
-        'action_player_number' => array(
-            'label'                   => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_player_number'],
-            'exclude'                 => true,
-            'filter'                  => true,
-            'inputType'               => 'text',
-            'eval'                    => array('maxlength'=>2,'tl_class'=>'w50'),
-            'sql'                     => "varchar(2) NOT NULL default ''"
-        ),
-        'action_type' => array(
-            'label'                   => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_type'],
-            'exclude'                 => true,
-            'filter'                  => true,
-            'inputType'               => 'text',
-            'eval'                    => array('maxlength'=>32,'tl_class'=>'w50'),
-            'sql'                     => "varchar(32) NOT NULL default ''"
-        ),
+        'matchtime' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['matchtime'],
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w50'],
+            'sql' => "varchar(32) unsigned NOT NULL default ''",
+        ],
+        'currentscore' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['currentscore'],
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 7, 'tl_class' => 'w50'],
+            'sql' => "varchar(7) unsigned NOT NULL default ''",
+        ],
+        'action_team' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_team'],
+            'exclude' => true,
+            'filter' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 32, 'tl_class' => 'w50'],
+            'sql' => "varchar(32) NOT NULL default ''",
+        ],
+        'action_player' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_player'],
+            'exclude' => true,
+            'filter' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 32, 'tl_class' => 'w50'],
+            'sql' => "varchar(32) NOT NULL default ''",
+        ],
+        'action_player_number' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_player_number'],
+            'exclude' => true,
+            'filter' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 2, 'tl_class' => 'w50'],
+            'sql' => "varchar(2) NOT NULL default ''",
+        ],
+        'action_type' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_type'],
+            'exclude' => true,
+            'filter' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 32, 'tl_class' => 'w50'],
+            'sql' => "varchar(32) NOT NULL default ''",
+        ],
     ],
 ];
 
@@ -151,6 +159,6 @@ class tl_h4a_timeline extends Backend
 
     public function listTimelineActions($arrRow)
     {
-        return '<div class="tl_content_left">' .$arrRow['matchtime'].' - '. $arrRow['action_type'].' - '. $arrRow['action_team']. ' <span style="color:#999;padding-left:3px"> (Spieler: '.$arrRow['action_player'].' ('.$arrRow['action_player_number'].') | Spielstand:'.$arrRow['currentscore'].')</span>' . "</div>\n";
+        return '<div class="tl_content_left">'.$arrRow['matchtime'].' - '.$arrRow['action_type'].' - '.$arrRow['action_team'].' <span style="color:#999;padding-left:3px"> (Spieler: '.$arrRow['action_player'].' ('.$arrRow['action_player_number'].') | Spielstand:'.$arrRow['currentscore'].')</span>'."</div>\n";
     }
 }

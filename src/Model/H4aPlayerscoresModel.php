@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of hsg-heilbronn website.
+ * This file is part of contao-h4a_gamestats.
  *
  * (c) Jan Lünborg
  *
@@ -23,10 +23,10 @@ class H4aPlayerscoresModel extends Model
     protected static $strTable = 'tl_h4a_playerscores';
 
     /**
-     * @param array $players
+     * @param array  $players
      * @param string $pid
      * @param string $teamname
-     * @param int $home_guest
+     * @param int    $home_guest
      */
     public static function savePlayerscores($players, $pid, $teamname, $home_guest): void
     {
@@ -77,7 +77,7 @@ class H4aPlayerscoresModel extends Model
         $db = System::getContainer()->get('database_connection');
 
         $stmt = $db->executeQuery(
-            'SELECT 
+            'SELECT
                 `is_home_or_guest`
                 ,`team_name`
                 ,`number`
@@ -88,19 +88,20 @@ class H4aPlayerscoresModel extends Model
                 , SUM(`yellow_card`) AS `yellow_cards`
                 , SUM(`suspensions`) AS `suspensions`
                 , SUM(`red_card`) AS `red_cards`
-                , SUM(`blue_card`) AS `blue_cards` 
-            FROM 
-                `tl_h4a_playerscores` 
-            WHERE 
-                `pid` = ?  
-            GROUP BY 
+                , SUM(`blue_card`) AS `blue_cards`
+            FROM
+                `tl_h4a_playerscores`
+            WHERE
+                `pid` = ?
+            GROUP BY
                 `is_home_or_guest`
                 ,`team_name`
-                ,`name` 
+                ,`name`
                 ,`number`
-            ORDER BY 
-                `is_home_or_guest`,`team_name`,`name`', 
-            [$pid]); 
+            ORDER BY
+                `is_home_or_guest`,`team_name`,`name`',
+            [$pid]
+        );
 
         return $stmt->fetchAll();
     }
@@ -116,7 +117,7 @@ class H4aPlayerscoresModel extends Model
         $db = System::getContainer()->get('database_connection');
 
         $stmt = $db->executeQuery(
-            'SELECT 
+            'SELECT
                 ps.`name`
                 , COUNT(ce.`gGameID`) AS `games`
                 , SUM(ps.`goals`) AS `goals`
@@ -125,35 +126,36 @@ class H4aPlayerscoresModel extends Model
                 , SUM(ps.`yellow_card`) AS `yellow_cards`
                 , SUM(ps.`suspensions`) AS `suspensions`
                 , SUM(ps.`red_card`) AS `red_cards`
-                , SUM(ps.`blue_card`) AS `blue_cards` 
-            FROM 
+                , SUM(ps.`blue_card`) AS `blue_cards`
+            FROM
                 `tl_h4a_playerscores` ps
-            JOIN 
+            JOIN
                 `tl_calendar_events` ce
             ON
                 ps.`pid` = ce.`id`
-            WHERE 
-                ce.`gClassID` = ? AND 
+            WHERE
+                ce.`gClassID` = ? AND
                 ps.`team_name`= ? AND
                 ps.`number` NOT IN ("A", "B", "C", "D")
-            GROUP BY 
-                ps.`name` 
-            ORDER BY 
-                ps.`name` ASC'
-            , [$classId, $team_name]);
+            GROUP BY
+                ps.`name`
+            ORDER BY
+                ps.`name` ASC',
+            [$classId, $team_name]
+        );
 
         return $stmt->fetchAll();
     }
+
     /**
      * @return array
      */
-    
     public static function findScoresBySeasonAndTeamName($season, $team_name)
     {
         $db = System::getContainer()->get('database_connection');
 
         $stmt = $db->executeQuery(
-            'SELECT 
+            'SELECT
                 ps.`name`
                 , COUNT(ce.`gGameID`) AS `games`
                 , SUM(ps.`goals`) AS `goals`
@@ -162,28 +164,29 @@ class H4aPlayerscoresModel extends Model
                 , SUM(ps.`yellow_card`) AS `yellow_cards`
                 , SUM(ps.`suspensions`) AS `suspensions`
                 , SUM(ps.`red_card`) AS `red_cards`
-                , SUM(ps.`blue_card`) AS `blue_cards` 
-            FROM 
+                , SUM(ps.`blue_card`) AS `blue_cards`
+            FROM
                 `tl_h4a_playerscores` ps
-            JOIN 
+            JOIN
                 `tl_calendar_events` ce
             ON
                 ps.`pid` = ce.`id`
-            WHERE 
-                ce.`h4a_season` = ? AND 
-                ps.`team_name`= ? 
-            GROUP BY 
-                ps.`name` 
-            ORDER BY 
-                ps.`name` ASC'
-            , [$season, $team_name]);
+            WHERE
+                ce.`h4a_season` = ? AND
+                ps.`team_name`= ?
+            GROUP BY
+                ps.`name`
+            ORDER BY
+                ps.`name` ASC',
+            [$season, $team_name]
+        );
 
         return $stmt->fetchAllAssociative();
     }
 
-        /**
-     * @var string $pid
-     * @var string $home_guest 1 = home, 2 = guest
+    /**
+     * @var string
+     * @var string 1 = home, 2 = guest
      *
      * @return array
      */
@@ -192,7 +195,7 @@ class H4aPlayerscoresModel extends Model
         $db = System::getContainer()->get('database_connection');
 
         $stmt = $db->executeQuery(
-            'SELECT 
+            'SELECT
                 `team_name`
                 ,`number`
                 ,`name`
@@ -202,18 +205,19 @@ class H4aPlayerscoresModel extends Model
                 , SUM(`yellow_card`) AS `yellow_cards`
                 , SUM(`suspensions`) AS `suspensions`
                 , SUM(`red_card`) AS `red_cards`
-                , SUM(`blue_card`) AS `blue_cards` 
-            FROM 
-                `tl_h4a_playerscores` 
-            WHERE 
+                , SUM(`blue_card`) AS `blue_cards`
+            FROM
+                `tl_h4a_playerscores`
+            WHERE
                 `pid` = ? AND
                 `is_home_or_guest` = ?
-            GROUP BY 
-                `name` 
+            GROUP BY
+                `name`
                 ,`number`
-            ORDER BY 
-                `number`,`name`', 
-            [$pid, $home_guest]); 
+            ORDER BY
+                `number`,`name`',
+            [$pid, $home_guest]
+        );
 
         return $stmt->fetchAll();
     }
