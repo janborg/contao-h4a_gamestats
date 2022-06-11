@@ -22,11 +22,19 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Class UpdateH4aScoresCommand
+ *
+ * @package Janborg\H4aGamestats\Command
+ * @property SymfonyStyle $io
+ * @property int $statusCode
+ */
+
 class UpdateH4aScoresCommand extends Command
 {
-    private $io;
+    protected static $defaultName = 'h4a:update:scores';
 
-    private $statusCode = 0;
+    protected static $defaultDescription = 'Update Scores from h4a';
 
     /**
      * @var ContaoFramework
@@ -42,18 +50,12 @@ class UpdateH4aScoresCommand extends Command
 
     protected function configure(): void
     {
-        $commandHelp = 'Update Playerscores der H4a-Events';
-
-        $this->setName('h4a:updatescores')
-            ->setDescription($commandHelp)
-        ;
+        $this->setHelp('This command allows you to update all Scores for h4a-Events, that have no scores yet.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int|null
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->framework->initialize();
-
-        $this->io = new SymfonyStyle($input, $output);
 
         $objEvents = CalendarEventsModel::findby(
             ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'h4a_resultComplete = ?'],
@@ -61,33 +63,45 @@ class UpdateH4aScoresCommand extends Command
         );
 
         if (null === $objEvents) {
-            $this->io->text('Es wurden keine Events mit ReportNo (sGID) gefunden.');
+            $output->writeln('Es wurden keine Events mit ReportNo (sGID) gefunden.');
 
-            return $this->statusCode;
+            return Command::SUCCESS;
         }
 
-        $this->io->text('Es wurden '.\count($objEvents).' H4a-Events mit ReportNo (sGID) gefunden. Versuche ReportNo abzurufen ...');
+        $output->writeln([
+            'Es wurden ' . \count($objEvents) . ' H4a-Events mit Ergebnis gefunden.',
+            'Versuche nun die Reports abzurufen ...',
+            '============================================================',
+        ]);
 
         foreach ($objEvents as $objEvent) {
+            $output->writeln([
+                '',
+                'Spiel ' . $objEvent->gGameNo . ' ' . $objEvent->title . ':',
+                '-----------------------------------------------------',
+            ]);
             if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
+
+                $output->writeln('Keine ReportNo (sGID) vorhanden. Versuche ReportNo zu finden ...');
                 $sGID = Helper::getReportNo($objEvent->gClassID, $objEvent->gGameNo);
 
                 if (null !== $sGID) {
                     $objEvent->sGID = $sGID;
                     $objEvent->save();
+                    $output->writeln('ReportNo (sGID) ' . $sGID . ' gefunden.');
                 } else {
-                    $this->io->text('Kein Spielbericht für '.$objEvent->gGameNo.' vorhanden... Skipped');
+                    $output->writeln('Keine Reportnummer vorhanden... Skipped');
                     continue;
                 }
             }
 
-            $this->io->text('Playerscores aus Spielbericht '.$objEvent->sGID.' abrufen...');
+            $output->writeln('Playerscores aus Spielbericht ' . $objEvent->sGID . ' abrufen...');
 
             //check, ob bereits Scores zum H4a-Event vorhanden sind:
             $objPlayerscores = H4aPlayerscoresModel::findBy('pid', $objEvent->id);
 
             if (null !== $objPlayerscores) {
-                $this->io->text('Playerscores für Spiel '.$objEvent->gGameNo.' bereits vorhanden. Überspringe Spielbericht...');
+                $output->writeln('Playerscores bereits vorhanden. Überspringe Spielbericht...');
 
                 continue;
             }
@@ -97,14 +111,14 @@ class UpdateH4aScoresCommand extends Command
             //Spieler der Heim Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
 
-            $this->io->text('Playerscores für '.$h4areportparser->heim_name.' in Spiel '.$objEvent->gGameNo.' gespeichert.');
+            $output->writeln('Playerscores für ' . $h4areportparser->heim_name . ' in Spiel ' . $objEvent->gGameNo . ' gespeichert.');
 
             //Spieler der Gast Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
-            $this->io->text('Playerscores für '.$h4areportparser->gast_name.' in Spiel '.$objEvent->gGameNo.' gespeichert.');
+            $output->writeln('Playerscores für ' . $h4areportparser->gast_name . ' in Spiel ' . $objEvent->gGameNo . ' gespeichert.');
         }
 
-        return $this->statusCode;
+        return Command::SUCCESS;
     }
 }
