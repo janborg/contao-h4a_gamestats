@@ -16,6 +16,17 @@ use Contao\FilesModel;
 use Contao\System;
 use Janborg\H4aGamestats\Tabula\TabulaConverter;
 
+/**
+ * Class H4aReportParser
+ *
+ * @property array $home_team
+ * @property array $guest_team
+ * @property string $heim_name
+ * @property string $gast_name
+ * @property array $timeline
+ * 
+ */
+
 class H4aReportParser
 {
     private $reportID;

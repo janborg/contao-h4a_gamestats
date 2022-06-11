@@ -12,14 +12,7 @@ use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 
 class H4aEventGamestats
 {
-    private $db;
-    private $bundles;
-
-    public function __construct(Connection $db)
-    {
-        $this->db = $db;
-    }
-
+ 
     /**
      * Adds stats for Home Team Players and Officials to template.
      */
@@ -57,7 +50,11 @@ class H4aEventGamestats
 
         return CalendarEventsModel::findByIdOrAlias($item);
     }
-
+    /**
+     * @param array<mixed> $teammembers
+     * @return array<mixed>
+     */
+   
     private function isPlayer($teammembers)
     {
         return array_filter(
@@ -79,6 +76,11 @@ class H4aEventGamestats
         );
     }
 
+    /**
+     * @param array<mixed> $teammembers
+     * @return array<mixed>
+     */
+    
     private function isOfficial($teammembers)
     {
         return array_filter(

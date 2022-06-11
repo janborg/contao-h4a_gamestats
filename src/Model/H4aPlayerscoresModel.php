@@ -23,7 +23,7 @@ class H4aPlayerscoresModel extends Model
     protected static $strTable = 'tl_h4a_playerscores';
 
     /**
-     * @param array  $players
+     * @param array<mixed>  $players
      * @param string $pid
      * @param string $teamname
      * @param int    $home_guest
@@ -68,10 +68,11 @@ class H4aPlayerscoresModel extends Model
     }
 
     /**
-     * @var string
+     * @param string $pid
      *
-     * @return array
+     * @return array<mixed>
      */
+     
     public static function findScoresByCalendarEvent($pid)
     {
         $db = System::getContainer()->get('database_connection');
@@ -107,10 +108,10 @@ class H4aPlayerscoresModel extends Model
     }
 
     /**
-     * @var string
-     * @var string
+     * @param string $classId
+     * @param string $team_name
      *
-     * @return array
+     * @return array<mixed>
      */
     public static function findScoresByClassIdAndTeamName($classId, $team_name)
     {
@@ -148,7 +149,10 @@ class H4aPlayerscoresModel extends Model
     }
 
     /**
-     * @return array
+     * @param string $season
+     * @param string $team_name
+     * 
+     * @return array<mixed>
      */
     public static function findScoresBySeasonAndTeamName($season, $team_name)
     {
@@ -185,10 +189,10 @@ class H4aPlayerscoresModel extends Model
     }
 
     /**
-     * @var string
-     * @var string 1 = home, 2 = guest
+     * @param string $pid
+     * @param string $home_guest (1 = home, 2 = guest)
      *
-     * @return array
+     * @return array<mixed>
      */
     public static function findTeamScoresByCalendarEvent($pid, $home_guest)
     {

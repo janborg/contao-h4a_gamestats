@@ -22,7 +22,10 @@ class H4aTimelineModel extends Model
 {
     protected static $strTable = 'tl_h4a_timeline';
 
-    public static function saveTimeline(array $timelineEvents, int $pid): void
+    /**
+     * @param array<mixed> $timelineEvents
+     */
+    public static function saveTimeline($timelineEvents, int $pid): void
     {
         foreach ($timelineEvents as $timelineEvent) {
             $objTimelineEvent = self::findBy(
@@ -48,10 +51,11 @@ class H4aTimelineModel extends Model
     }
 
     /**
-     * @var string
+     * @param int $pid
      *
-     * @return array
+     * @return array<mixed>
      */
+     
     public static function findAllGoalsByCalendarEvent($pid)
     {
         $db = System::getContainer()->get('database_connection');
