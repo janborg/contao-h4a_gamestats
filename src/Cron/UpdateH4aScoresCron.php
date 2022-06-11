@@ -19,7 +19,7 @@ use Contao\System;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aTabellen\Helper\Helper;
-use Psr\log\LogLevel;
+use Psr\Log\LogLevel;
 
 class UpdateH4aScoresCron
 {
