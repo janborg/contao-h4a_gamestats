@@ -16,25 +16,28 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class H4aReportFinder
 {
-    private $baseUrl = 'https://spo.handball4all.de/Spielbetrieb/index.php?orgGrpID=1&all=1&score=';
+    private string $baseUrl = 'https://spo.handball4all.de/Spielbetrieb/index.php?orgGrpID=1&all=1&score=';
 
-    private $leagueID;
+    private string $leagueID;
 
-    private $gameNo;
+    private string $gameNo;
 
-    public function setLeagueID($leagueID): void
+    public function setLeagueID(string $leagueID): void
     {
         $this->leagueID = $leagueID;
     }
 
-    public function setgameNo($gameNo): void
+    public function setgameNo(string $gameNo): void
     {
         $this->gameNo = $gameNo;
     }
 
-    public function getGameTableByLeagueID()
+    /**
+     * @return array<string>
+     */
+    public function getGameTableByLeagueID(): array
     {
-        $url = $this->baseUrl.$this->leagueID;
+        $url = $this->baseUrl . $this->leagueID;
         dump($this->baseUrl, $this->leagueID, $url);
         $html = file_get_contents($url);
 
@@ -62,9 +65,13 @@ class H4aReportFinder
         );
     }
 
+    /**
+     * @return array<string>
+     */
+
     public function getReportNoByGameNo()
     {
-        $url = $this->baseUrl.$this->leagueID;
+        $url = $this->baseUrl . $this->leagueID;
         dump($this->baseUrl, $this->leagueID, $url, $this->gameNo);
         $html = file_get_contents($url);
 
@@ -90,11 +97,23 @@ class H4aReportFinder
             }
         );
 
-        foreach ($allGames as $game) {
-            if ($game[1]['text'] === $this->gameNo) {
-                $reportNo = $game[10]['sGID'];
-            }
-        }
+        $reportNo = $this->getReportNoByGameNoFromAllGames($allGames, $this->gameNo);
+        
+        return $reportNo;
+    }
+
+    /**
+     * @param array<mixed> $allGames
+     * @param string $gameNo
+     * @return array<string>
+     */
+    public function getReportNoByGameNoFromAllGames(array $allGames, $gameNo): array
+    {
+        $sgame = array_filter($allGames, function ($game) use ($gameNo) {
+            return $game[1]['text'] === $gameNo;
+        });
+
+        $reportNo = $sgame[10]['sGID'] ?? null;
 
         return $reportNo;
     }

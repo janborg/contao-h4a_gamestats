@@ -30,11 +30,11 @@ use Symfony\Component\Process\Process;
  */
 class TabulaConverter
 {
-    public $os;
-    public $encoding = 'utf-8';
-    public $javaOptions = [];
-    public $input;
-    public $options = [
+    public string $os;
+    public string $encoding = 'utf-8';
+    public array $javaOptions = [];
+    public string $input;
+    public array $options = [
         'pages' => null,
         'guess' => true,
         'area' => [],
@@ -51,15 +51,13 @@ class TabulaConverter
 
     /**
      * Additional dir to check for java executable.
-     *
-     * @var
      */
-    private $binDir = [];
+    private array $binDir = [];
 
     /**
      * Path to jar file.
      */
-    private $jarArchive = __DIR__.'/lib/tabula-1.0.5-jar-with-dependencies.jar';
+    private string $jarArchive = __DIR__ . '/lib/tabula-1.0.5-jar-with-dependencies.jar';
 
     /**
      * Tabula constructor.
@@ -88,22 +86,34 @@ class TabulaConverter
         }
     }
 
-    public function isEncodeUTF8()
+    /**
+     * @return bool
+     */
+    public function isEncodeUTF8(): bool
     {
         return 'utf-8' === $this->encoding;
     }
 
-    public function isOsWindow()
+    /**
+     * @return bool
+     */
+    public function isOsWindow(): bool
     {
         return 'Window' === $this->os;
     }
 
-    public function isOsMac()
+    /**
+     * @return bool
+     */
+    public function isOsMac(): bool
     {
         return 'Mac' === $this->os;
     }
 
-    public function isLinux()
+    /**
+     * @return bool
+     */
+    public function isLinux(): bool
     {
         return 'Linux' === $this->os;
     }
@@ -117,7 +127,7 @@ class TabulaConverter
     }
 
     /**
-     * @return Tabula
+     * @return TabulaConverter
      */
     public function setJarArchive(string $jarArchive)
     {
@@ -135,9 +145,9 @@ class TabulaConverter
     }
 
     /**
-     * @param $binDir
+     * @param array $binDir
      *
-     * @return Tabula
+     * @return TabulaConverter
      */
     public function setBinDir($binDir)
     {
@@ -147,7 +157,7 @@ class TabulaConverter
     }
 
     /**
-     * @return Tabula
+     * @return TabulaConverter
      */
     public function setPdf(string $input)
     {
@@ -157,7 +167,7 @@ class TabulaConverter
     }
 
     /**
-     * @return Tabula
+     * @return TabulaConverter
      */
     public function setOptions(array $options)
     {
@@ -167,11 +177,11 @@ class TabulaConverter
     }
 
     /**
-     * @param $format
+     * @param string $format
      *
      * @return string
      */
-    public function extractFormatForConversion($format)
+    public function extractFormatForConversion($format): string
     {
         if (empty($format)) {
             throw new InvalidArgumentException('Convert format does not exist.');
@@ -187,11 +197,11 @@ class TabulaConverter
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return bool
      */
-    public function existFileCheck($path)
+    public function existFileCheck($path): bool
     {
         if (!file_exists($path)) {
             throw new InvalidArgumentException('File does not exist.');
@@ -206,11 +216,11 @@ class TabulaConverter
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return bool
      */
-    public function existDirectoryCheck($path)
+    public function existDirectoryCheck($path): bool
     {
         if (!is_dir($path)) {
             throw new InvalidArgumentException('Folder to target Pdf does not exist.');

@@ -24,20 +24,26 @@ use Janborg\H4aGamestats\Tabula\TabulaConverter;
  * @property string $heim_name
  * @property string $gast_name
  * @property array $timeline
+ * @property string $reportUrl
+ * @property json $jsonReport
+ * @property array<mixed> $arrReport
+ * @property string $gameNo
+ * @property array<mixed> $zuschauer
+ * @property array<mixed> $schiedsrichter
  * 
  */
 
 class H4aReportParser
 {
-    private $reportID;
+    private string $reportID;
 
-    private $base_url = 'https://spo.handball4all.de/misc/sboPublicReports.php?sGID=';
+    private string $base_url = 'https://spo.handball4all.de/misc/sboPublicReports.php?sGID=';
 
-    public function __construct($reportID)
+    public function __construct(string $reportID)
     {
         $this->reportID = $reportID;
 
-        $this->reportUrl = $this->base_url.$this->reportID;
+        $this->reportUrl = $this->base_url . $this->reportID;
     }
 
     /**
@@ -46,8 +52,8 @@ class H4aReportParser
     public function convertPdfReport(): void
     {
         $projectDir = System::getContainer()->getParameter('kernel.project_dir');
-        $outfilename = 'report_'.$this->reportID.'.pdf';
-        $outputPath = $projectDir.'/'.$outfilename;
+        $outfilename = 'report_' . $this->reportID . '.pdf';
+        $outputPath = $projectDir . '/' . $outfilename;
 
         $ch = curl_init($this->reportUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -70,8 +76,7 @@ class H4aReportParser
                         'stream' => true,
                     ]
                 )
-                ->convert()
-            ;
+                ->convert();
 
             $this->arrReport = json_decode($this->jsonReport, true);
 
@@ -81,7 +86,7 @@ class H4aReportParser
         }
     }
 
-    public function parseReport()
+    public function parseReport(): H4aReportParser
     {
         $this->convertPdfReport();
 
@@ -110,13 +115,13 @@ class H4aReportParser
      *
      * @param FilesModel $file Contao filesModel of pdf-Report to be converted
      *
-     * @return Json
+     * @return string
      */
-    private function convertPdfReportFileToJson(FilesModel $file)
+    private function convertPdfReportFileToJson(FilesModel $file): string
     {
         $projectDir = System::getContainer()->getParameter('kernel.project_dir');
 
-        $filePath = $projectDir.'/'.$file->path;
+        $filePath = $projectDir . '/' . $file->path;
 
         $tabula = new TabulaConverter();
 
@@ -129,14 +134,13 @@ class H4aReportParser
                     'stream' => true,
                 ]
             )
-            ->convert()
-        ;
+            ->convert();
     }
 
     /**
-     * @* @param array $gameInfo Table from converted H4a report, home or guest team
+     * @return array<mixed>
      */
-    private function parseGameInfo()
+    private function parseGameInfo(): array
     {
         $gameInfo = $this->arrReport[0]['data'];
 
@@ -152,9 +156,10 @@ class H4aReportParser
     }
 
     /**
-     * @* @param string $team 'home_team' or 'guest_team'
+     * @param string $team 'home_team' or 'guest_team'
+     * @return array<mixed>
      */
-    private function parsePlayerStats($team)
+    private function parsePlayerStats($team): array
     {
         if ('home_team' === $team) {
             $teamstats = $this->arrReport[2]['data'];
@@ -195,9 +200,9 @@ class H4aReportParser
     }
 
     /**
-     * @param array $timeline array from converted H4a report
+     * @return array<mixed>
      */
-    private function parseTimeline()
+    private function parseTimeline(): array
     {
         $timeline = $this->arrReport[4]['data'];
 
@@ -242,8 +247,9 @@ class H4aReportParser
 
     /**
      * @* @param array $referees array from converted H4a report
+     * @return array<mixed>
      */
-    private function parseReferees()
+    private function parseReferees(): array
     {
         $referees = $this->arrReport[1]['data'];
 
@@ -261,14 +267,17 @@ class H4aReportParser
         ];
     }
 
-    private function isPlayer($teammembers)
+    /**
+     * @param array<mixed> $teammembers
+     * @return array<mixed>
+     */
+    private function isPlayer($teammembers):array
     {
         return array_filter(
             $teammembers,
             static function ($teammember) {
                 if (
-                    '' !== $teammember['name'] && (
-                        'A' === $teammember['number'] ||
+                    '' !== $teammember['name'] && ('A' === $teammember['number'] ||
                         'B' === $teammember['number'] ||
                         'C' === $teammember['number'] ||
                         'D' === $teammember['number']
@@ -282,17 +291,20 @@ class H4aReportParser
         );
     }
 
-    private function isOfficial($teammembers)
+    /**
+     * @param array<mixed> $teammembers
+     * @return array<mixed>
+     */
+    private function isOfficial($teammembers): array
     {
         return array_filter(
             $teammembers,
             static function ($teammember) {
                 if (
-                    '' !== $teammember['name'] && (
-                        'A' === $teammember['number'] ||
-                    'B' === $teammember['number'] ||
-                    'C' === $teammember['number'] ||
-                    'D' === $teammember['number']
+                    '' !== $teammember['name'] && ('A' === $teammember['number'] ||
+                        'B' === $teammember['number'] ||
+                        'C' === $teammember['number'] ||
+                        'D' === $teammember['number']
                     )
                 ) {
                     return true;
@@ -303,9 +315,10 @@ class H4aReportParser
         );
     }
 
-    /*
-    * @param string $action
-    */
+    /** 
+     * @param string $action
+     * @return string
+     */
 
     private function parseActionType(string $action): string
     {
@@ -339,8 +352,9 @@ class H4aReportParser
         return $parsedactiontype;
     }
 
-    /*
+    /**
     * @param string $action
+    * @return array<mixed>
     */
     private function parseActionPlayer(string $action): array
     {
@@ -386,10 +400,10 @@ class H4aReportParser
     }
 
     /**
-     * @param array  $arrplayer
-     * @param string $team      home_team or guest_team
+     * @param array<mixed>  $arrplayer
+     * @return string
      */
-    private function parseActionPlayerName($arrplayer): string
+    private function parseActionPlayerName(array $arrplayer): string
     {
         $allplayers = array_merge($this->home_team, $this->guest_team);
         $player_name = array_filter(
@@ -398,7 +412,7 @@ class H4aReportParser
                 if (
                     // mehrstufiges filter_array
                     $arrplayer['number'] === $player['number'] &&
-                        $arrplayer['team'] === $player['team']
+                    $arrplayer['team'] === $player['team']
                 ) {
                     return true;
                 }
