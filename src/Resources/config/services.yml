@@ -31,3 +31,12 @@ services:
                 interval: 'hourly'
                 method: updateScores
     
+    Janborg\H4aGamestats\Cron\UpdateTimelineCron:
+        arguments:
+            - '@contao.framework'
+        tags:
+            -
+                name: contao.cronjob
+                interval: 'hourly'
+                method: updateTimeline
+    
