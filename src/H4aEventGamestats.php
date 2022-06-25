@@ -9,6 +9,7 @@ use Contao\Input;
 use Contao\Template;
 use Doctrine\DBAL\Connection;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
+use Janborg\H4aGamestats\Model\H4aTimelineModel;
 
 class H4aEventGamestats
 {
@@ -35,6 +36,20 @@ class H4aEventGamestats
         $template->guestPlayers = $this->isPlayer($guestteamscores);
 
         $template->guestOfficials = $this->isOfficial($guestteamscores);
+    }
+
+
+    /**
+     * Adds timeline to template.
+     */
+    public function addTimelineToTemplate(Template $template, CalendarEventsModel $event): void
+    {
+        $timeline = H4aTimelineModel::findAllGoalsByCalendarEvent($event->id);
+        $objCalEvent = CalendarEventsModel::findByPk($event->id);
+
+        $template->timeline = $timeline;
+        $template->home_team = $objCalEvent->gHomeTeam;
+        $template->guest_team = $objCalEvent->gGuestTeam;
     }
 
     /**

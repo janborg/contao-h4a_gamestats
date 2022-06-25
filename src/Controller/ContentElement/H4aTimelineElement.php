@@ -20,7 +20,7 @@ use Contao\Template;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use Janborg\H4aGamestats\H4aEventGamestats;
 /**
  * @ContentElement("h4a_timeline",
  *   category="handball4all",
@@ -29,15 +29,22 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class H4aTimelineElement extends AbstractContentElementController
 {
+    /**
+     * @var H4aEventGamestats
+     */
+    private $h4aEventGamestats;
+
+    public function __construct(H4aEventGamestats $h4aEventGamestats)
+    {
+        $this->h4aEventGamestats = $h4aEventGamestats;
+    }
+
     public function getResponse(Template $template, ContentModel $model, Request $request): Response|null
     {
-        $timeline = H4aTimelineModel::findAllGoalsByCalendarEvent($model->h4a_event_id);
-        $objCalEvent = CalendarEventsModel::findByPk($model->h4a_event_id);
+        $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
 
-        $template->timeline = $timeline;
-        $template->home_team = $objCalEvent->gHomeTeam;
-        $template->guest_team = $objCalEvent->gGuestTeam;
-
+        $this->h4aEventGamestats->addTimelineToTemplate($template, $event);
+    
         return $template->getResponse();
     }
 }
