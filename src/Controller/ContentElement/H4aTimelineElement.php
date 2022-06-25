@@ -17,7 +17,6 @@ use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
 use Contao\Template;
-use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Janborg\H4aGamestats\H4aEventGamestats;
