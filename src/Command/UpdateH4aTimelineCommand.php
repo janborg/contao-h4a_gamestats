@@ -62,7 +62,7 @@ class UpdateH4aTimelineCommand extends Command
         );
 
         if (null === $objEvents) {
-            $output->writeln('Es wurden keine Events mit ReportNo (sGID) gefunden.');
+            $output->writeln('<info>Es wurden keine Events mit ReportNo (sGID) gefunden.</info>');
 
             return Command::SUCCESS;
         }

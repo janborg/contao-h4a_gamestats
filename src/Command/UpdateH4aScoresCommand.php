@@ -63,7 +63,7 @@ class UpdateH4aScoresCommand extends Command
         );
 
         if (null === $objEvents) {
-            $output->writeln('Es wurden keine Events mit ReportNo (sGID) gefunden.');
+            $output->writeln('<info>Es wurden keine Events mit ReportNo (sGID) gefunden.</info>');
 
             return Command::SUCCESS;
         }
@@ -88,9 +88,9 @@ class UpdateH4aScoresCommand extends Command
                 if (null !== $sGID) {
                     $objEvent->sGID = $sGID;
                     $objEvent->save();
-                    $output->writeln('ReportNo (sGID) ' . $sGID . ' gefunden.');
+                    $output->writeln('<info>ReportNo (sGID) ' . $sGID . ' gefunden.</info>');
                 } else {
-                    $output->writeln('Keine Reportnummer vorhanden... Skipped');
+                    $output->writeln('<error>Keine Reportnummer vorhanden... Skipped</error>');
                     continue;
                 }
             }
@@ -101,7 +101,7 @@ class UpdateH4aScoresCommand extends Command
             $objPlayerscores = H4aPlayerscoresModel::findBy('pid', $objEvent->id);
 
             if (null !== $objPlayerscores) {
-                $output->writeln('Playerscores bereits vorhanden. Überspringe Spielbericht...');
+                $output->writeln('<comment>Playerscores bereits vorhanden. Überspringe Spielbericht...</comment>');
 
                 continue;
             }
@@ -111,12 +111,12 @@ class UpdateH4aScoresCommand extends Command
             //Spieler der Heim Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
 
-            $output->writeln('Playerscores für ' . $h4areportparser->heim_name . ' in Spiel ' . $objEvent->gGameNo . ' gespeichert.');
+            $output->writeln('<info>Playerscores für ' . $h4areportparser->heim_name . ' in Spiel ' . $objEvent->gGameNo . ' gespeichert.</info>');
 
             //Spieler der Gast Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
-            $output->writeln('Playerscores für ' . $h4areportparser->gast_name . ' in Spiel ' . $objEvent->gGameNo . ' gespeichert.');
+            $output->writeln('<info>Playerscores für ' . $h4areportparser->gast_name . ' in Spiel ' . $objEvent->gGameNo . ' gespeichert.</info>');
         }
 
         return Command::SUCCESS;
