@@ -7,7 +7,6 @@ namespace Janborg\H4aGamestats;
 use Contao\CalendarEventsModel;
 use Contao\Input;
 use Contao\Template;
-use Doctrine\DBAL\Connection;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 
