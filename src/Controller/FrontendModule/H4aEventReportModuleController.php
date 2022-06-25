@@ -39,6 +39,7 @@ class H4aEventReportModuleController extends AbstractFrontendModuleController
 
         $this->h4aEventGamestats->addHomeStatsToTemplate($template, $event);
         $this->h4aEventGamestats->addGuestStatsToTemplate($template, $event);
+        $this->h4aEventGamestats->addTimelineToTemplate($template, $event);
 
         return $template->getResponse();
     }
