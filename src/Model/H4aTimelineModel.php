@@ -55,7 +55,6 @@ class H4aTimelineModel extends Model
      *
      * @return array<mixed>
      */
-     
     public static function findAllGoalsByCalendarEvent($pid)
     {
         $db = System::getContainer()->get('database_connection');

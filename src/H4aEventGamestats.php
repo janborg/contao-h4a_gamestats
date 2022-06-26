@@ -12,7 +12,6 @@ use Janborg\H4aGamestats\Model\H4aTimelineModel;
 
 class H4aEventGamestats
 {
- 
     /**
      * Adds stats for Home Team Players and Officials to template.
      */
@@ -36,7 +35,6 @@ class H4aEventGamestats
 
         $template->guestOfficials = $this->isOfficial($guestteamscores);
     }
-
 
     /**
      * Adds timeline to template.
@@ -64,11 +62,12 @@ class H4aEventGamestats
 
         return CalendarEventsModel::findByIdOrAlias($item);
     }
+
     /**
      * @param array<mixed> $teammembers
+     *
      * @return array<mixed>
      */
-   
     private function isPlayer($teammembers)
     {
         return array_filter(
@@ -92,9 +91,9 @@ class H4aEventGamestats
 
     /**
      * @param array<mixed> $teammembers
+     *
      * @return array<mixed>
      */
-    
     private function isOfficial($teammembers)
     {
         return array_filter(

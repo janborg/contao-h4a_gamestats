@@ -10,11 +10,10 @@ declare(strict_types=1);
  * @license MIT
  */
 
-
 /*
  * palettes
  */
- 
+
 $GLOBALS['TL_DCA']['tl_content']['palettes']['h4a_gamescore'] = '{type_legend},type,headline;{h4a_legend},team_calendar,h4a_season, h4a_event_id;{expert_legend:hide},cssID';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['h4a_seasonscore'] = '{type_legend},type,headline;{h4a_legend},team_calendar,h4a_season, my_team_name;{expert_legend:hide},cssID';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['h4a_timeline'] = '{type_legend},type,headline;{h4a_legend},team_calendar,h4a_season, h4a_event_id;{expert_legend:hide},cssID';

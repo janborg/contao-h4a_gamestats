@@ -57,7 +57,7 @@ class TabulaConverter
     /**
      * Path to jar file.
      */
-    private string $jarArchive = __DIR__ . '/lib/tabula-1.0.5-jar-with-dependencies.jar';
+    private string $jarArchive = __DIR__.'/lib/tabula-1.0.5-jar-with-dependencies.jar';
 
     /**
      * Tabula constructor.
@@ -86,33 +86,21 @@ class TabulaConverter
         }
     }
 
-    /**
-     * @return bool
-     */
     public function isEncodeUTF8(): bool
     {
         return 'utf-8' === $this->encoding;
     }
 
-    /**
-     * @return bool
-     */
     public function isOsWindow(): bool
     {
         return 'Window' === $this->os;
     }
 
-    /**
-     * @return bool
-     */
     public function isOsMac(): bool
     {
         return 'Mac' === $this->os;
     }
 
-    /**
-     * @return bool
-     */
     public function isLinux(): bool
     {
         return 'Linux' === $this->os;
@@ -178,8 +166,6 @@ class TabulaConverter
 
     /**
      * @param string $format
-     *
-     * @return string
      */
     public function extractFormatForConversion($format): string
     {
@@ -198,8 +184,6 @@ class TabulaConverter
 
     /**
      * @param string $path
-     *
-     * @return bool
      */
     public function existFileCheck($path): bool
     {
@@ -208,7 +192,7 @@ class TabulaConverter
         }
 
         if (!is_readable($path)) {
-            throw new InvalidArgumentException(sprintf("Could not read `{%s}`", $path));
+            throw new InvalidArgumentException(sprintf('Could not read `{%s}`', $path));
             //throw new InvalidArgumentException("Could not read `{$path}`");
         }
 
@@ -217,8 +201,6 @@ class TabulaConverter
 
     /**
      * @param string $path
-     *
-     * @return bool
      */
     public function existDirectoryCheck($path): bool
     {
@@ -248,18 +230,18 @@ class TabulaConverter
             throw new RuntimeException('Could not find java on your system.');
         }
 
-        array_push($javaOptions, '-Xmx256m');
+        $javaOptions[] = '-Xmx256m';
 
         if ($this->isOsMac()) {
-            array_push($javaOptions, '-Djava.awt.headless=true');
+            $javaOptions[] = '-Djava.awt.headless=true';
         }
 
         if ($this->isEncodeUTF8()) {
-            array_push($javaOptions, '-Dfile.encoding=UTF8');
+            $javaOptions[] = '-Dfile.encoding=UTF8';
         }
 
-        array_push($javaOptions, '-jar');
-        array_push($javaOptions, $this->getJarArchive());
+        $javaOptions[] = '-jar';
+        $javaOptions[] = $this->getJarArchive();
 
         $this->javaOptions = $javaOptions;
     }

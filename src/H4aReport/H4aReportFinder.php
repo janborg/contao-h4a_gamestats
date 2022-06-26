@@ -37,7 +37,7 @@ class H4aReportFinder
      */
     public function getGameTableByLeagueID(): array
     {
-        $url = $this->baseUrl . $this->leagueID;
+        $url = $this->baseUrl.$this->leagueID;
         dump($this->baseUrl, $this->leagueID, $url);
         $html = file_get_contents($url);
 
@@ -68,10 +68,9 @@ class H4aReportFinder
     /**
      * @return array<string>
      */
-
     public function getReportNoByGameNo()
     {
-        $url = $this->baseUrl . $this->leagueID;
+        $url = $this->baseUrl.$this->leagueID;
         dump($this->baseUrl, $this->leagueID, $url, $this->gameNo);
         $html = file_get_contents($url);
 
@@ -97,24 +96,19 @@ class H4aReportFinder
             }
         );
 
-        $reportNo = $this->getReportNoByGameNoFromAllGames($allGames, $this->gameNo);
-        
-        return $reportNo;
+        return $this->getReportNoByGameNoFromAllGames($allGames, $this->gameNo);
     }
 
     /**
      * @param array<mixed> $allGames
-     * @param string $gameNo
+     * @param string       $gameNo
+     *
      * @return array<string>
      */
     public function getReportNoByGameNoFromAllGames(array $allGames, $gameNo): array
     {
-        $sgame = array_filter($allGames, function ($game) use ($gameNo) {
-            return $game[1]['text'] === $gameNo;
-        });
+        $sgame = array_filter($allGames, static fn ($game) => $game[1]['text'] === $gameNo);
 
-        $reportNo = $sgame[10]['sGID'] ?? null;
-
-        return $reportNo;
+        return $sgame[10]['sGID'] ?? null;
     }
 }

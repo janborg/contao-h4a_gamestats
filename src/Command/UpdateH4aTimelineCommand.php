@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of hsg-heilbronn website.
+ * This file is part of contao-h4a_gamestats.
  *
  * (c) Jan Lünborg
  *
@@ -21,14 +21,11 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-
 /**
- * Class UpdateH4aTimelineCommand
+ * Class UpdateH4aTimelineCommand.
  *
- * @package Janborg\H4aGamestats\Command
  * @property int $statusCode
  */
-
 class UpdateH4aTimelineCommand extends Command
 {
     protected static $defaultName = 'h4a:update:timeline';
@@ -68,7 +65,7 @@ class UpdateH4aTimelineCommand extends Command
         }
 
         $output->writeln([
-            'Es wurden ' . \count($objEvents) . ' H4a-Events mit Ergebnis gefunden.',
+            'Es wurden '.\count($objEvents).' H4a-Events mit Ergebnis gefunden.',
             'Versuche nun die Reports abzurufen ...',
             '============================================================',
         ]);
@@ -76,25 +73,25 @@ class UpdateH4aTimelineCommand extends Command
         foreach ($objEvents as $objEvent) {
             $output->writeln([
                 '',
-                'Spiel ' . $objEvent->gGameNo . ' ' . $objEvent->title . ':',
+                'Spiel '.$objEvent->gGameNo.' '.$objEvent->title.':',
                 '-----------------------------------------------------',
             ]);
-            if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
 
+            if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
                 $output->writeln('Keine ReportNo (sGID) vorhanden. Versuche ReportNo zu finden ...');
                 $sGID = Helper::getReportNo($objEvent->gClassID, $objEvent->gGameNo);
 
                 if (null !== $sGID) {
                     $objEvent->sGID = $sGID;
                     $objEvent->save();
-                    $output->writeln('<info>ReportNo (sGID) ' . $sGID . ' gefunden.</info>');
+                    $output->writeln('<info>ReportNo (sGID) '.$sGID.' gefunden.</info>');
                 } else {
                     $output->writeln('<error>Keine Reportnummer vorhanden... Skipped</error>');
                     continue;
                 }
             }
 
-            $output->writeln('Timeline aus Spielbericht ' . $objEvent->sGID . ' abrufen...');
+            $output->writeln('Timeline aus Spielbericht '.$objEvent->sGID.' abrufen...');
 
             //check, ob bereits Timeline zum H4a-Event vorhanden sind:
             $objPlayerscores = H4aTimelineModel::findBy('pid', $objEvent->id);
@@ -110,7 +107,7 @@ class UpdateH4aTimelineCommand extends Command
             //Spieler der Heim Mannschaft speichern
             H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
 
-            $output->writeln('<info>Timeline für Spiel ' . $objEvent->gGameNo . ' gespeichert.</info>');
+            $output->writeln('<info>Timeline für Spiel '.$objEvent->gGameNo.' gespeichert.</info>');
         }
 
         return Command::SUCCESS;

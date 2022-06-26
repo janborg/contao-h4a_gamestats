@@ -17,9 +17,10 @@ use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
 use Contao\Template;
+use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Janborg\H4aGamestats\H4aEventGamestats;
+
 /**
  * @ContentElement("h4a_timeline",
  *   category="handball4all",
@@ -43,7 +44,7 @@ class H4aTimelineElement extends AbstractContentElementController
         $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
 
         $this->h4aEventGamestats->addTimelineToTemplate($template, $event);
-    
+
         return $template->getResponse();
     }
 }
