@@ -44,6 +44,8 @@ class ContentListener
                 `h4a_season` = ? 
             ORDER BY `startDate`', [$dc->activeRecord->team_calendar, $dc->activeRecord->h4a_season]);
 
+        $options = [];
+
         while ($row = $stmt->fetchAssociative()) {
             $options[$row['id']] = date('d.m.Y', (int) ($row['startDate'])) . ' / ' . $row['title'];
         }
@@ -68,6 +70,8 @@ class ContentListener
                 `tl_h4a_seasons` 
             ORDER BY 
                 `season` DESC');
+
+        $options = [];
 
         while ($row = $stmt->fetchAssociative()) {
             $options[$row['id']] = $row['season'];
