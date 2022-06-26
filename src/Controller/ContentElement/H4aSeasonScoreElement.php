@@ -19,6 +19,7 @@ use Contao\Template;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Contao\CalendarModel;
 
 /**
  * @ContentElement("h4a_seasonscore",
@@ -30,7 +31,19 @@ class H4aSeasonScoreElement extends AbstractContentElementController
 {
     public function getResponse(Template $template, ContentModel $model, Request $request): Response|null
     {
-        $playerscores = H4aPlayerscoresModel::findScoresBySeasonAndTeamName($model->h4a_season, $model->my_team_name);
+        //get h4a_classID and h4aseason from calendar
+        $objCalendar = CalendarModel::findById($model->team_calendar);
+        
+        $seasons = unserialize($objCalendar->h4a_seasons);
+
+        $saison = array_values(
+            array_filter($seasons, function ($season) use ($model) {
+            return $season['h4a_saison'] == $model->h4a_season;
+        }));
+
+        $classID = $saison[0]['h4a_liga'];
+
+        $playerscores = H4aPlayerscoresModel::findScoresByClassIdAndTeamName($classID, $model->my_team_name);
 
         $template->playerscores = $playerscores;
 
