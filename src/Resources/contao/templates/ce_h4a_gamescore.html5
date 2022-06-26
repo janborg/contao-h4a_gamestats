@@ -4,7 +4,7 @@
 
 <div class="gamescore hometeam">
     <p>
-    <h3>Für <?= $this->team_1_name ?> spielten:</h3>
+    <h3>Für <?= $this->home_team ?> spielten:</h3>
     </p>
     <p>
         <?php foreach ($this->homePlayers as $player) {
@@ -46,7 +46,7 @@
 </div>
 <div class="gamescore guestteam">
     <p>
-    <h3>Für <?= $this->team_2_name ?> spielten:</h3>
+    <h3>Für <?= $this->guest_team ?> spielten:</h3>
     <p>
         <?php foreach ($this->guestPlayers as $player) {
             echo $player['name'];

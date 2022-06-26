@@ -19,6 +19,8 @@ class H4aEventGamestats
     {
         $hometeamscores = H4aPlayerscoresModel::findTeamScoresByCalendarEvent($event->id, '1');
 
+        $template->home_team = $event->gHomeTeam;
+        
         $template->homePlayers = $this->isPlayer($hometeamscores);
 
         $template->homeOfficials = $this->isOfficial($hometeamscores);
@@ -30,6 +32,8 @@ class H4aEventGamestats
     public function addGuestStatsToTemplate(Template $template, CalendarEventsModel $event): void
     {
         $guestteamscores = H4aPlayerscoresModel::findTeamScoresByCalendarEvent($event->id, '2');
+
+        $template->guest_team = $event->gGuestTeam;
 
         $template->guestPlayers = $this->isPlayer($guestteamscores);
 
