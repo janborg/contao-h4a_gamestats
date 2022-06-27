@@ -26,6 +26,7 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
         'dataContainer' => 'Table',
         'ptable' => 'tl_calendar_events',
         'doNotCopyRecords' => true,
+        'doNotDeleteRecords' => false,
         'enableVersioning' => true,
         'sql' => [
             'keys' => [
