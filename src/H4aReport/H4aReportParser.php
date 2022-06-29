@@ -175,7 +175,11 @@ class H4aReportParser
         $playerstats = [];
 
         foreach ($teamstats as $key => $teammember) {
-            if (empty($teammember[1]['text'])) {
+            //leere Spalten oder fehlerhafte Spalten überspringen (Bsp. Report No. 158918, https://spo.handball4all.de/misc/sboPublicReports.php?sGID=158918)
+            if (
+                empty($teammember[1]['text'])
+                || !empty($teammember[2]['text'])
+            ) {
                 continue;
             }
             $penalties = explode('/', $teammember[6]['text']);
