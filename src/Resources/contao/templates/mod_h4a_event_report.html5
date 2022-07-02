@@ -2,8 +2,6 @@
 
 <?php $this->block('content'); ?>
 
-<?= $this->showTemplateVars(); ?>
-
 <div class="gamescore hometeam">
     <p>
     <h3>Für <?= $this->home_team ?> spielten:</h3>
