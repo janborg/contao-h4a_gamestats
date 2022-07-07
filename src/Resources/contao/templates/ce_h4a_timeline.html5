@@ -1,34 +1,85 @@
+<?php
+$GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4agamestats/js/chart.min.js', false, null);
+$GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4agamestats/js/chartjs-adapter-date-fns.bundle.min.js', false, null);
+?>
+
 <?php $this->extend('block_searchable'); ?>
 
 <?php $this->block('content'); ?>
 
-<div class="h4a_timeline">
-    <table border="0" width="100%" cellspacing="0" cellpadding="3" class="timelinetable">
-        <tbody>
-            <tr>
-                <th>Zeit</th>
-                <th><?=$this->home_team ?></th>
-                <th>Spielstand</th>
-                <th><?=$this->guest_team ?></th>
-            </tr>
-            <?php foreach($this->timeline as $timelineEvent): ?>
-                <tr>
-                    <td><?=$timelineEvent['matchtime'] ?></td>
-                    <td>
-                    <?php if ($timelineEvent['action_team'] == $this->home_team): ?>
-                        <?= $timelineEvent['action_type'].' durch '.$timelineEvent['action_player'] ?>
-                    <?php endif; ?>
-                    </td>
-                    <td><?=$timelineEvent['currentscore'] ?></td>
-                    <td>
-                    <?php if ($timelineEvent['action_team'] == $this->guest_team): ?> 
-                        <?=$timelineEvent['action_type'].' durch '.$timelineEvent['action_player'] ?>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+<?php if (Contao\System::getContainer()->get('kernel')->isDebug()) dump($this) ?>
+
+<div>
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+
+    <script>
+        const homeTeam = <?= json_encode($this->home_team) ?>;
+        const guestTeam = <?= json_encode($this->guest_team) ?>;
+        const ctx = document.getElementById('myChart');
+        const chartData = <?= $this->chartData ?>;
+
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                        label: homeTeam,
+                        data: chartData,
+                        borderColor: 'rgb(255, 0, 0)',
+                        parsing: {
+                            yAxisKey: 'home',
+                        }
+                    },
+                    {
+                        label: guestTeam,
+                        data: chartData,
+                        borderColor: 'RGB(0, 255, 0)',
+                        parsing: {
+                            yAxisKey: 'guest',
+                        },
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                stepped: true,
+                interaction: {
+                    mode: 'index',
+                    axis: 'x',
+                    intersect: false,
+                },
+                elements: {
+                    point: {
+                        radius: 0,
+                    },
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Spielverlauf: ' + homeTeam + ' - ' + guestTeam,
+                    },
+                },
+            },
+            scales: {
+                xAxis: {
+                    type: 'time',
+                    time: {
+                        parser: "mm:ss",
+                        unit: "second",
+                        tooltipFormat: 'mm:ss',
+                        displayFormats: {
+                            'second': "mm:ss"
+                        },
+                    },
+                },
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                    },
+                }],
+            }
+        });
+    </script>
 </div>
 
 <?php $this->endblock(); ?>
