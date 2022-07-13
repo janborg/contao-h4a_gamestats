@@ -10,9 +10,10 @@ $GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4ag
 <?php if (Contao\System::getContainer()->get('kernel')->isDebug()) dump($this) ?>
 
 <div>
+    <h3>Spielverlauf</h3>
     <canvas id="myChart" width="400" height="200"></canvas>
-
-
+</div>
+<div>
     <script>
         const homeTeam = <?= json_encode($this->home_team) ?>;
         const guestTeam = <?= json_encode($this->guest_team) ?>;
@@ -55,12 +56,6 @@ $GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4ag
                 elements: {
                     point: {
                         radius: 0,
-                    },
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Spielverlauf: ' + homeTeam + ' - ' + guestTeam,
                     },
                 },
             },
