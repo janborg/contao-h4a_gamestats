@@ -16,7 +16,7 @@ $GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4ag
     <script>
         const homeTeam = <?= json_encode($this->home_team) ?>;
         const guestTeam = <?= json_encode($this->guest_team) ?>;
-        const ctx = document.getElementById('myChart');
+        var ctx = document.getElementById('myChart').getContext("2d");
         const chartData = <?= $this->chartData ?>;
 
         const myChart = new Chart(ctx, {
@@ -25,7 +25,9 @@ $GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4ag
                 datasets: [{
                         label: homeTeam,
                         data: chartData,
-                        borderColor: 'rgb(255, 0, 0)',
+                        borderColor: 'rgba(255, 0, 0, 1)',
+                        fill: true,
+                        backgroundColor: 'rgba(255, 0, 0, 0.25)',
                         parsing: {
                             yAxisKey: 'home',
                         }
@@ -33,7 +35,9 @@ $GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4ag
                     {
                         label: guestTeam,
                         data: chartData,
-                        borderColor: 'RGB(0, 255, 0)',
+                        borderColor: 'rgba(0, 0, 178, 1)',
+                        fill: true,
+                        backgroundColor: 'rgba(0, 0, 178, 0.25)',
                         parsing: {
                             yAxisKey: 'guest',
                         },
