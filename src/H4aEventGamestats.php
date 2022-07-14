@@ -46,8 +46,33 @@ class H4aEventGamestats
     public function addTimelineToTemplate(Template $template, CalendarEventsModel $event): void
     {
         $timeline = H4aTimelineModel::findAllGoalsByCalendarEvent($event->id);
+
+        $arrChartData[] = [
+            'x' => '00:00',
+            'home' => 0,
+            'guest' => 0,
+        ];
+
+
+        foreach ($timeline as $goal) {
+            $arrChartData[] = [
+                'x' => $goal['matchtime'],
+                'home' => explode(':', $goal['currentscore'])[0],
+                'guest' => explode(':', $goal['currentscore'])[1],
+            ];
+            // if its the last array item, then add x = 60:00 and currentscore = currentscore
+            if ($goal === end($timeline)) {
+                $arrChartData[] = [
+                    'x' => '60:00',
+                    'home' => explode(':', $goal['currentscore'])[0],
+                    'guest' => explode(':', $goal['currentscore'])[1],
+                ];
+            }
+        }
+
         $objCalEvent = CalendarEventsModel::findByPk($event->id);
 
+        $template->chartData = json_encode($arrChartData);
         $template->timeline = $timeline;
         $template->home_team = $objCalEvent->gHomeTeam;
         $template->guest_team = $objCalEvent->gGuestTeam;
