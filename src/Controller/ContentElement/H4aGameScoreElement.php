@@ -22,13 +22,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @ContentElement("h4a_gamescore",
+ * @ContentElement(type=H4aGameScoreElement::TYPE,
  *   category="handball4all",
  *   template="ce_h4a_gamescore",
  * )
  */
 class H4aGameScoreElement extends AbstractContentElementController
 {
+    public const TYPE = 'h4a_gamescore';
+
     /**
      * @var H4aEventGamestats
      */

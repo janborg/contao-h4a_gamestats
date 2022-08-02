@@ -22,13 +22,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Contao\CalendarModel;
 
 /**
- * @ContentElement("h4a_seasonscore",
+ * @ContentElement(type=H4aSeasonScoreElement::TYPE,
  *   category="handball4all",
  *   template="ce_h4a_seasonscore",
  * )
  */
 class H4aSeasonScoreElement extends AbstractContentElementController
 {
+
+    public const TYPE = 'h4a_seasonscore';
+
     public function getResponse(Template $template, ContentModel $model, Request $request): Response|null
     {
         //get h4a_classID and h4aseason from calendar

@@ -22,13 +22,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @ContentElement("h4a_timeline",
+ * @ContentElement(type=H4aTimelineElement::TYPE,
  *   category="handball4all",
  *   template="ce_h4a_timeline",
  * )
  */
 class H4aTimelineElement extends AbstractContentElementController
 {
+
+    public const TYPE = 'h4a_timeline';
+
     /**
      * @var H4aEventGamestats
      */
