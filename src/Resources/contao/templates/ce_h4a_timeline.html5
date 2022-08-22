@@ -7,8 +7,6 @@ $GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4ag
 
 <?php $this->block('content'); ?>
 
-<?php if (Contao\System::getContainer()->get('kernel')->isDebug()) dump($this) ?>
-
 <div>
     <h3>Spielverlauf</h3>
     <canvas id="myChart" width="400" height="200"></canvas>
