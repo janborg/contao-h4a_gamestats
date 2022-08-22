@@ -39,8 +39,8 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
     // List
     'list' => [
         'sorting' => [
-            'mode' => 4,
-            'flag' => 11,
+            'mode' => Contao\DataContainer::MODE_PARENT,
+            'flag' => Contao\DataContainer::SORT_ASC,
             'headerFields' => ['title', 'startDate', 'starttime', 'sGID', 'gHomeGoals', 'gGuestGoals'],
             'fields' => ['is_home_or_guest', 'goals'],
             'panelLayout' => 'sort;filter',
