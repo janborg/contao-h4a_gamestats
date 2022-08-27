@@ -1,6 +1,7 @@
 services:
     _defaults:
         autoconfigure: true
+        autowire: true
 
     _instanceof:
         Contao\CoreBundle\Framework\FrameworkAwareInterface:
@@ -12,3 +13,5 @@ services:
         arguments:
             - '@contao.framework'
             - '@database_connection'
+
+    Janborg\H4aGamestats\EventListener\DataContainer\UnsetH4aGamestatsOperationCallback: ~
