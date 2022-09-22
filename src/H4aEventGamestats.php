@@ -21,9 +21,17 @@ class H4aEventGamestats
 
         $template->home_team = $event->gHomeTeam;
         
-        $template->homePlayers = $this->isPlayer($hometeamscores);
+        $template->home_players = $this->isPlayer($hometeamscores);
 
-        $template->homeOfficials = $this->isOfficial($hometeamscores);
+        $template->home_officials = $this->isOfficial($hometeamscores);
+
+        $template->home_yellow_cards = $this->hasYellowCard($hometeamscores);
+
+        $template->home_suspensions = $this->hasSuspensions($hometeamscores);
+
+        $template->home_red_cards = $this->hasRedCard($hometeamscores);
+
+        $template->home_blue_cards = $this->hasBlueCard($hometeamscores);
     }
 
     /**
@@ -35,9 +43,17 @@ class H4aEventGamestats
 
         $template->guest_team = $event->gGuestTeam;
 
-        $template->guestPlayers = $this->isPlayer($guestteamscores);
+        $template->guest_players = $this->isPlayer($guestteamscores);
 
-        $template->guestOfficials = $this->isOfficial($guestteamscores);
+        $template->guest_officials = $this->isOfficial($guestteamscores);
+
+        $template->guest_yellow_cards = $this->hasYellowCard($guestteamscores);
+
+        $template->guest_suspensions = $this->hasSuspensions($guestteamscores);
+
+        $template->guest_red_cards = $this->hasRedCard($guestteamscores);
+
+        $template->guest_blue_cards = $this->hasBlueCard($guestteamscores);
     }
 
     /**
@@ -135,6 +151,90 @@ class H4aEventGamestats
                     'C' === $teammember['number'] ||
                     'D' === $teammember['number']
                     )
+                ) {
+                    return true;
+                }
+
+                return false;
+            }
+        );
+    }
+
+    /**
+     * @param array<mixed> $teammembers
+     *
+     * @return array<mixed>
+     */
+    private function hasYellowCard($teammembers)
+    {
+        return array_filter(
+            $teammembers,
+            static function ($teammember) {
+                if (
+                    '0' !== $teammember['yellow_cards'] 
+                ) {
+                    return true;
+                }
+
+                return false;
+            }
+        );
+    }
+
+    /**
+     * @param array<mixed> $teammembers
+     *
+     * @return array<mixed>
+     */
+    private function hasSuspensions($teammembers)
+    {
+        return array_filter(
+            $teammembers,
+            static function ($teammember) {
+                if (
+                    '0' !== $teammember['suspensions'] 
+                ) {
+                    return true;
+                }
+
+                return false;
+            }
+        );
+    }
+
+    /**
+     * @param array<mixed> $teammembers
+     *
+     * @return array<mixed>
+     */
+    private function hasRedCard($teammembers)
+    {
+        return array_filter(
+            $teammembers,
+            static function ($teammember) {
+                if (
+                    '0' !== $teammember['red_cards'] 
+                ) {
+                    return true;
+                }
+
+                return false;
+            }
+        );
+    }
+
+    /**
+     * @param array<mixed> $teammembers
+     *
+     * @return array<mixed>
+     */
+    private function hasBlueCard($teammembers)
+    {
+        return array_filter(
+            $teammembers,
+            static function ($teammember) {
+                if (
+                    '0' !== $teammember['blue_cards'] 
                 ) {
                     return true;
                 }
