@@ -16,7 +16,6 @@
         "symfony/config": "^5.4",
         "symfony/dependency-injection": "^5.4",
         "symfony/http-kernel": "^5.4",
-        "codefog/contao-haste": "^4.17",
         "janborg/contao-h4a_tabellen": "^1.0"
     },
     "require-dev": {
