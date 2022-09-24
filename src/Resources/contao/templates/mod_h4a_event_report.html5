@@ -11,90 +11,168 @@ $GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4ag
     <h3>Spielverlauf</h3>
     <canvas id="myChart" width="400" height="200"></canvas>
 </div>
+
 <div class="gamescore hometeam">
-    <p>
+
     <h3>Für <?= $this->home_team ?> spielten:</h3>
-    </p>
+
     <p>
-        <?php foreach ($this->homePlayers as $player) {
-            echo $player['name'];
+        <?php $players_goals = ''; ?>
+        <?php foreach ($this->home_players as $player) {
+            $players_goals .= $player['name'];
 
             if ("0" !== $player['goals']) {
-                echo " (" . $player['goals'];
+                $players_goals .= " (" . $player['goals'];
 
                 if ("0" !== $player['penalty_goals']) {
-                    echo "/" . $player['penalty_goals'];
+                    $players_goals .= "/" . $player['penalty_goals'];
                 }
 
-                echo  "), ";
+                $players_goals .=  "), ";
             } else {
-                echo ", ";
+                $players_goals .= ", ";
             }
         } ?>
+        <?php echo rtrim($players_goals, ', '); ?>
     </p>
 
-    <p>
-        <b>Gelbe Karten: </b><?= $this->team_1_yellow_cards; ?>
-        <?php foreach ($this->homePlayers as $player) {
+    <?php if ($this->home_yellow_cards) : ?>
+        <p>
+            <b>Gelbe Karten: </b>
+            <?php $players_yellow = ''; ?>
+            <?php foreach ($this->home_yellow_cards as $player) {
+                $players_yellow .= $player['name'] . ', ';
+            } ?>
+            <?php echo rtrim($players_yellow, ', '); ?>
+        </p>
+    <?php endif; ?>
 
-            if ("0" !== $player['yellow_cards']) {
-                echo $player['name'] . ' (' . $player['yellow_cards'] . '), ';
-            }
-        } ?>
-    </p>
+    <?php if ($this->home_suspensions) : ?>
+        <p>
+            <b>Zeitstrafen: </b>
+            <?php $players_suspensions = ''; ?>
+            <?php foreach ($this->home_suspensions as $player) {
+                $players_suspensions .= $player['name'] . ' (' . $player['suspensions'] . '), ';
+            } ?>
+            <?php echo rtrim($players_suspensions, ', '); ?>
+        </p>
+    <?php endif; ?>
 
-    <p>
-        <b>Zeitstrafen:</b>
-        <?php foreach ($this->homePlayers as $player) {
+    <?php if ($this->home_red_cards) : ?>
+        <p>
+            <b>Rote Karten: </b>
+            <?php $players_red = ''; ?>
+            <?php foreach ($this->home_red_cards as $player) {
+                $players_red .= $player['name'] . ', ';
+            } ?>
+            <?php echo rtrim($players_red, ', '); ?>
+        </p>
+    <?php endif; ?>
 
-            if ("0" !== $player['suspensions']) {
-                echo $player['name'] . ' (' . $player['suspensions'] . '), ';
-            }
-        } ?>
-    </p>
+    <?php if ($this->home_blue_cards) : ?>
+        <p>
+            <b>Blaue Karten: </b>
+            <?php $players_blue = ''; ?>
+            <?php foreach ($this->home_blue_cards as $player) {
+                $players_blue .= $player['name'] . ', ';
+            } ?>
+            <?php echo rtrim($players_blue, ', '); ?>
+        </p>
+    <?php endif; ?>
+
+    <?php if ($this->home_officials) : ?>
+        <p>
+            <b>Trainer / Betreuer: </b>
+            <?php $officials = ''; ?>
+            <?php foreach ($this->home_officials as $official) {
+                $officials .= $official['name'] . ', ';
+            } ?>
+            <?php echo rtrim($officials, ', '); ?>
+        </p>
+    <?php endif; ?>
+
 </div>
+
 <div class="gamescore guestteam">
-    <p>
+
     <h3>Für <?= $this->guest_team ?> spielten:</h3>
+
     <p>
-        <?php foreach ($this->guestPlayers as $player) {
-            echo $player['name'];
+        <?php $players_goals = ''; ?>
+        <?php foreach ($this->guest_players as $player) {
+            $players_goals .= $player['name'];
 
             if ("0" !== $player['goals']) {
-                echo " (" . $player['goals'];
+                $players_goals .= " (" . $player['goals'];
 
                 if ("0" !== $player['penalty_goals']) {
-                    echo "/" . $player['penalty_goals'];
+                    $players_goals .= "/" . $player['penalty_goals'];
                 }
 
-                echo  "), ";
+                $players_goals .=  "), ";
             } else {
-                echo ", ";
+                $players_goals .= ", ";
             }
         } ?>
+        <?php echo rtrim($players_goals, ', '); ?>
     </p>
 
-    <p>
-        <b>Gelbe Karten: </b><?= $this->team_1_yellow_cards; ?>
-        <?php foreach ($this->guestPlayers as $player) {
+    <?php if ($this->guest_yellow_cards) : ?>
+        <p>
+            <b>Gelbe Karten: </b>
+            <?php $players_yellow = ''; ?>
+            <?php foreach ($this->guest_yellow_cards as $player) {
+                $players_yellow .= $player['name'] . ', ';
+            } ?>
+            <?php echo rtrim($players_yellow, ', '); ?>
+        </p>
+    <?php endif; ?>
 
-            if ("0" !== $player['yellow_cards']) {
-                echo $player['name'] . ' (' . $player['yellow_cards'] . '), ';
-            }
-        } ?>
-    </p>
+    <?php if ($this->guest_suspensions) : ?>
+        <p>
+            <b>Zeitstrafen: </b>
+            <?php $players_suspensions = ''; ?>
+            <?php foreach ($this->guest_suspensions as $player) {
+                $players_suspensions .= $player['name'] . ' (' . $player['suspensions'] . '), ';
+            } ?>
+            <?php echo rtrim($players_suspensions, ', '); ?>
+        </p>
+    <?php endif; ?>
 
-    <p>
-        <b>Zeitstrafen:</b>
-        <?php foreach ($this->guestPlayers as $player) {
+    <?php if ($this->guest_red_cards) : ?>
+        <p>
+            <b>Rote Karten: </b>
+            <?php $players_red = ''; ?>
+            <?php foreach ($this->guest_red_cards as $player) {
+                $players_red .= $player['name'] . ', ';
+            } ?>
+            <?php echo rtrim($players_red, ', '); ?>
+        </p>
+    <?php endif; ?>
 
-            if ("0" !== $player['suspensions']) {
-                echo $player['name'] . ' (' . $player['suspensions'] . '), ';
-            }
-        } ?>
-    </p>
+    <?php if ($this->guest_blue_cards) : ?>
+        <p>
+            <b>Blaue Karten: </b>
+            <?php $players_blue = ''; ?>
+            <?php foreach ($this->guest_blue_cards as $player) {
+                $players_blue .= $player['name'] . ', ';
+            } ?>
+            <?php echo rtrim($players_blue, ', '); ?>
+        </p>
+    <?php endif; ?>
 
+    <?php if ($this->guest_officials) : ?>
+        <p>
+            <b>Trainer / Betreuer: </b>
+            <?php $officials = ''; ?>
+            <?php foreach ($this->guest_officials as $official) {
+                $officials .= $official['name'] . ', ';
+            } ?>
+            <?php echo rtrim($officials, ', '); ?>
+        </p>
+    <?php endif; ?>
 </div>
+
 <div>
     <script>
         const homeTeam = <?= json_encode($this->home_team) ?>;
