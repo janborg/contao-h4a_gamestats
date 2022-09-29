@@ -75,7 +75,7 @@ class UpdateH4aScoresCommand extends Command
         foreach ($objEvents as $objEvent) {
             $output->writeln([
                 '',
-                'Spiel '.$objEvent->gGameNo.' '.$objEvent->title.':',
+                'Spiel '.$objEvent->gGameID.' '.$objEvent->title.':',
                 '-----------------------------------------------------',
             ]);
 
@@ -109,12 +109,12 @@ class UpdateH4aScoresCommand extends Command
             //Spieler der Heim Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
 
-            $output->writeln('<info>Playerscores für '.$h4areportparser->heim_name.' in Spiel '.$objEvent->gGameNo.' gespeichert.</info>');
+            $output->writeln('<info>Playerscores für '.$h4areportparser->heim_name.' in Spiel '.$objEvent->gGameID.' gespeichert.</info>');
 
             //Spieler der Gast Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
-            $output->writeln('<info>Playerscores für '.$h4areportparser->gast_name.' in Spiel '.$objEvent->gGameNo.' gespeichert.</info>');
+            $output->writeln('<info>Playerscores für '.$h4areportparser->gast_name.' in Spiel '.$objEvent->gGameID.' gespeichert.</info>');
         }
 
         return Command::SUCCESS;

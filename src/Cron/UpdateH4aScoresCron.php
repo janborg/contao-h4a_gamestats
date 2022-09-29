@@ -77,7 +77,7 @@ class UpdateH4aScoresCron
                 ->log(
                     LogLevel::INFO,
                     'Gamescores aus Bericht Nr. '.$objEvent->sGID
-                        .' für Spiel '.$objEvent->gGameNo.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
+                        .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
                         .' über Handball4all gespeichert',
                     ['contao' => new ContaoContext(__CLASS__.'::'.__FUNCTION__, TL_CRON)]
                 )

@@ -73,7 +73,7 @@ class UpdateH4aTimelineCommand extends Command
         foreach ($objEvents as $objEvent) {
             $output->writeln([
                 '',
-                'Spiel '.$objEvent->gGameNo.' '.$objEvent->title.':',
+                'Spiel '.$objEvent->gGameID.' '.$objEvent->title.':',
                 '-----------------------------------------------------',
             ]);
 
@@ -107,7 +107,7 @@ class UpdateH4aTimelineCommand extends Command
             //Spieler der Heim Mannschaft speichern
             H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
 
-            $output->writeln('<info>Timeline für Spiel '.$objEvent->gGameNo.' gespeichert.</info>');
+            $output->writeln('<info>Timeline für Spiel '.$objEvent->gGameID.' gespeichert.</info>');
         }
 
         return Command::SUCCESS;
