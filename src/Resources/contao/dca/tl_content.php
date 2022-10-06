@@ -32,6 +32,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['team_calendar'] = [
     'search' => true,
     'inputType' => 'select',
     'foreignKey' => 'tl_calendar.title',
+    'relation' => ['type'=>'hasOne', 'load'=>'lazy'],
     'eval' => ['includeBlankOption' => true, 'mandatory' => true, 'maxlength' => 10, 'tl_class' => 'w50', 'chosen' => true, 'submitOnChange' => true],
     'sql' => 'int(10) unsigned NOT NULL default 0',
 ];
@@ -42,6 +43,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['h4a_season'] = [
     'search' => true,
     'inputType' => 'select',
     'foreignKey' => 'tl_h4a_seasons.season',
+    'relation' => ['type'=>'hasOne', 'load'=>'lazy'],
     'eval' => ['includeBlankOption' => true, 'mandatory' => true, 'maxlength' => 10, 'tl_class' => 'w50', 'chosen' => true, 'submitOnChange' => true],
     'sql' => 'int(10) unsigned NOT NULL default 0',
 ];
