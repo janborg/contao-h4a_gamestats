@@ -1,0 +1,40 @@
+{% extends '@Contao/block_searchable' %}
+
+{% block content %}
+	<div class="seasonscore ce_table" style="overflow-x:auto;">
+		<table border="0" width="100%" cellspacing="0" cellpadding="3" class="seasonscoretable">
+			<tbody>
+				<tr>
+					<th>Name</th>
+					<th style="text-align: center;">Spiele</th>
+					<th style="text-align: center;">Tore</th>
+					<th style="text-align: center;">&#216 Tore</th>
+					<th style="text-align: center;">Feldtore</th>
+					<th style="text-align: center;">7m</th>
+					<th style="text-align: center;">Gelb</th>
+					<th style="text-align: center;">2min</th>
+					<th style="text-align: center;">Rot</th>
+					<th style="text-align: center;">Blau</th>
+				</tr>
+				{% for player in playerscores %}
+					<tr>
+						<td>{{ player.name }}</td>
+						<td style="text-align: center;">{{ player.games }}</td>
+						<td style="text-align: center;">{{ player.goals }}</td>
+						<td style="text-align: center;">
+							{{ (player.goals / player.games)|number_format(1,',','.') }}
+						</td>
+						<td style="text-align: center;">{{ player.goals - player.penalty_goals }}
+						</td>
+						<td style="text-align: center;">{{ player.penalty_goals }}/{{ player.penalty_tries }}</td>
+						<td style="text-align: center;">{{ player.yellow_cards }}</td>
+						<td style="text-align: center;">{{ player.suspensions }}</td>
+						<td style="text-align: center;">{{ player.red_cards }}</td>
+						<td style="text-align: center;">{{ player.blue_cards }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+{% endblock %}

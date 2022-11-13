@@ -1,0 +1,164 @@
+{% extends '@Contao/block_searchable' %}
+
+{% block content %}
+
+	<div class="gamescore hometeam">
+
+		<h3>Für
+			{{ home_team }}
+			spielten:</h3>
+
+		<p>
+			<b>Spieler (Tore/7m):</b>
+			{% set players_w_goals =[] %}
+			{% for player in home_players %}
+				{% if player.goals > 0 %}
+					{% set nextPlayer = "#{player.name} (#{player.goals}/#{player.penalty_goals})" %}
+				{% else %}
+					{% set nextPlayer = "#{player.name}" %}
+				{% endif %}
+				{% set players_w_goals = players_w_goals|merge([nextPlayer]) %}
+			{% endfor %}
+			{{ players_w_goals|join(', ') }}
+		</p>
+
+		{% if home_yellow_cards %}
+			<p>
+				<b>Gelbe Karten:</b>
+				{% set players_w_yellow =[] %}
+				{% for player in home_yellow_cards %}
+					{% set players_w_yellow = players_w_yellow|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_yellow|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if home_suspensions %}
+			<p>
+				<b>Zeitstrafen:</b>
+				{% set players_w_suspension =[] %}
+				{% for player in home_suspensions %}
+					{% set players_w_suspension = players_w_suspension|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_suspension|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if home_red_cards %}
+			<p>
+				<b>Rote Karten:
+				</b>
+				{% set players_w_red =[] %}
+				{% for player in home_red_cards %}
+					{% set players_w_red = players_w_red|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_red|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if home_blue_cards %}
+			<p>
+				<b>Blaue Karten:
+				</b>
+				{% set players_w_blue =[] %}
+				{% for player in home_blue_cards %}
+					{% set players_w_blue = players_w_blue|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_blue|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if home_officials %}
+			<p>
+				<b>Trainer / Betreuer:
+				</b>
+				{% set players_officials =[] %}
+				{% for player in home_officials %}
+					{% set players_officials = players_officials|merge([player.name]) %}
+				{% endfor %}
+				{{ players_officials|join(', ') }}
+			</p>
+		{% endif %}
+
+	</div>
+	<div class="gamescore guestteam">
+
+		<h3>Für
+			{{ guest_team }}
+			spielten:</h3>
+
+		<p>
+			<b>Spieler (Tore/7m):</b>
+			{% set players_w_goals =[] %}
+			{% for player in guest_players %}
+				{% if player.goals > 0 %}
+					{% set nextPlayer = "#{player.name} (#{player.goals}/#{player.penalty_goals})" %}
+				{% else %}
+					{% set nextPlayer = "#{player.name}" %}
+				{% endif %}
+				{% set players_w_goals = players_w_goals|merge([nextPlayer]) %}
+			{% endfor %}
+			{{ players_w_goals|join(', ') }}
+		</p>
+
+		{% if guest_yellow_cards %}
+			<p>
+				<b>Gelbe Karten:</b>
+				{% set players_w_yellow =[] %}
+				{% for player in guest_yellow_cards %}
+					{% set players_w_yellow = players_w_yellow|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_yellow|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if guest_suspensions %}
+			<p>
+				<b>Zeitstrafen:</b>
+				{% set players_w_suspension =[] %}
+				{% for player in guest_suspensions %}
+					{% set players_w_suspension = players_w_suspension|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_suspension|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if guest_red_cards %}
+			<p>
+				<b>Rote Karten:
+				</b>
+				{% set players_w_red =[] %}
+				{% for player in guest_red_cards %}
+					{% set players_w_red = players_w_red|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_red|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if guest_blue_cards %}
+			<p>
+				<b>Blaue Karten:
+				</b>
+				{% set players_w_blue =[] %}
+				{% for player in guest_blue_cards %}
+					{% set players_w_blue = players_w_blue|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_blue|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if guest_officials %}
+			<p>
+				<b>Trainer / Betreuer:
+				</b>
+				{% set players_officials =[] %}
+				{% for player in guest_officials %}
+					{% set players_officials = players_officials|merge([player.name]) %}
+				{% endfor %}
+				{{ players_officials|join(', ') }}
+			</p>
+		{% endif %}
+
+	</div>
+
+{% endblock %}
