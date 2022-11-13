@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 
 use Contao\Backend;
+use Contao\BackendUser;
+use Contao\DC_Table;
 
 /*
  * This file is part of contao-h4a_gamestats.
@@ -23,7 +25,7 @@ use Contao\Backend;
 $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
     // Config
     'config' => [
-        'dataContainer' => 'Table',
+        'dataContainer' => DC_Table::class,
         'ptable' => 'tl_calendar_events',
         'doNotCopyRecords' => true,
         'doNotDeleteRecords' => false,
@@ -155,7 +157,7 @@ class tl_h4a_timeline extends Backend
     public function __construct()
     {
         parent::__construct();
-        $this->import('BackendUser', 'User');
+        $this->import(BackendUser::class, 'User');
     }
 
     public function listTimelineActions($arrRow)

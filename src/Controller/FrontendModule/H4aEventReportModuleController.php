@@ -7,7 +7,7 @@ namespace Janborg\H4aGamestats\Controller\FrontendModule;
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
 use Contao\ModuleModel;
-use Contao\Template;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +29,7 @@ class H4aEventReportModuleController extends AbstractFrontendModuleController
         $this->h4aEventGamestats = $h4aEventGamestats;
     }
 
-    protected function getResponse(Template $template, ModuleModel $model, Request $request): Response|null
+    protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
     {
         $event = $this->h4aEventGamestats->getCurrentEvent();
 

@@ -16,7 +16,7 @@ use Contao\CalendarEventsModel;
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
-use Contao\Template;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,7 +42,7 @@ class H4aTimelineElement extends AbstractContentElementController
         $this->h4aEventGamestats = $h4aEventGamestats;
     }
 
-    public function getResponse(Template $template, ContentModel $model, Request $request): Response|null
+    public function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
     {
         $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
 

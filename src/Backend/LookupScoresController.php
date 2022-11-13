@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Backend;
 
 use Contao\Backend;
+use Contao\BackendUser;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Monolog\ContaoContext;
 use Contao\Input;
@@ -27,7 +28,7 @@ class LookupScoresController extends Backend
     public function __construct()
     {
         parent::__construct();
-        $this->import('BackendUser', 'User');
+        $this->import(BackendUser::class, 'User');
     }
 
     public function lookupScores(): void
@@ -61,8 +62,8 @@ class LookupScoresController extends Backend
         H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objCalendarEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
         System::getContainer()
-            ->get('monolog.logger.contao')
-            ->log(LogLevel::INFO, 'Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.', ['contao' => new ContaoContext(__CLASS__.'::'.__FUNCTION__, TL_GENERAL)])
+            ->get('monolog.logger.contao.general')
+            ->info('Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.')
             ;
 
         $this->redirect($this->getReferer());
