@@ -1,0 +1,243 @@
+{% extends '@Contao/block_searchable' %}
+
+{% block content %}
+
+{% add to head %}
+<script src="bundles/janborgh4agamestats/js/chart.min.js"></script>
+<script src="bundles/janborgh4agamestats/js/chartjs-adapter-date-fns.bundle.min.js"></script>
+{% endadd %}
+
+
+<div>
+    <h3>Spielverlauf</h3>
+    <canvas id="myChart" width="400" height="200"></canvas>
+</div>
+
+	<div class="gamescore hometeam">
+
+		<h3>Für
+			{{ home_team }}
+			spielten:</h3>
+
+		<p>
+			<b>Spieler (Tore/7m):</b>
+			{% set players_w_goals =[] %}
+			{% for player in home_players %}
+				{% if player.goals > 0 %}
+					{% set nextPlayer = "#{player.name} (#{player.goals}/#{player.penalty_goals})" %}
+				{% else %}
+					{% set nextPlayer = "#{player.name}" %}
+				{% endif %}
+				{% set players_w_goals = players_w_goals|merge([nextPlayer]) %}
+			{% endfor %}
+			{{ players_w_goals|join(', ') }}
+		</p>
+
+		{% if home_yellow_cards %}
+			<p>
+				<b>Gelbe Karten:</b>
+				{% set players_w_yellow =[] %}
+				{% for player in home_yellow_cards %}
+					{% set players_w_yellow = players_w_yellow|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_yellow|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if home_suspensions %}
+			<p>
+				<b>Zeitstrafen:</b>
+				{% set players_w_suspension =[] %}
+				{% for player in home_suspensions %}
+					{% set players_w_suspension = players_w_suspension|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_suspension|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if home_red_cards %}
+			<p>
+				<b>Rote Karten:
+				</b>
+				{% set players_w_red =[] %}
+				{% for player in home_red_cards %}
+					{% set players_w_red = players_w_red|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_red|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if home_blue_cards %}
+			<p>
+				<b>Blaue Karten:
+				</b>
+				{% set players_w_blue =[] %}
+				{% for player in home_blue_cards %}
+					{% set players_w_blue = players_w_blue|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_blue|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if home_officials %}
+			<p>
+				<b>Trainer / Betreuer:
+				</b>
+				{% set players_officials =[] %}
+				{% for player in home_officials %}
+					{% set players_officials = players_officials|merge([player.name]) %}
+				{% endfor %}
+				{{ players_officials|join(', ') }}
+			</p>
+		{% endif %}
+
+	</div>
+	<div class="gamescore guestteam">
+
+		<h3>Für
+			{{ guest_team }}
+			spielten:</h3>
+
+		<p>
+			<b>Spieler (Tore/7m):</b>
+			{% set players_w_goals =[] %}
+			{% for player in guest_players %}
+				{% if player.goals > 0 %}
+					{% set nextPlayer = "#{player.name} (#{player.goals}/#{player.penalty_goals})" %}
+				{% else %}
+					{% set nextPlayer = "#{player.name}" %}
+				{% endif %}
+				{% set players_w_goals = players_w_goals|merge([nextPlayer]) %}
+			{% endfor %}
+			{{ players_w_goals|join(', ') }}
+		</p>
+
+		{% if guest_yellow_cards %}
+			<p>
+				<b>Gelbe Karten:</b>
+				{% set players_w_yellow =[] %}
+				{% for player in guest_yellow_cards %}
+					{% set players_w_yellow = players_w_yellow|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_yellow|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if guest_suspensions %}
+			<p>
+				<b>Zeitstrafen:</b>
+				{% set players_w_suspension =[] %}
+				{% for player in guest_suspensions %}
+					{% set players_w_suspension = players_w_suspension|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_suspension|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if guest_red_cards %}
+			<p>
+				<b>Rote Karten:
+				</b>
+				{% set players_w_red =[] %}
+				{% for player in guest_red_cards %}
+					{% set players_w_red = players_w_red|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_red|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if guest_blue_cards %}
+			<p>
+				<b>Blaue Karten:
+				</b>
+				{% set players_w_blue =[] %}
+				{% for player in guest_blue_cards %}
+					{% set players_w_blue = players_w_blue|merge([player.name]) %}
+				{% endfor %}
+				{{ players_w_blue|join(', ') }}
+			</p>
+		{% endif %}
+
+		{% if guest_officials %}
+			<p>
+				<b>Trainer / Betreuer:
+				</b>
+				{% set players_officials =[] %}
+				{% for player in guest_officials %}
+					{% set players_officials = players_officials|merge([player.name]) %}
+				{% endfor %}
+				{{ players_officials|join(', ') }}
+			</p>
+		{% endif %}
+
+	</div>
+
+<div>
+    <script>
+        const homeTeam = {{ home_team|json_encode|raw }} 
+        const guestTeam = {{ guest_team|json_encode|raw }} 
+        var ctx = document.getElementById('myChart').getContext("2d");
+        const chartData = {{ chartData | json_encode() | raw }} ;
+
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                        label: homeTeam,
+                        data: chartData,
+                        borderColor: 'rgba(255, 0, 0, 1)',
+                        fill: true,
+                        backgroundColor: 'rgba(255, 0, 0, 0.25)',
+                        parsing: {
+                            yAxisKey: 'home',
+                        }
+                    },
+                    {
+                        label: guestTeam,
+                        data: chartData,
+                        borderColor: 'rgba(0, 0, 178, 1)',
+                        fill: true,
+                        backgroundColor: 'rgba(0, 0, 178, 0.25)',
+                        parsing: {
+                            yAxisKey: 'guest',
+                        },
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                stepped: true,
+                interaction: {
+                    mode: 'index',
+                    axis: 'x',
+                    intersect: false,
+                },
+                elements: {
+                    point: {
+                        radius: 0,
+                    },
+                },
+            },
+            scales: {
+                xAxis: {
+                    type: 'time',
+                    time: {
+                        parser: "mm:ss",
+                        unit: "second",
+                        tooltipFormat: 'mm:ss',
+                        displayFormats: {
+                            'second': "mm:ss"
+                        },
+                    },
+                },
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                    },
+                }],
+            }
+        });
+    </script>
+</div>
+
+{% endblock %}

@@ -88,7 +88,7 @@ class H4aEventGamestats
 
         $objCalEvent = CalendarEventsModel::findByPk($event->id);
 
-        $template->chartData = json_encode($arrChartData);
+        $template->chartData = $arrChartData;
         $template->timeline = $timeline;
         $template->home_team = $objCalEvent->gHomeTeam;
         $template->guest_team = $objCalEvent->gGuestTeam;

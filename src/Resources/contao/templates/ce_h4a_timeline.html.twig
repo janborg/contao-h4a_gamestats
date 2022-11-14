@@ -1,22 +1,23 @@
-<?php
-$GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4agamestats/js/chart.min.js', false, null);
-$GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4agamestats/js/chartjs-adapter-date-fns.bundle.min.js', false, null);
-?>
+{% extends '@Contao/block_searchable' %}
 
-<?php $this->extend('block_searchable'); ?>
+{% block content %}
 
-<?php $this->block('content'); ?>
+{% add to head %}
+<script src="bundles/janborgh4agamestats/js/chart.min.js"></script>
+<script src="bundles/janborgh4agamestats/js/chartjs-adapter-date-fns.bundle.min.js"></script>
+{% endadd %}
 
 <div>
     <h3>Spielverlauf</h3>
     <canvas id="myChart" width="400" height="200"></canvas>
 </div>
+
 <div>
     <script>
-        const homeTeam = <?= json_encode($this->home_team) ?>;
-        const guestTeam = <?= json_encode($this->guest_team) ?>;
+        const homeTeam = {{ home_team|json_encode|raw }} ;
+        const guestTeam = {{ guest_team|json_encode|raw }}; 
         var ctx = document.getElementById('myChart').getContext("2d");
-        const chartData = <?= $this->chartData ?>;
+        const chartData = {{ chartData | json_encode() | raw }} ;
 
         const myChart = new Chart(ctx, {
             type: 'line',
@@ -79,4 +80,4 @@ $GLOBALS['TL_HEAD'][] = \Contao\Template::generateScriptTag('bundles/janborgh4ag
     </script>
 </div>
 
-<?php $this->endblock(); ?>
+{% endblock %}
