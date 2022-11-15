@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 use Contao\Backend;
 use Contao\BackendUser;
+use Contao\DataContainer;
 use Contao\DC_Table;
 
 /*
@@ -41,8 +42,8 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
     // List
     'list' => [
         'sorting' => [
-            'mode' => Contao\DataContainer::MODE_PARENT,
-            'flag' => Contao\DataContainer::SORT_ASC,
+            'mode' => DataContainer::MODE_PARENT,
+            'flag' => DataContainer::SORT_ASC,
             'headerFields' => ['title', 'startDate', 'starttime', 'sGID', 'gHomeGoals', 'gGuestGoals'],
             'fields' => ['is_home_or_guest', 'goals'],
             'panelLayout' => 'sort;filter',
