@@ -15,13 +15,11 @@ namespace Janborg\H4aGamestats\Backend;
 use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CalendarEventsModel;
-use Contao\CoreBundle\Monolog\ContaoContext;
 use Contao\Input;
 use Contao\System;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\Helper;
-use Psr\Log\LogLevel;
 
 class LookupTimelineController extends Backend
 {

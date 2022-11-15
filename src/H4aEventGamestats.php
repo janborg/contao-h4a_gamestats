@@ -20,7 +20,7 @@ class H4aEventGamestats
         $hometeamscores = H4aPlayerscoresModel::findTeamScoresByCalendarEvent($event->id, '1');
 
         $template->home_team = $event->gHomeTeam;
-        
+
         $template->home_players = $this->isPlayer($hometeamscores);
 
         $template->home_officials = $this->isOfficial($hometeamscores);
@@ -68,7 +68,6 @@ class H4aEventGamestats
             'home' => 0,
             'guest' => 0,
         ];
-
 
         foreach ($timeline as $goal) {
             $arrChartData[] = [
@@ -171,7 +170,7 @@ class H4aEventGamestats
             $teammembers,
             static function ($teammember) {
                 if (
-                    '0' !== $teammember['yellow_cards'] 
+                    '0' !== $teammember['yellow_cards']
                 ) {
                     return true;
                 }
@@ -192,7 +191,7 @@ class H4aEventGamestats
             $teammembers,
             static function ($teammember) {
                 if (
-                    '0' !== $teammember['suspensions'] 
+                    '0' !== $teammember['suspensions']
                 ) {
                     return true;
                 }
@@ -213,7 +212,7 @@ class H4aEventGamestats
             $teammembers,
             static function ($teammember) {
                 if (
-                    '0' !== $teammember['red_cards'] 
+                    '0' !== $teammember['red_cards']
                 ) {
                     return true;
                 }
@@ -234,7 +233,7 @@ class H4aEventGamestats
             $teammembers,
             static function ($teammember) {
                 if (
-                    '0' !== $teammember['blue_cards'] 
+                    '0' !== $teammember['blue_cards']
                 ) {
                     return true;
                 }

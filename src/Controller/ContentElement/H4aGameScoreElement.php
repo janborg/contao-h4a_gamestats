@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of hsg-heilbronn website.
+ * This file is part of contao-h4a_gamestats.
  *
  * (c) Jan Lünborg
  *

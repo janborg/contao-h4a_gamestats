@@ -1,5 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of contao-h4a_gamestats.
+ *
+ * (c) Jan Lünborg
+ *
+ * @license MIT
+ */
+
 namespace Janborg\H4aGamestats\EventListener\DataContainer;
 
 use Contao\CalendarModel;
@@ -27,11 +37,10 @@ class UnsetH4aGamestatsOperationCallback
 
         $calendar = CalendarModel::findById($dc->id);
 
-        if (null === $calendar || "" !== $calendar->h4a_imported) {
+        if (null === $calendar || '' !== $calendar->h4a_imported) {
             return;
         }
 
-        unset($GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['h4a_playerscores']);
-        unset($GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['h4a_timeline']);
+        unset($GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['h4a_playerscores'], $GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['h4a_timeline']);
     }
 }
