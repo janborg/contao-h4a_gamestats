@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @FrontendModule(type=H4aEventReportModuleController::TYPE, category="events")
+ * @FrontendModule(type=H4aEventReportModuleController::TYPE, category="events", template="mod_h4a_event_report")
  */
 class H4aEventReportModuleController extends AbstractFrontendModuleController
 {
