@@ -13,9 +13,6 @@
     "require":{
         "php": "^8.0",
         "contao/core-bundle": "^5.0",
-        "symfony/config": "^5.4",
-        "symfony/dependency-injection": "^5.4",
-        "symfony/http-kernel": "^5.4",
         "janborg/contao-h4a_tabellen": "^2.0"
     },
     "require-dev": {
