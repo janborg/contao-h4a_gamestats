@@ -1,0 +1,13 @@
+{% extends '@Contao/block_searchable' %}
+
+{% block content %}
+
+{% if showTimeline %}
+        {% include '@Contao/h4a_timeline' with _context %}
+    {% endif %}
+
+    {% if showGamescores %}
+        {% include '@Contao/h4a_gamescores' with _context %}
+    {% endif %}
+
+{% endblock %}
