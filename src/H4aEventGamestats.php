@@ -95,6 +95,35 @@ class H4aEventGamestats
     }
 
     /**
+     * Returns stats for Home And Guest Team Players and Officials of a given event. 
+     * @param array CalendarEventsModel $event
+     * @return array<mixed>
+     */
+    public function getTeamsStats(CalendarEventsModel $event): array
+    {
+        $hometeamscores = H4aPlayerscoresModel::findTeamScoresByCalendarEvent($event->id, '1');
+        $guestteamscores = H4aPlayerscoresModel::findTeamScoresByCalendarEvent($event->id, '2');
+
+        $gameStats['homeTeam']['team_name'] = $event->gHomeTeam;
+        $gameStats['homeTeam']['players'] = $this->isPlayer($hometeamscores);
+        $gameStats['homeTeam']['officials'] = $this->isOfficial($hometeamscores);
+        $gameStats['homeTeam']['yellow_cards'] = $this->hasYellowCard($hometeamscores);
+        $gameStats['homeTeam']['suspensions'] = $this->hasSuspensions($hometeamscores);
+        $gameStats['homeTeam']['red_cards'] = $this->hasRedCard($hometeamscores);
+        $gameStats['homeTeam']['blue_cards'] = $this->hasBlueCard($hometeamscores);
+
+        $gameStats['guestTeam']['team_name'] = $event->gGuestTeam;
+        $gameStats['guestTeam']['players'] = $this->isPlayer($guestteamscores);
+        $gameStats['guestTeam']['officials'] = $this->isOfficial($guestteamscores);
+        $gameStats['guestTeam']['yellow_cards'] = $this->hasYellowCard($guestteamscores);
+        $gameStats['guestTeam']['suspensions'] = $this->hasSuspensions($guestteamscores);
+        $gameStats['guestTeam']['red_cards'] = $this->hasRedCard($guestteamscores);
+        $gameStats['guestTeam']['blue_cards'] = $this->hasBlueCard($guestteamscores);
+
+        return $gameStats;
+    }
+
+    /**
      * Returns the current event based on the auto_item.
      */
     public function getCurrentEvent(): CalendarEventsModel|null
