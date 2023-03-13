@@ -24,7 +24,7 @@ class H4aPlayerscoresModel extends Model
 
     /**
      * @param array<mixed> $players
-     * @param string       $pid
+     * @param int          $pid
      * @param string       $teamname
      * @param int          $home_guest
      */
@@ -188,7 +188,7 @@ class H4aPlayerscoresModel extends Model
     }
 
     /**
-     * @param string $pid
+     * @param int $pid
      * @param string $home_guest (1 = home, 2 = guest)
      *
      * @return array<mixed>

@@ -22,11 +22,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class UnsetH4aGamestatsOperationCallback
 {
-    private $requestStack;
-
-    public function __construct(RequestStack $requestStack)
+    public function __construct()
     {
-        $this->requestStack = $requestStack;
+        
     }
 
     public function __invoke(DataContainer $dc = null): void
