@@ -70,15 +70,10 @@ class UpdateH4aTimelineCron
             H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
 
             System::getContainer()
-                ->get('monolog.logger.contao')
-                ->log(
-                    LogLevel::INFO,
-                    'Timeline aus Bericht Nr. '.$objEvent->sGID
-                        .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
-                        .' über Handball4all gespeichert',
-                    ['contao' => new ContaoContext(__CLASS__.'::'.__FUNCTION__, TL_CRON)]
-                )
-            ;
+                ->get('monolog.logger.contao.cron')
+                ->log('Timeline aus Bericht Nr. ' . $objEvent->sGID
+                    . ' für Spiel ' . $objEvent->gGameID . ' ' . $h4areportparser->heim_name . ' - ' . $h4areportparser->gast_name
+                    . ' über Handball4all gespeichert');
         }
     }
 }

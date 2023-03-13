@@ -73,15 +73,10 @@ class UpdateH4aScoresCron
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
             System::getContainer()
-                ->get('monolog.logger.contao')
-                ->log(
-                    LogLevel::INFO,
-                    'Gamescores aus Bericht Nr. '.$objEvent->sGID
-                        .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
-                        .' über Handball4all gespeichert',
-                    ['contao' => new ContaoContext(__CLASS__.'::'.__FUNCTION__, TL_CRON)]
-                )
-            ;
+                ->get('monolog.logger.contao.cron')
+                ->info('Gamescores aus Bericht Nr. ' . $objEvent->sGID
+                    . ' für Spiel ' . $objEvent->gGameID . ' ' . $h4areportparser->heim_name . ' - ' . $h4areportparser->gast_name
+                    . ' über Handball4all gespeichert',);
         }
     }
 }
