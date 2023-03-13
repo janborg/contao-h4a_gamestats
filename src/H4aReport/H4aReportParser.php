@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\H4aReport;
 
-use Contao\FilesModel;
 use Contao\System;
 use Janborg\H4aGamestats\Tabula\TabulaConverter;
 
@@ -41,7 +40,7 @@ class H4aReportParser
     {
         $this->reportID = $reportID;
 
-        $this->reportUrl = $this->base_url . $this->reportID;
+        $this->reportUrl = $this->base_url.$this->reportID;
     }
 
     /**
@@ -50,8 +49,8 @@ class H4aReportParser
     public function convertPdfReport(): void
     {
         $projectDir = System::getContainer()->getParameter('kernel.project_dir');
-        $outfilename = 'report_' . $this->reportID . '.pdf';
-        $outputPath = $projectDir . '/' . $outfilename;
+        $outfilename = 'report_'.$this->reportID.'.pdf';
+        $outputPath = $projectDir.'/'.$outfilename;
 
         $ch = curl_init($this->reportUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -74,7 +73,8 @@ class H4aReportParser
                         'stream' => true,
                     ]
                 )
-                ->convert();
+                ->convert()
+            ;
 
             $this->arrReport = json_decode($this->jsonReport, true);
 
@@ -108,7 +108,6 @@ class H4aReportParser
         return $this;
     }
 
-
     /**
      * @return array<mixed>
      */
@@ -136,9 +135,7 @@ class H4aReportParser
 
         $players_team = $this->heim_name;
 
-        $home_playerstats = $this->parsePlayerStats($teamstats, $players_team);
-
-        return $home_playerstats;
+        return $this->parsePlayerStats($teamstats, $players_team);
     }
 
     /**
@@ -150,14 +147,12 @@ class H4aReportParser
 
         $players_team = $this->gast_name;
 
-        $guest_playerstats = $this->parsePlayerStats($teamstats, $players_team);
-
-        return $guest_playerstats;
+        return $this->parsePlayerStats($teamstats, $players_team);
     }
 
     /**
-     * @param string $players_team 
-     * @param array<mixed> $teamstats 
+     * @param string       $players_team
+     * @param array<mixed> $teamstats
      *
      * @return array<mixed>
      */
@@ -264,7 +259,6 @@ class H4aReportParser
         ];
     }
 
-
     private function parseActionType(string $action): string
     {
         $action_exploded = explode(' ', $action);
@@ -292,6 +286,7 @@ class H4aReportParser
             case 'Disqualifikation':
                 $parsedactiontype = 'Disqualifikation';
                 break;
+
             default:
                 $parsedactiontype = '';
         }

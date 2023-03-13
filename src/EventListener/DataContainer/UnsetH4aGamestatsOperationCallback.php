@@ -15,7 +15,6 @@ namespace Janborg\H4aGamestats\EventListener\DataContainer;
 use Contao\CalendarModel;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\DataContainer;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @Callback(table="tl_calendar_events", target="config.onload")
@@ -24,7 +23,6 @@ class UnsetH4aGamestatsOperationCallback
 {
     public function __construct()
     {
-        
     }
 
     public function __invoke(DataContainer $dc = null): void

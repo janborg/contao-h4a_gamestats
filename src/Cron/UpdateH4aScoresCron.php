@@ -14,12 +14,10 @@ namespace Janborg\H4aGamestats\Cron;
 
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Contao\CoreBundle\Monolog\ContaoContext;
 use Contao\System;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aTabellen\Helper\Helper;
-use Psr\Log\LogLevel;
 
 class UpdateH4aScoresCron
 {
@@ -74,9 +72,10 @@ class UpdateH4aScoresCron
 
             System::getContainer()
                 ->get('monolog.logger.contao.cron')
-                ->info('Gamescores aus Bericht Nr. ' . $objEvent->sGID
-                    . ' für Spiel ' . $objEvent->gGameID . ' ' . $h4areportparser->heim_name . ' - ' . $h4areportparser->gast_name
-                    . ' über Handball4all gespeichert',);
+                ->info('Gamescores aus Bericht Nr. '.$objEvent->sGID
+                    .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
+                    .' über Handball4all gespeichert', )
+            ;
         }
     }
 }

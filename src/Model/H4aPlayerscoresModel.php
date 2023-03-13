@@ -188,7 +188,7 @@ class H4aPlayerscoresModel extends Model
     }
 
     /**
-     * @param int $pid
+     * @param int    $pid
      * @param string $home_guest (1 = home, 2 = guest)
      *
      * @return array<mixed>
