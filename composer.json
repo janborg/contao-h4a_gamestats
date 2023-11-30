@@ -23,7 +23,7 @@
         "contao/calendar-bundle":"^4.13",
         "contao/manager-plugin": "^2.0",
         "phpunit/phpunit": "^9.5",
-        "symfony/phpunit-bridge": "^6.1"
+        "symfony/phpunit-bridge": "^7.0"
     },
     "conflict": {
          "contao/manager-plugin": "<2.0 || >=3.0"
