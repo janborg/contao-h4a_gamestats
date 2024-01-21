@@ -12,9 +12,11 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Controller\ContentElement;
 
+use Contao\BackendTemplate;
 use Contao\CalendarModel;
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
 use Contao\CoreBundle\Twig\FragmentTemplate;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
@@ -31,8 +33,25 @@ class H4aSeasonScoreElement extends AbstractContentElementController
 {
     public const TYPE = 'h4a_seasonscore';
 
+    /**
+     * @var ScopeMatcher
+     */
+    private $scopeMatcher;
+
+    public function __construct(ScopeMatcher $scopeMatcher)
+    {
+        $this->scopeMatcher = $scopeMatcher;        
+    }
+
     public function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
     {
+        if ($this->scopeMatcher->isBackendRequest($request)) {
+            $template = new BackendTemplate('be_wildcard');
+            $template->wildcard = '## H4a Seasonscores ##';
+
+            return new Response($template->parse());
+        }
+
         //get h4a_classID and h4aseason from calendar
         $objCalendar = CalendarModel::findById($model->team_calendar);
 
