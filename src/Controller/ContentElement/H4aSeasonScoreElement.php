@@ -40,7 +40,7 @@ class H4aSeasonScoreElement extends AbstractContentElementController
 
     public function __construct(ScopeMatcher $scopeMatcher)
     {
-        $this->scopeMatcher = $scopeMatcher;        
+        $this->scopeMatcher = $scopeMatcher;
     }
 
     public function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
@@ -58,9 +58,8 @@ class H4aSeasonScoreElement extends AbstractContentElementController
         $seasons = unserialize($objCalendar->h4a_seasons);
 
         $saison = array_values(
-            array_filter($seasons, function ($season) use ($model) {
-            return $season['h4a_saison'] == $model->h4a_season;
-        }));
+            array_filter($seasons, static fn ($season) => $season['h4a_saison'] === $model->h4a_season)
+        );
 
         $classID = $saison[0]['h4a_liga'] ?? null;
 

@@ -286,6 +286,7 @@ class H4aReportParser
             case 'Disqualifikation':
                 $parsedactiontype = 'Disqualifikation';
                 break;
+
             default:
                 $parsedactiontype = 'Sonstiges';
         }

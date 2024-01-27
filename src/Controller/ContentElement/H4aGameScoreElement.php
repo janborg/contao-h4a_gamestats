@@ -20,7 +20,6 @@ use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
 use Contao\CoreBundle\Twig\FragmentTemplate;
 use Janborg\H4aGamestats\H4aEventGamestats;
-use Symfony\Bridge\Twig\NodeVisitor\Scope;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,7 +32,6 @@ use Symfony\Component\HttpFoundation\Response;
 class H4aGameScoreElement extends AbstractContentElementController
 {
     public const TYPE = 'h4a_gamescore';
-    
 
     /**
      * @var H4aEventGamestats
@@ -56,7 +54,6 @@ class H4aGameScoreElement extends AbstractContentElementController
 
             return new Response($template->parse());
         }
-
 
         $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
 
