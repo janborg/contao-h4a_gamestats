@@ -13,24 +13,25 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Model;
 
 use Contao\Model;
+use Contao\Model\Collection;
 use Contao\System;
 
 /**
- * @property int        $id
- * @property int        $pid
- * @property int        $tstamp
- * @property string     $number
- * @property string     $team_name
- * @property string     $name
- * @property int        $goals
- * @property int        $penalty_goals
- * @property int        $penalty_tries
- * @property int        $yellow_card
- * @property int        $suspensions
- * @property int        $red_card
- * @property int        $blue_card
- * @property string     $is_home_or_guest
- * 
+ * @property int    $id
+ * @property int    $pid
+ * @property int    $tstamp
+ * @property string $number
+ * @property string $team_name
+ * @property string $name
+ * @property int    $goals
+ * @property int    $penalty_goals
+ * @property int    $penalty_tries
+ * @property int    $yellow_card
+ * @property int    $suspensions
+ * @property int    $red_card
+ * @property int    $blue_card
+ * @property string $is_home_or_guest
+ *
  * @method static H4aPlayerscoresModel|null                                         findById($id, array $opt=[])
  * @method static H4aPlayerscoresModel|null                                         findByPk($id, array $opt=[])
  * @method static H4aPlayerscoresModel|null                                         findOneBy($col, $val, array $opt=[])
@@ -47,13 +48,11 @@ use Contao\System;
  * @method static H4aPlayerscoresModel|null                                         findOneByRed_card($val, array $opt=[])
  * @method static H4aPlayerscoresModel|null                                         findOneByBlue_card($val, array $opt=[])
  * @method static H4aPlayerscoresModel|null                                         findOneByIs_home_or_guest($val, array $opt=[])
- * 
  * @method static Collection<H4aPlayerscoresModel>|H4aPlayerscoresModel|null        findByPid($val, array $opt=[])
  * @method static Collection<H4aPlayerscoresModel>|H4aPlayerscoresModel|null        findByTeamName($val, array $opt=[])
  * @method static Collection<H4aPlayerscoresModel>|H4aPlayerscoresModel|null        findMultipleByIds($val, array $opt=array())
  * @method static Collection<H4aPlayerscoresModel>|H4aPlayerscoresModel|null        findBy($col, $val, array $opt=array())
  * @method static Collection<H4aPlayerscoresModel>|H4aPlayerscoresModel|null        findAll(array $opt=array())
- * 
  * @method static integer countById($id, array $opt=array())
  * @method static integer countByPid($val, array $opt=array())
  * @method static integer countByTstamp($val, array $opt=array())
@@ -68,7 +67,6 @@ use Contao\System;
  * @method static integer countByRed_card($val, array $opt=array())
  * @method static integer countByBlue_card($val, array $opt=array())
  * @method static integer countByIs_home_or_guest($val, array $opt=array())
- * 
  */
 class H4aPlayerscoresModel extends Model
 {

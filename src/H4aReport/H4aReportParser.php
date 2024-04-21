@@ -32,9 +32,31 @@ use Janborg\H4aGamestats\Tabula\TabulaConverter;
  */
 class H4aReportParser
 {
+    public string $heim_name;
+
+    public string $gast_name;
+
+    public string $zuschauer;
+
+    public mixed $schiedsrichter;
+
+    public string $home_team;
+
+    public string $guest_team;
+
+    public mixed $timeline;
+
+    public mixed $arrReport;
+
+    public string $gameNo;
+
     private string $reportID;
 
     private string $base_url = 'https://spo.handball4all.de/misc/sboPublicReports.php?sGID=';
+
+    private string $reportUrl;
+
+    private string $jsonReport;
 
     public function __construct(string $reportID)
     {

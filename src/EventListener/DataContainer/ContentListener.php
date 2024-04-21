@@ -23,6 +23,9 @@ use Doctrine\DBAL\Connection;
  */
 class ContentListener
 {
+    public Connection $connection;
+    public ContaoFramework $contaoFramework;
+
     public function __construct(ContaoFramework $contaoFramework, Connection $connection)
     {
         $this->contaoFramework = $contaoFramework;

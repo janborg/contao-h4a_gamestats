@@ -13,19 +13,20 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Model;
 
 use Contao\Model;
+use Contao\Model\Collection;
 use Contao\System;
 
 /**
- * @property int        $id
- * @property int        $pid
- * @property int        $tstamp
- * @property string     $matchtime
- * @property string     $currentscore
- * @property string     $action_team
- * @property int        $action_player
- * @property int        $action_player_number
- * @property int        $action_type
- * 
+ * @property int    $id
+ * @property int    $pid
+ * @property int    $tstamp
+ * @property string $matchtime
+ * @property string $currentscore
+ * @property string $action_team
+ * @property int    $action_player
+ * @property int    $action_player_number
+ * @property int    $action_type
+ *
  * @method static H4aTimelineModel|null                                         findById($id, array $opt=[])
  * @method static H4aTimelineModel|null                                         findByPk($id, array $opt=[])
  * @method static H4aTimelineModel|null                                         findOneBy($col, $val, array $opt=[])
@@ -37,7 +38,6 @@ use Contao\System;
  * @method static H4aTimelineModel|null                                         findOneByAction_player($val, array $opt=[])
  * @method static H4aTimelineModel|null                                         findOneByAction_player_number($val, array $opt=[])
  * @method static H4aTimelineModel|null                                         findOneByAction_type($val, array $opt=[])
- * 
  * @method static Collection<H4aTimelineModel>|H4aTimelineModel|null            findByPid($val, array $opt=[])
  * @method static Collection<H4aTimelineModel>|H4aTimelineModel|null            findByMatchtime($val, array $opt=[])
  * @method static Collection<H4aTimelineModel>|H4aTimelineModel|null            findByCurrentscore($val, array $opt=[])
@@ -49,7 +49,6 @@ use Contao\System;
  * @method static Collection<H4aTimelineModel>|H4aTimelineModel|null            findMultipleByIds($val, array $opt=array())
  * @method static Collection<H4aTimelineModel>|H4aTimelineModel|null            findBy($col, $val, array $opt=array())
  * @method static Collection<H4aTimelineModel>|H4aTimelineModel|null            findAll(array $opt=array())
- * 
  * @method static integer countById($id, array $opt=array())
  * @method static integer countByPid($val, array $opt=array())
  * @method static integer countByTstamp($val, array $opt=array())
@@ -60,7 +59,6 @@ use Contao\System;
  * @method static integer countByAction_player_number($val, array $opt=array())
  * @method static integer countByAction_type($val, array $opt=array())
  * @method static integer countByAction_team($val, array $opt=array())
- * 
  */
 class H4aTimelineModel extends Model
 {

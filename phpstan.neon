@@ -20,7 +20,4 @@ parameters:
         - %currentWorkingDirectory%/src/Tabula/TabulaConverter
 
     ignoreErrors:
-        - '#Access to an undefined property object::\$gClassID#'
-        - '#Access to an undefined property object::\$gGameNo#'
-        - '#Call to an undefined method object::save\(\)#'
         - '#Access to an undefined property Contao\\DataContainer::\$activeRecord#'

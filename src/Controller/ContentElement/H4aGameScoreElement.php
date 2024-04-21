@@ -33,12 +33,9 @@ class H4aGameScoreElement extends AbstractContentElementController
 {
     public const TYPE = 'h4a_gamescore';
 
-    /**
-     * @var H4aEventGamestats
-     * @var ScopeMatcher
-     */
-    private $h4aEventGamestats;
-    private $scopeMatcher;
+    private H4aEventGamestats $h4aEventGamestats;
+
+    private ScopeMatcher $scopeMatcher;
 
     public function __construct(H4aEventGamestats $h4aEventGamestats, ScopeMatcher $scopeMatcher)
     {
