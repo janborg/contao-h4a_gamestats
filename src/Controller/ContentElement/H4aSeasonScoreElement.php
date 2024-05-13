@@ -18,7 +18,7 @@ use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
-use Contao\CoreBundle\Twig\FragmentTemplate;
+use Contao\Template;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +43,7 @@ class H4aSeasonScoreElement extends AbstractContentElementController
         $this->scopeMatcher = $scopeMatcher;
     }
 
-    public function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
+    public function getResponse(Template $template, ContentModel $model, Request $request): Response
     {
         if ($this->scopeMatcher->isBackendRequest($request)) {
             $template = new BackendTemplate('be_wildcard');
@@ -52,13 +52,13 @@ class H4aSeasonScoreElement extends AbstractContentElementController
             return new Response($template->parse());
         }
 
-        //get h4a_classID and h4aseason from calendar
+        // get h4a_classID and h4aseason from calendar
         $objCalendar = CalendarModel::findById($model->team_calendar);
 
         $seasons = unserialize($objCalendar->h4a_seasons);
 
         $saison = array_values(
-            array_filter($seasons, static fn ($season) => $season['h4a_saison'] === $model->h4a_season)
+            array_filter($seasons, static fn ($season) => $season['h4a_saison'] === $model->h4a_season),
         );
 
         $classID = $saison[0]['h4a_liga'] ?? null;

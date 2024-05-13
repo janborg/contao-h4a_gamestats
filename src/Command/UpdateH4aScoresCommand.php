@@ -57,7 +57,7 @@ class UpdateH4aScoresCommand extends Command
 
         $objEvents = CalendarEventsModel::findby(
             ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'h4a_resultComplete = ?'],
-            [date('Y-m-d'), true]
+            [date('Y-m-d'), true],
         );
 
         if (null === $objEvents) {
@@ -95,7 +95,7 @@ class UpdateH4aScoresCommand extends Command
 
             $output->writeln('Playerscores aus Spielbericht '.$objEvent->sGID.' abrufen...');
 
-            //check, ob bereits Scores zum H4a-Event vorhanden sind:
+            // check, ob bereits Scores zum H4a-Event vorhanden sind:
             $objPlayerscores = H4aPlayerscoresModel::findBy('pid', $objEvent->id);
 
             if (null !== $objPlayerscores) {
@@ -106,12 +106,12 @@ class UpdateH4aScoresCommand extends Command
             $h4areportparser = new H4aReportParser($objEvent->sGID);
             $h4areportparser->parseReport();
 
-            //Spieler der Heim Mannschaft speichern
+            // Spieler der Heim Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
 
             $output->writeln('<info>Playerscores für '.$h4areportparser->heim_name.' in Spiel '.$objEvent->gGameID.' gespeichert.</info>');
 
-            //Spieler der Gast Mannschaft speichern
+            // Spieler der Gast Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
             $output->writeln('<info>Playerscores für '.$h4areportparser->gast_name.' in Spiel '.$objEvent->gGameID.' gespeichert.</info>');

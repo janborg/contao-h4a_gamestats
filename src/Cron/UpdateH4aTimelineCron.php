@@ -36,7 +36,7 @@ class UpdateH4aTimelineCron
     {
         $objEvents = CalendarEventsModel::findby(
             ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'h4a_resultComplete = ?'],
-            [date('Y-m-d'), true]
+            [date('Y-m-d'), true],
         );
 
         if (null === $objEvents) {
@@ -64,7 +64,7 @@ class UpdateH4aTimelineCron
             $h4areportparser = new H4aReportParser($objEvent->sGID);
             $h4areportparser->parseReport();
 
-            //Timeline des Spiels speichern
+            // Timeline des Spiels speichern
             H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
 
             System::getContainer()

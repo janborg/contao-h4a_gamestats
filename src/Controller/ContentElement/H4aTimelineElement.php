@@ -18,7 +18,7 @@ use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
-use Contao\CoreBundle\Twig\FragmentTemplate;
+use Contao\Template;
 use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +43,7 @@ class H4aTimelineElement extends AbstractContentElementController
         $this->scopeMatcher = $scopeMatcher;
     }
 
-    public function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
+    public function getResponse(Template $template, ContentModel $model, Request $request): Response
     {
         if ($this->scopeMatcher->isBackendRequest($request)) {
             $template = new BackendTemplate('be_wildcard');
@@ -55,6 +55,8 @@ class H4aTimelineElement extends AbstractContentElementController
         $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
 
         $this->h4aEventGamestats->addTimelineToTemplate($template, $event);
+
+        $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/janborgh4agamestats/js/chart.umd.min.js';
 
         return $template->getResponse();
     }

@@ -24,6 +24,7 @@ use Doctrine\DBAL\Connection;
 class ContentListener
 {
     public Connection $connection;
+
     public ContaoFramework $contaoFramework;
 
     public function __construct(ContaoFramework $contaoFramework, Connection $connection)
@@ -34,8 +35,6 @@ class ContentListener
 
     /**
      * @Callback(table="tl_content", target="fields.h4a_event_id.options")
-     *
-     * @param $dc
      *
      * @return array<mixed>
      */
@@ -50,13 +49,13 @@ class ContentListener
                 `pid` = ? AND
                 `h4a_season` = ?
             ORDER BY `startDate`',
-            [$dc->activeRecord->team_calendar, $dc->activeRecord->h4a_season]
+            [$dc->activeRecord->team_calendar, $dc->activeRecord->h4a_season],
         );
 
         $options = [];
 
         while ($row = $stmt->fetchAssociative()) {
-            $options[$row['id']] = date('d.m.Y', (int) ($row['startDate'])).' / '.$row['title'];
+            $options[$row['id']] = date('d.m.Y', (int) $row['startDate']).' / '.$row['title'];
         }
 
         return $options;
@@ -64,8 +63,6 @@ class ContentListener
 
     /**
      * @Callback(table="tl_content", target="fields.h4a_season.options")
-     *
-     * @param $dc
      *
      * @return array<mixed>
      */
@@ -77,7 +74,7 @@ class ContentListener
             FROM
                 `tl_h4a_seasons`
             ORDER BY
-                `season` DESC'
+                `season` DESC',
         );
 
         $options = [];

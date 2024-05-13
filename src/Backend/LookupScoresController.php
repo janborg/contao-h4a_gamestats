@@ -40,7 +40,7 @@ class LookupScoresController extends Backend
             $objCalendarEvent->save();
         }
 
-        //check if sGID is set and not empty
+        // check if sGID is set and not empty
         if (isset($objCalendarEvent->sGID) && '' !== $objCalendarEvent->sGID) {
             $sGID = $objCalendarEvent->sGID;
         } else {
@@ -53,16 +53,16 @@ class LookupScoresController extends Backend
 
         $h4areportparser->parseReport();
 
-        //Spieler der Heimmannschaft speichern
+        // Spieler der Heimmannschaft speichern
         H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objCalendarEvent->id, $h4areportparser->heim_name, $home_guest = 1);
 
-        //Spieler der Gastmannschaft speichern
+        // Spieler der Gastmannschaft speichern
         H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objCalendarEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
         System::getContainer()
             ->get('monolog.logger.contao.general')
             ->info('Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.')
-            ;
+        ;
 
         $this->redirect($this->getReferer());
     }

@@ -93,7 +93,7 @@ class H4aReportParser
                         'pages' => 'all',
                         'lattice' => true,
                         'stream' => true,
-                    ]
+                    ],
                 )
                 ->convert()
             ;
@@ -110,19 +110,19 @@ class H4aReportParser
     {
         $this->convertPdfReport();
 
-        //gameInfo
+        // gameInfo
         $gameInfo = $this->parseGameInfo();
         $this->gameNo = $gameInfo['SpielNr'];
         $this->heim_name = $gameInfo['Heim'];
         $this->gast_name = $gameInfo['Gast'];
         $this->zuschauer = $gameInfo['Zuschauer'];
-        //schiedsrichter
+        // schiedsrichter
         $this->schiedsrichter = $this->parseReferees();
 
-        //heim_team
+        // heim_team
         $this->home_team = $this->parseHomePlayerStats();
 
-        //gast_team
+        // gast_team
         $this->guest_team = $this->parseGuestPlayerStats();
 
         $this->timeline = $this->parseTimeline();
@@ -185,7 +185,7 @@ class H4aReportParser
         $playerstats = [];
 
         foreach ($teamstats as $key => $teammember) {
-            //leere Spalten oder fehlerhafte Spalten überspringen (Bsp. Report No. 158918, https://spo.handball4all.de/misc/sboPublicReports.php?sGID=158918)
+            // leere Spalten oder fehlerhafte Spalten überspringen (Bsp. Report No. 158918, https://spo.handball4all.de/misc/sboPublicReports.php?sGID=158918)
             if (
                 empty($teammember[1]['text'])
                 || !empty($teammember[2]['text'])
@@ -285,7 +285,7 @@ class H4aReportParser
     {
         $action_exploded = explode(' ', $action);
 
-        //type of action
+        // type of action
         switch ($action_exploded[0]) {
             case 'Tor':
                 $parsedactiontype = 'Tor';
@@ -354,11 +354,11 @@ class H4aReportParser
     /**
      * @param string $matchTime
      */
-    private function parseMatchTime($matchTime): string //int
+    private function parseMatchTime($matchTime): string // int
     {
-        //$matchTime = explode(':', $matchTime);
+        // $matchTime = explode(':', $matchTime);
 
-        //return $matchTime[0] * 60 + $matchTime[1];
+        // return $matchTime[0] * 60 + $matchTime[1];
         return $matchTime;
     }
 
@@ -373,14 +373,14 @@ class H4aReportParser
             static function ($player) use ($arrplayer) {
                 if (
                     // mehrstufiges filter_array
-                    $arrplayer['number'] === $player['number'] &&
-                    $arrplayer['team'] === $player['team']
+                    $arrplayer['number'] === $player['number']
+                    && $arrplayer['team'] === $player['team']
                 ) {
                     return true;
                 }
 
                 return false;
-            }
+            },
         );
         // Array neu ordnen
         $player_name = array_values($player_name);

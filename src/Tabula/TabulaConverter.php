@@ -31,9 +31,13 @@ use Symfony\Component\Process\Process;
 class TabulaConverter
 {
     public string $os;
+
     public string $encoding = 'utf-8';
+
     public array $javaOptions = [];
+
     public string $input;
+
     public array $options = [
         'pages' => null,
         'guess' => true,
@@ -193,7 +197,7 @@ class TabulaConverter
 
         if (!is_readable($path)) {
             throw new InvalidArgumentException(sprintf('Could not read `{%s}`', $path));
-            //throw new InvalidArgumentException("Could not read `{$path}`");
+            // throw new InvalidArgumentException("Could not read `{$path}`");
         }
 
         return true;

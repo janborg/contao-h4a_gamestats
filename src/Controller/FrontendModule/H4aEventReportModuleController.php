@@ -14,8 +14,8 @@ namespace Janborg\H4aGamestats\Controller\FrontendModule;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
-use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\ModuleModel;
+use Contao\Template;
 use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +37,7 @@ class H4aEventReportModuleController extends AbstractFrontendModuleController
         $this->h4aEventGamestats = $h4aEventGamestats;
     }
 
-    protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
+    protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {
         $event = $this->h4aEventGamestats->getCurrentEvent();
 
@@ -48,6 +48,9 @@ class H4aEventReportModuleController extends AbstractFrontendModuleController
         $this->h4aEventGamestats->addHomeStatsToTemplate($template, $event);
         $this->h4aEventGamestats->addGuestStatsToTemplate($template, $event);
         $this->h4aEventGamestats->addTimelineToTemplate($template, $event);
+
+        $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/janborgh4agamestats/js/chart.min.js';
+        $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/janborgh4agamestats/js/chartjs-adapter-date-fns.bundle.min.js';
 
         return $template->getResponse();
     }
