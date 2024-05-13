@@ -56,6 +56,8 @@ class H4aTimelineElement extends AbstractContentElementController
 
         $this->h4aEventGamestats->addTimelineToTemplate($template, $event);
 
+        $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/janborgh4agamestats/js/chart.umd.min.js';
+
         return $template->getResponse();
     }
 }
