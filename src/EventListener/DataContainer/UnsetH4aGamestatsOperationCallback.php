@@ -25,7 +25,7 @@ class UnsetH4aGamestatsOperationCallback
     {
     }
 
-    public function __invoke(DataContainer $dc = null): void
+    public function __invoke(DataContainer|null $dc = null): void
     {
         if (null === $dc || !$dc->id) {
             return;

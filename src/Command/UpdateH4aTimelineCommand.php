@@ -55,7 +55,7 @@ class UpdateH4aTimelineCommand extends Command
 
         $objEvents = CalendarEventsModel::findby(
             ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'h4a_resultComplete = ?'],
-            [date('Y-m-d'), true]
+            [date('Y-m-d'), true],
         );
 
         if (null === $objEvents) {
@@ -93,7 +93,7 @@ class UpdateH4aTimelineCommand extends Command
 
             $output->writeln('Timeline aus Spielbericht '.$objEvent->sGID.' abrufen...');
 
-            //check, ob bereits Timeline zum H4a-Event vorhanden sind:
+            // check, ob bereits Timeline zum H4a-Event vorhanden sind:
             $objPlayerscores = H4aTimelineModel::findBy('pid', $objEvent->id);
 
             if (null !== $objPlayerscores) {
@@ -104,7 +104,7 @@ class UpdateH4aTimelineCommand extends Command
             $h4areportparser = new H4aReportParser($objEvent->sGID);
             $h4areportparser->parseReport();
 
-            //Spieler der Heim Mannschaft speichern
+            // Spieler der Heim Mannschaft speichern
             H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
 
             $output->writeln('<info>Timeline für Spiel '.$objEvent->gGameID.' gespeichert.</info>');

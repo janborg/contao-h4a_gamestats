@@ -52,16 +52,16 @@ class H4aReportFinder
                         $value['text'] = $td->text();
 
                         if ($td->filterXPath('//a')->count() > 0) {
-                            //$value['href'] = $td->filterXPath('//a')->attr('href');
+                            // $value['href'] = $td->filterXPath('//a')->attr('href');
                             $parts = parse_url($td->filterXPath('//a')->attr('href'));
                             parse_str($parts['query'], $query);
                             $value['sGID'] = $query['sGID'];
                         }
 
                         return $value;
-                    }
+                    },
                 );
-            }
+            },
         );
     }
 
@@ -91,9 +91,9 @@ class H4aReportFinder
                         }
 
                         return $value;
-                    }
+                    },
                 );
-            }
+            },
         );
 
         return $this->getReportNoByGameNoFromAllGames($allGames, $this->gameNo);

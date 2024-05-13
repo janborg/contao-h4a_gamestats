@@ -40,7 +40,7 @@ class LookupTimelineController extends Backend
             $objCalendarEvent->save();
         }
 
-        //check if sGID is set and not empty
+        // check if sGID is set and not empty
         if (isset($objCalendarEvent->sGID) && '' !== $objCalendarEvent->sGID) {
             $sGID = $objCalendarEvent->sGID;
         } else {
@@ -58,7 +58,7 @@ class LookupTimelineController extends Backend
         System::getContainer()
             ->get('monolog.logger.contao.general')
             ->info('Timeline für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.')
-    ;
+        ;
 
         $this->redirect($this->getReferer());
     }

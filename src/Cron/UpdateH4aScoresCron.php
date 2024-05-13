@@ -36,7 +36,7 @@ class UpdateH4aScoresCron
     {
         $objEvents = CalendarEventsModel::findby(
             ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'h4a_resultComplete = ?'],
-            [date('Y-m-d'), true]
+            [date('Y-m-d'), true],
         );
 
         if (null === $objEvents) {
@@ -64,10 +64,10 @@ class UpdateH4aScoresCron
             $h4areportparser = new H4aReportParser($objEvent->sGID);
             $h4areportparser->parseReport();
 
-            //Spieler der Heim Mannschaft speichern
+            // Spieler der Heim Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
 
-            //Spieler der Gast Mannschaft speichern
+            // Spieler der Gast Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
             System::getContainer()

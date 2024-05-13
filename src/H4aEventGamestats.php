@@ -85,7 +85,7 @@ class H4aEventGamestats
             }
         }
 
-        $objCalEvent = CalendarEventsModel::findByPk($event->id);
+        $objCalEvent = CalendarEventsModel::findById($event->id);
 
         $template->chartData = $arrChartData;
         $template->timeline = $timeline;
@@ -119,17 +119,17 @@ class H4aEventGamestats
             static function ($teammember) {
                 if (
                     '' !== $teammember['name'] && (
-                        'A' === $teammember['number'] ||
-                        'B' === $teammember['number'] ||
-                        'C' === $teammember['number'] ||
-                        'D' === $teammember['number']
+                        'A' === $teammember['number']
+                        || 'B' === $teammember['number']
+                        || 'C' === $teammember['number']
+                        || 'D' === $teammember['number']
                     )
                 ) {
                     return false;
                 }
 
                 return true;
-            }
+            },
         );
     }
 
@@ -145,17 +145,17 @@ class H4aEventGamestats
             static function ($teammember) {
                 if (
                     '' !== $teammember['name'] && (
-                        'A' === $teammember['number'] ||
-                    'B' === $teammember['number'] ||
-                    'C' === $teammember['number'] ||
-                    'D' === $teammember['number']
+                        'A' === $teammember['number']
+                    || 'B' === $teammember['number']
+                    || 'C' === $teammember['number']
+                    || 'D' === $teammember['number']
                     )
                 ) {
                     return true;
                 }
 
                 return false;
-            }
+            },
         );
     }
 
@@ -176,7 +176,7 @@ class H4aEventGamestats
                 }
 
                 return false;
-            }
+            },
         );
     }
 
@@ -197,7 +197,7 @@ class H4aEventGamestats
                 }
 
                 return false;
-            }
+            },
         );
     }
 
@@ -218,7 +218,7 @@ class H4aEventGamestats
                 }
 
                 return false;
-            }
+            },
         );
     }
 
@@ -239,7 +239,7 @@ class H4aEventGamestats
                 }
 
                 return false;
-            }
+            },
         );
     }
 }
