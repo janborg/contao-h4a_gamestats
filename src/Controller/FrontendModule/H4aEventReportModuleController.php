@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Controller\FrontendModule;
 
+use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
 use Contao\ModuleModel;
@@ -27,14 +28,17 @@ class H4aEventReportModuleController extends AbstractFrontendModuleController
 {
     public const TYPE = 'h4a_event_report';
 
+    private EntityCacheTags $entityCacheTags;
+
     /**
      * @var H4aEventGamestats
      */
     private $h4aEventGamestats;
 
-    public function __construct(H4aEventGamestats $h4aEventGamestats)
+    public function __construct(H4aEventGamestats $h4aEventGamestats, EntityCacheTags $entityCacheTags)
     {
         $this->h4aEventGamestats = $h4aEventGamestats;
+        $this->entityCacheTags = $entityCacheTags;
     }
 
     protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
@@ -51,6 +55,8 @@ class H4aEventReportModuleController extends AbstractFrontendModuleController
 
         $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/janborgh4agamestats/js/chart.min.js';
         $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/janborgh4agamestats/js/chartjs-adapter-date-fns.bundle.min.js';
+
+        $this->entityCacheTags->tagWith($event);
 
         return $template->getResponse();
     }
