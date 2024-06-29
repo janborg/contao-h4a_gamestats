@@ -69,7 +69,7 @@ class UpdateH4aTimelineCron
 
             System::getContainer()
                 ->get('monolog.logger.contao.cron')
-                ->log('Timeline aus Bericht Nr. '.$objEvent->sGID
+                ->info('Timeline aus Bericht Nr. '.$objEvent->sGID
                     .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
                     .' über Handball4all gespeichert')
             ;
