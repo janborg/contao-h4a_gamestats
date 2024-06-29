@@ -24,7 +24,7 @@ use Janborg\H4aGamestats\Tabula\TabulaConverter;
  * @property string       $gast_name
  * @property array        $timeline
  * @property string       $reportUrl
- * @property json         $jsonReport
+ * @property string       $jsonReport
  * @property array<mixed> $arrReport
  * @property string       $gameNo
  * @property array<mixed> $zuschauer
@@ -40,9 +40,9 @@ class H4aReportParser
 
     public mixed $schiedsrichter;
 
-    public string $home_team;
+    public mixed $home_team;
 
-    public string $guest_team;
+    public mixed $guest_team;
 
     public mixed $timeline;
 
