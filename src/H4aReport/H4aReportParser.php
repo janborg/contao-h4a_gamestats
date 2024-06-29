@@ -24,7 +24,7 @@ use Janborg\H4aGamestats\Tabula\TabulaConverter;
  * @property string       $gast_name
  * @property array        $timeline
  * @property string       $reportUrl
- * @property json         $jsonReport
+ * @property string       $jsonReport
  * @property array<mixed> $arrReport
  * @property string       $gameNo
  * @property array<mixed> $zuschauer
@@ -40,9 +40,9 @@ class H4aReportParser
 
     public mixed $schiedsrichter;
 
-    public string $home_team;
+    public mixed $home_team;
 
-    public string $guest_team;
+    public mixed $guest_team;
 
     public mixed $timeline;
 
@@ -185,7 +185,8 @@ class H4aReportParser
         $playerstats = [];
 
         foreach ($teamstats as $key => $teammember) {
-            // leere Spalten oder fehlerhafte Spalten überspringen (Bsp. Report No. 158918, https://spo.handball4all.de/misc/sboPublicReports.php?sGID=158918)
+            // leere Spalten oder fehlerhafte Spalten überspringen (Bsp. Report No 158918,
+            // https://spo.handball4all.de/misc/sboPublicReports.php?sGID=158918)
             if (
                 empty($teammember[1]['text'])
                 || !empty($teammember[2]['text'])
@@ -356,9 +357,7 @@ class H4aReportParser
      */
     private function parseMatchTime($matchTime): string // int
     {
-        // $matchTime = explode(':', $matchTime);
-
-        // return $matchTime[0] * 60 + $matchTime[1];
+        // $matchTime = explode(':', $matchTime); return $matchTime[0] * 60 + $matchTime[1];
         return $matchTime;
     }
 

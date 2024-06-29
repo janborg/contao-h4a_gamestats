@@ -15,6 +15,7 @@ namespace Janborg\H4aGamestats\Controller\ContentElement;
 use Contao\BackendTemplate;
 use Contao\CalendarModel;
 use Contao\ContentModel;
+use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
@@ -38,9 +39,12 @@ class H4aSeasonScoreElement extends AbstractContentElementController
      */
     private $scopeMatcher;
 
-    public function __construct(ScopeMatcher $scopeMatcher)
+    private EntityCacheTags $entityCacheTags;
+
+    public function __construct(ScopeMatcher $scopeMatcher, EntityCacheTags $entityCacheTags)
     {
         $this->scopeMatcher = $scopeMatcher;
+        $this->entityCacheTags = $entityCacheTags;
     }
 
     public function getResponse(Template $template, ContentModel $model, Request $request): Response
@@ -58,7 +62,7 @@ class H4aSeasonScoreElement extends AbstractContentElementController
         $seasons = unserialize($objCalendar->h4a_seasons);
 
         $saison = array_values(
-            array_filter($seasons, static fn ($season) => $season['h4a_saison'] == $model->h4a_season),
+            array_filter($seasons, static fn ($season) => $season['h4a_saison'] === $model->h4a_season),
         );
 
         $classID = $saison[0]['h4a_liga'] ?? null;
@@ -66,6 +70,8 @@ class H4aSeasonScoreElement extends AbstractContentElementController
         $playerscores = H4aPlayerscoresModel::findScoresByClassIdAndTeamName($classID, $model->my_team_name);
 
         $template->playerscores = $playerscores;
+
+        $this->entityCacheTags->tagWith($objCalendar);
 
         return $template->getResponse();
     }

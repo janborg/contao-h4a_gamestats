@@ -15,6 +15,7 @@ namespace Janborg\H4aGamestats\Controller\ContentElement;
 use Contao\BackendTemplate;
 use Contao\CalendarEventsModel;
 use Contao\ContentModel;
+use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
@@ -37,10 +38,13 @@ class H4aTimelineElement extends AbstractContentElementController
 
     private ScopeMatcher $scopeMatcher;
 
-    public function __construct(H4aEventGamestats $h4aEventGamestats, ScopeMatcher $scopeMatcher)
+    private EntityCacheTags $entityCacheTags;
+
+    public function __construct(H4aEventGamestats $h4aEventGamestats, ScopeMatcher $scopeMatcher, EntityCacheTags $entityCacheTags)
     {
         $this->h4aEventGamestats = $h4aEventGamestats;
         $this->scopeMatcher = $scopeMatcher;
+        $this->entityCacheTags = $entityCacheTags;
     }
 
     public function getResponse(Template $template, ContentModel $model, Request $request): Response
@@ -57,6 +61,8 @@ class H4aTimelineElement extends AbstractContentElementController
         $this->h4aEventGamestats->addTimelineToTemplate($template, $event);
 
         $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/janborgh4agamestats/js/chart.umd.min.js';
+
+        $this->entityCacheTags->tagWith($event);
 
         return $template->getResponse();
     }
