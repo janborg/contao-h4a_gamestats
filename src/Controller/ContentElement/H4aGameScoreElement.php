@@ -62,7 +62,7 @@ class H4aGameScoreElement extends AbstractContentElementController
         $this->h4aEventGamestats->addGuestStatsToTemplate($template, $event);
 
         $this->entityCacheTags->tagWith($event);
-        
+
         return $template->getResponse();
     }
 }
