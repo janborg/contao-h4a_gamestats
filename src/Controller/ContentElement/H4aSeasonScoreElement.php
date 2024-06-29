@@ -62,7 +62,7 @@ class H4aSeasonScoreElement extends AbstractContentElementController
         $seasons = unserialize($objCalendar->h4a_seasons);
 
         $saison = array_values(
-            array_filter($seasons, static fn ($season) => intval($season['h4a_saison']) === $model->h4a_season),
+            array_filter($seasons, static fn ($season) => (int) $season['h4a_saison'] === $model->h4a_season),
         );
 
         $classID = $saison[0]['h4a_liga'] ?? null;
