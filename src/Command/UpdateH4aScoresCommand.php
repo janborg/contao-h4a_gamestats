@@ -30,8 +30,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class UpdateH4aScoresCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'h4a:update:scores';
 
+    /**
+     * @var string
+     */
     protected static $defaultDescription = 'Update Scores from h4a';
 
     /**

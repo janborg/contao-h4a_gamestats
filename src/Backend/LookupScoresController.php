@@ -46,7 +46,7 @@ class LookupScoresController extends Backend
         } else {
             $this->redirect($this->getReferer());
 
-            return;
+            return; // @phpstan-ignore deadCode.unreachable
         }
 
         $h4areportparser = new H4aReportParser($sGID);

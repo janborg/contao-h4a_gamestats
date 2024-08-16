@@ -28,8 +28,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class UpdateH4aTimelineCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'h4a:update:timeline';
 
+    /**
+     * @var string
+     */
     protected static $defaultDescription = 'Update Games Timelines from h4a';
 
     /**
