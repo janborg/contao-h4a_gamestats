@@ -53,8 +53,7 @@ class H4aEventReportModuleController extends AbstractFrontendModuleController
         $this->h4aEventGamestats->addGuestStatsToTemplate($template, $event);
         $this->h4aEventGamestats->addTimelineToTemplate($template, $event);
 
-        $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/janborgh4agamestats/js/chart.min.js';
-        $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/janborgh4agamestats/js/chartjs-adapter-date-fns.bundle.min.js';
+        $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/janborgh4agamestats/js/chart.umd.min.js';
 
         $this->entityCacheTags->tagWith($event);
 
