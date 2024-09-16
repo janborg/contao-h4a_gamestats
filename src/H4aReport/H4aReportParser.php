@@ -283,7 +283,7 @@ class H4aReportParser
         $action_exploded = explode(' ', $action);
 
         // type of action
-        $parsedactiontype = match ($action_exploded[0]) {
+        return match ($action_exploded[0]) {
             'Tor' => 'Tor',
             '7m-Tor' => '7m-Tor',
             '7m,' => '7m-Versuch',
@@ -293,8 +293,6 @@ class H4aReportParser
             'Disqualifikation' => 'Disqualifikation',
             default => 'Sonstiges',
         };
-
-        return $parsedactiontype;
     }
 
     /**

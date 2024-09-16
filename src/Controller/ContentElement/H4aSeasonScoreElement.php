@@ -34,8 +34,10 @@ class H4aSeasonScoreElement extends AbstractContentElementController
 {
     public const TYPE = 'h4a_seasonscore';
 
-    public function __construct(private ScopeMatcher $scopeMatcher, private EntityCacheTags $entityCacheTags)
-    {
+    public function __construct(
+        private ScopeMatcher $scopeMatcher,
+        private EntityCacheTags $entityCacheTags,
+    ) {
     }
 
     public function getResponse(Template $template, ContentModel $model, Request $request): Response

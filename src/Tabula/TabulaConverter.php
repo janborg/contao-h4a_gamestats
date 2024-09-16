@@ -64,8 +64,10 @@ class TabulaConverter
     /**
      * Tabula constructor.
      */
-    public function __construct($binDir = null, public string $encoding = 'utf-8')
-    {
+    public function __construct(
+        $binDir = null,
+        public string $encoding = 'utf-8',
+    ) {
         $this->osCheck();
 
         if ($binDir) {

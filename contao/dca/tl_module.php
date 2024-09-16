@@ -10,36 +10,34 @@ declare(strict_types=1);
  * @license MIT
  */
 
-use \Contao\Controller;
 use Janborg\H4aGamestats\Controller\FrontendModule\H4aEventReportModuleController;
 
-/**
+/*
  * Palettes
  */
 
 $GLOBALS['TL_DCA']['tl_module']['palettes'][H4aEventReportModuleController::TYPE] = '{title_legend},name,headline,type;{template_legend:hide},customTpl,showGamescores,showTimeline;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
 
-
-/**
+/*
  * fields
  */
 
 $GLOBALS['TL_DCA']['tl_module']['fields'] = array_merge(
     ['showGamescores' => [
-        'label'                   => &$GLOBALS['TL_LANG']['tl_module']['showGamescores'],
-        'default'                 => 1,
-        'exclude'                 => true,
-        'inputType'               => 'checkbox',
-        'eval'                    => ['tl_class' => 'w50 clr'],
-        'sql'                     => "char(1) NOT NULL default ''"
+        'label' => &$GLOBALS['TL_LANG']['tl_module']['showGamescores'],
+        'default' => 1,
+        'exclude' => true,
+        'inputType' => 'checkbox',
+        'eval' => ['tl_class' => 'w50 clr'],
+        'sql' => "char(1) NOT NULL default ''",
     ]],
     ['showTimeline' => [
-        'label'                   => &$GLOBALS['TL_LANG']['tl_table_name']['showTimeline'],
-        'default'                 => 1,
-        'exclude'                 => true,
-        'inputType'               => 'checkbox',
-        'eval'                    => ['tl_class' => 'w50 clr'],
-        'sql'                     => "char(1) NOT NULL default ''"
+        'label' => &$GLOBALS['TL_LANG']['tl_table_name']['showTimeline'],
+        'default' => 1,
+        'exclude' => true,
+        'inputType' => 'checkbox',
+        'eval' => ['tl_class' => 'w50 clr'],
+        'sql' => "char(1) NOT NULL default ''",
     ]],
-    $GLOBALS['TL_DCA']['tl_module']['fields']
+    $GLOBALS['TL_DCA']['tl_module']['fields'],
 );

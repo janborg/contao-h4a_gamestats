@@ -46,7 +46,7 @@ class H4aReportFinder
         $crawler = $crawler->filterXPath('//table[@class="gametable"]/tr[position() > 1]');
 
         return $crawler->filterXPath('//tr')->each(
-            static fn($tr, $i) => $tr->filterXPath('//td')->each(
+            static fn ($tr, $i) => $tr->filterXPath('//td')->each(
                 static function ($td, $i) {
                     $value['text'] = $td->text();
 
@@ -77,7 +77,7 @@ class H4aReportFinder
         $crawler = $crawler->filterXPath('//table[@class="gametable"]/tr[position() > 1]');
 
         $allGames = $crawler->filterXPath('//tr')->each(
-            static fn($tr, $i) => $tr->filterXPath('//td')->each(
+            static fn ($tr, $i) => $tr->filterXPath('//td')->each(
                 static function ($td, $i) {
                     $value['text'] = $td->text();
 

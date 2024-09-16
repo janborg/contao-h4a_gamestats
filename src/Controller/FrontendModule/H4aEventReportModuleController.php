@@ -28,8 +28,10 @@ class H4aEventReportModuleController extends AbstractFrontendModuleController
 {
     public const TYPE = 'h4a_event_report';
 
-    public function __construct(private H4aEventGamestats $h4aEventGamestats, private EntityCacheTags $entityCacheTags)
-    {
+    public function __construct(
+        private H4aEventGamestats $h4aEventGamestats,
+        private EntityCacheTags $entityCacheTags,
+    ) {
     }
 
     protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
