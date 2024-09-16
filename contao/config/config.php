@@ -18,8 +18,8 @@ use Janborg\H4aGamestats\Model\H4aTimelineModel;
  */
 $GLOBALS['BE_MOD']['content']['calendar']['tables'][] = 'tl_h4a_playerscores';
 $GLOBALS['BE_MOD']['content']['calendar']['tables'][] = 'tl_h4a_timeline';
-$GLOBALS['BE_MOD']['content']['calendar']['lookup_scores'] = ['Janborg\H4aGamestats\Backend\LookupScoresController', 'lookupScores'];
-$GLOBALS['BE_MOD']['content']['calendar']['lookup_timeline'] = ['Janborg\H4aGamestats\Backend\LookupTimelineController', 'lookupTimeline'];
+$GLOBALS['BE_MOD']['content']['calendar']['lookup_scores'] = [\Janborg\H4aGamestats\Backend\LookupScoresController::class, 'lookupScores'];
+$GLOBALS['BE_MOD']['content']['calendar']['lookup_timeline'] = [\Janborg\H4aGamestats\Backend\LookupTimelineController::class, 'lookupTimeline'];
 
 /*
  * models

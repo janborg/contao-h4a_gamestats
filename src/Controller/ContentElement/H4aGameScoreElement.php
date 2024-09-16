@@ -34,17 +34,8 @@ class H4aGameScoreElement extends AbstractContentElementController
 {
     public const TYPE = 'h4a_gamescore';
 
-    private H4aEventGamestats $h4aEventGamestats;
-
-    private ScopeMatcher $scopeMatcher;
-
-    private EntityCacheTags $entityCacheTags;
-
-    public function __construct(H4aEventGamestats $h4aEventGamestats, ScopeMatcher $scopeMatcher, EntityCacheTags $entityCacheTags)
+    public function __construct(private H4aEventGamestats $h4aEventGamestats, private ScopeMatcher $scopeMatcher, private EntityCacheTags $entityCacheTags)
     {
-        $this->h4aEventGamestats = $h4aEventGamestats;
-        $this->scopeMatcher = $scopeMatcher;
-        $this->entityCacheTags = $entityCacheTags;
     }
 
     public function getResponse(Template $template, ContentModel $model, Request $request): Response

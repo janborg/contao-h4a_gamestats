@@ -21,6 +21,6 @@ class JanborgH4aGamestatsBundleTest extends TestCase
     {
         $bundle = new JanborgH4aGamestatsBundle();
 
-        $this->assertInstanceOf('Janborg\H4aGamestats\JanborgH4aGamestatsBundle', $bundle);
+        $this->assertInstanceOf(\Janborg\H4aGamestats\JanborgH4aGamestatsBundle::class, $bundle);
     }
 }

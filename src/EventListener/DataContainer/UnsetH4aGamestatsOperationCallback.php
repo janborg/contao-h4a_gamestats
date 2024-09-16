@@ -21,10 +21,6 @@ use Contao\DataContainer;
  */
 class UnsetH4aGamestatsOperationCallback
 {
-    public function __construct()
-    {
-    }
-
     public function __invoke(DataContainer|null $dc = null): void
     {
         if (null === $dc || !$dc->id) {

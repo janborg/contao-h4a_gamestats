@@ -30,7 +30,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields'] = array_merge(
         'default'                 => 1,
         'exclude'                 => true,
         'inputType'               => 'checkbox',
-        'eval'                    => array('tl_class' => 'w50 clr'),
+        'eval'                    => ['tl_class' => 'w50 clr'],
         'sql'                     => "char(1) NOT NULL default ''"
     ]],
     ['showTimeline' => [
@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields'] = array_merge(
         'default'                 => 1,
         'exclude'                 => true,
         'inputType'               => 'checkbox',
-        'eval'                    => array('tl_class' => 'w50 clr'),
+        'eval'                    => ['tl_class' => 'w50 clr'],
         'sql'                     => "char(1) NOT NULL default ''"
     ]],
     $GLOBALS['TL_DCA']['tl_module']['fields']
