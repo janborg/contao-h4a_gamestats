@@ -32,8 +32,6 @@ class TabulaConverter
 {
     public string $os;
 
-    public string $encoding = 'utf-8';
-
     public array $javaOptions = [];
 
     public string $input;
@@ -65,14 +63,12 @@ class TabulaConverter
 
     /**
      * Tabula constructor.
-     *
-     * @param null   $binDir
-     * @param string $encoding
      */
-    public function __construct($binDir = null, $encoding = 'utf-8')
-    {
+    public function __construct(
+        $binDir = null,
+        public string $encoding = 'utf-8',
+    ) {
         $this->osCheck();
-        $this->encoding = $encoding;
 
         if ($binDir) {
             $this->binDir = \is_array($binDir) ? $binDir : [$binDir];
@@ -275,7 +271,7 @@ class TabulaConverter
             $options['guess'] = false;
 
             foreach ($options['area'] as $key => $value) {
-                if ('%' === substr($value, 0, 1)) {
+                if (str_starts_with($value, '%')) {
                     if ($options['relativeArea']) {
                         $options['area'][$key] = str_replace('%', '', $options['area'][$key]);
                     }

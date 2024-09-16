@@ -10,6 +10,8 @@ declare(strict_types=1);
  * @license MIT
  */
 
+use Janborg\H4aGamestats\Backend\LookupScoresController;
+use Janborg\H4aGamestats\Backend\LookupTimelineController;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 
@@ -18,8 +20,8 @@ use Janborg\H4aGamestats\Model\H4aTimelineModel;
  */
 $GLOBALS['BE_MOD']['content']['calendar']['tables'][] = 'tl_h4a_playerscores';
 $GLOBALS['BE_MOD']['content']['calendar']['tables'][] = 'tl_h4a_timeline';
-$GLOBALS['BE_MOD']['content']['calendar']['lookup_scores'] = ['Janborg\H4aGamestats\Backend\LookupScoresController', 'lookupScores'];
-$GLOBALS['BE_MOD']['content']['calendar']['lookup_timeline'] = ['Janborg\H4aGamestats\Backend\LookupTimelineController', 'lookupTimeline'];
+$GLOBALS['BE_MOD']['content']['calendar']['lookup_scores'] = [LookupScoresController::class, 'lookupScores'];
+$GLOBALS['BE_MOD']['content']['calendar']['lookup_timeline'] = [LookupTimelineController::class, 'lookupTimeline'];
 
 /*
  * models

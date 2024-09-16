@@ -50,18 +50,14 @@ class H4aReportParser
 
     public string $gameNo;
 
-    private string $reportID;
-
     private string $base_url = 'https://spo.handball4all.de/misc/sboPublicReports.php?sGID=';
 
     private string $reportUrl;
 
     private string $jsonReport;
 
-    public function __construct(string $reportID)
+    public function __construct(private string $reportID)
     {
-        $this->reportID = $reportID;
-
         $this->reportUrl = $this->base_url.$this->reportID;
     }
 
@@ -287,34 +283,16 @@ class H4aReportParser
         $action_exploded = explode(' ', $action);
 
         // type of action
-        switch ($action_exploded[0]) {
-            case 'Tor':
-                $parsedactiontype = 'Tor';
-                break;
-            case '7m-Tor':
-                $parsedactiontype = '7m-Tor';
-                break;
-            case '7m,':
-                $parsedactiontype = '7m-Versuch';
-                break;
-            case 'Verwarnung':
-                $parsedactiontype = 'Verwarnung';
-                break;
-            case '2-min':
-                $parsedactiontype = '2-min';
-                break;
-            case 'Auszeit':
-                $parsedactiontype = 'Auszeit';
-                break;
-            case 'Disqualifikation':
-                $parsedactiontype = 'Disqualifikation';
-                break;
-
-            default:
-                $parsedactiontype = 'Sonstiges';
-        }
-
-        return $parsedactiontype;
+        return match ($action_exploded[0]) {
+            'Tor' => 'Tor',
+            '7m-Tor' => '7m-Tor',
+            '7m,' => '7m-Versuch',
+            'Verwarnung' => 'Verwarnung',
+            '2-min' => '2-min',
+            'Auszeit' => 'Auszeit',
+            'Disqualifikation' => 'Disqualifikation',
+            default => 'Sonstiges',
+        };
     }
 
     /**

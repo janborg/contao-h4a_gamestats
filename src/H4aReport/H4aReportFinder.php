@@ -46,22 +46,20 @@ class H4aReportFinder
         $crawler = $crawler->filterXPath('//table[@class="gametable"]/tr[position() > 1]');
 
         return $crawler->filterXPath('//tr')->each(
-            static function ($tr, $i) {
-                return $tr->filterXPath('//td')->each(
-                    static function ($td, $i) {
-                        $value['text'] = $td->text();
+            static fn ($tr, $i) => $tr->filterXPath('//td')->each(
+                static function ($td, $i) {
+                    $value['text'] = $td->text();
 
-                        if ($td->filterXPath('//a')->count() > 0) {
-                            // $value['href'] = $td->filterXPath('//a')->attr('href');
-                            $parts = parse_url($td->filterXPath('//a')->attr('href'));
-                            parse_str($parts['query'], $query);
-                            $value['sGID'] = $query['sGID'];
-                        }
+                    if ($td->filterXPath('//a')->count() > 0) {
+                        // $value['href'] = $td->filterXPath('//a')->attr('href');
+                        $parts = parse_url($td->filterXPath('//a')->attr('href'));
+                        parse_str($parts['query'], $query);
+                        $value['sGID'] = $query['sGID'];
+                    }
 
-                        return $value;
-                    },
-                );
-            },
+                    return $value;
+                },
+            ),
         );
     }
 
@@ -79,21 +77,19 @@ class H4aReportFinder
         $crawler = $crawler->filterXPath('//table[@class="gametable"]/tr[position() > 1]');
 
         $allGames = $crawler->filterXPath('//tr')->each(
-            static function ($tr, $i) {
-                return $tr->filterXPath('//td')->each(
-                    static function ($td, $i) {
-                        $value['text'] = $td->text();
+            static fn ($tr, $i) => $tr->filterXPath('//td')->each(
+                static function ($td, $i) {
+                    $value['text'] = $td->text();
 
-                        if ($td->filterXPath('//a')->count() > 0) {
-                            $parts = parse_url($td->filterXPath('//a')->attr('href'));
-                            parse_str($parts['query'], $query);
-                            $value['sGID'] = $query['sGID'];
-                        }
+                    if ($td->filterXPath('//a')->count() > 0) {
+                        $parts = parse_url($td->filterXPath('//a')->attr('href'));
+                        parse_str($parts['query'], $query);
+                        $value['sGID'] = $query['sGID'];
+                    }
 
-                        return $value;
-                    },
-                );
-            },
+                    return $value;
+                },
+            ),
         );
 
         return $this->getReportNoByGameNoFromAllGames($allGames, $this->gameNo);
