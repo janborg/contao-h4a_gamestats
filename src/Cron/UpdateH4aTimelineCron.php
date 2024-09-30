@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Cron;
 
 use Contao\CalendarEventsModel;
+use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\System;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
@@ -21,8 +22,10 @@ use Janborg\H4aTabellen\Helper\Helper;
 
 class UpdateH4aTimelineCron
 {
-    public function __construct(private ContaoFramework $framework)
-    {
+    public function __construct(
+        private ContaoFramework $framework,
+        private EntityCacheTags $entityCacheTags,
+    ) {
         $this->framework->initialize();
     }
 
@@ -67,6 +70,8 @@ class UpdateH4aTimelineCron
                     .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
                     .' über Handball4all gespeichert')
             ;
+
+            $this->entityCacheTags->invalidateTagsFor($objEvent);
         }
     }
 }
