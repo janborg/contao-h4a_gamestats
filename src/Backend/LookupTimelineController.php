@@ -15,6 +15,7 @@ namespace Janborg\H4aGamestats\Backend;
 use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CalendarEventsModel;
+use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\Input;
 use Contao\System;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
@@ -23,7 +24,7 @@ use Janborg\H4aTabellen\Helper\Helper;
 
 class LookupTimelineController extends Backend
 {
-    public function __construct()
+    public function __construct(private EntityCacheTags $entityCacheTags)
     {
         parent::__construct();
         $this->import(BackendUser::class, 'User');
@@ -59,6 +60,8 @@ class LookupTimelineController extends Backend
             ->get('monolog.logger.contao.general')
             ->info('Timeline für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.')
         ;
+
+        $this->entityCacheTags->invalidateTagsFor($objCalendarEvent);
 
         $this->redirect($this->getReferer());
     }
