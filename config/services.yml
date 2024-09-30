@@ -19,9 +19,6 @@ services:
 
     Janborg\H4aGamestats\H4aEventGamestats: ~
 
-    Janborg\H4aGamestats\Controller\:
-        resource: '../src/Controller/*'
-
     Janborg\H4aGamestats\Cron\UpdateH4aScoresCron:
         arguments:
             - '@contao.framework'

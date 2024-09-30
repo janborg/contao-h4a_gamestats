@@ -1,0 +1,22 @@
+services:
+    _defaults:
+        autoconfigure: true
+        autowire: true
+
+    Janborg\H4aGamestats\Controller\ContentElement\H4aGamescoreElement: ~
+
+    Janborg\H4aGamestats\Controller\ContentElement\H4aSeasonScoreElement: ~
+
+    Janborg\H4aGamestats\Controller\ContentElement\H4aTimelineElement: ~
+
+    Janborg\H4aGamestats\Controller\FrontendModule\H4aEventReportModuleController: ~
+
+    Janborg\H4aGamestats\Backend\LookupScoresController:
+        public: true
+        arguments: 
+            - '@contao.cache.entity_tags'
+
+    Janborg\H4aGamestats\Backend\LookupTimelineController:
+        public: true
+        arguments: 
+            - '@contao.cache.entity_tags'
