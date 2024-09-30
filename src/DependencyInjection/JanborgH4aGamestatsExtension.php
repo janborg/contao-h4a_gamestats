@@ -30,6 +30,7 @@ class JanborgH4aGamestatsExtension extends Extension
         $loader = new YamlFileLoader($container, $fileLocator);
 
         $loader->load('commands.yml');
+        $loader->load('controller.yml');
         $loader->load('services.yml');
         $loader->load('listener.yml');
     }
