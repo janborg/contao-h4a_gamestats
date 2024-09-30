@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Command;
 
 use Contao\CalendarEventsModel;
+use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
@@ -40,7 +41,7 @@ class UpdateH4aScoresCommand extends Command
      */
     protected static $defaultDescription = 'Update Scores from h4a';
 
-    public function __construct(private ContaoFramework $framework)
+    public function __construct(private ContaoFramework $framework, private EntityCacheTags $entityCacheTags)
     {
         parent::__construct();
     }
@@ -114,6 +115,8 @@ class UpdateH4aScoresCommand extends Command
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
             $output->writeln('<info>Playerscores für '.$h4areportparser->gast_name.' in Spiel '.$objEvent->gGameID.' gespeichert.</info>');
+
+            $this->entityCacheTags->invalidateTagsFor($objEvent);
         }
 
         return Command::SUCCESS;

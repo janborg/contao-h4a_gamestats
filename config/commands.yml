@@ -11,6 +11,7 @@ services:
         class: Janborg\H4aGamestats\Command\UpdateH4aScoresCommand
         arguments:
             - '@contao.framework'
+            - '@contao.cache.entity_tags'
         tags: 
             - "console.command"
 
@@ -18,5 +19,6 @@ services:
         class: Janborg\H4aGamestats\Command\UpdateH4aTimelineCommand
         arguments:
             - '@contao.framework'
+            - '@contao.cache.entity_tags'
         tags: 
             - "console.command"

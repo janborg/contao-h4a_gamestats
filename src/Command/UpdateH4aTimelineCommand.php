@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Command;
 
 use Contao\CalendarEventsModel;
+use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
@@ -38,7 +39,7 @@ class UpdateH4aTimelineCommand extends Command
      */
     protected static $defaultDescription = 'Update Games Timelines from h4a';
 
-    public function __construct(private ContaoFramework $framework)
+    public function __construct(private ContaoFramework $framework, private EntityCacheTags $entityCacheTags)
     {
         parent::__construct();
     }
@@ -107,6 +108,8 @@ class UpdateH4aTimelineCommand extends Command
             H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
 
             $output->writeln('<info>Timeline für Spiel '.$objEvent->gGameID.' gespeichert.</info>');
+
+            $this->entityCacheTags->invalidateTagsFor($objEvent);
         }
 
         return Command::SUCCESS;
