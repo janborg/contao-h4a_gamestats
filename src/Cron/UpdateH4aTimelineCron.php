@@ -22,8 +22,10 @@ use Janborg\H4aTabellen\Helper\Helper;
 
 class UpdateH4aTimelineCron
 {
-    public function __construct(private ContaoFramework $framework, private EntityCacheTags $entityCacheTags)
-    {
+    public function __construct(
+        private ContaoFramework $framework,
+        private EntityCacheTags $entityCacheTags,
+    ) {
         $this->framework->initialize();
     }
 

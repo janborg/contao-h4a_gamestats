@@ -41,8 +41,10 @@ class UpdateH4aScoresCommand extends Command
      */
     protected static $defaultDescription = 'Update Scores from h4a';
 
-    public function __construct(private ContaoFramework $framework, private EntityCacheTags $entityCacheTags)
-    {
+    public function __construct(
+        private ContaoFramework $framework,
+        private EntityCacheTags $entityCacheTags,
+    ) {
         parent::__construct();
     }
 

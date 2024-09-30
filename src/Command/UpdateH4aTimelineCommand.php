@@ -39,8 +39,10 @@ class UpdateH4aTimelineCommand extends Command
      */
     protected static $defaultDescription = 'Update Games Timelines from h4a';
 
-    public function __construct(private ContaoFramework $framework, private EntityCacheTags $entityCacheTags)
-    {
+    public function __construct(
+        private ContaoFramework $framework,
+        private EntityCacheTags $entityCacheTags,
+    ) {
         parent::__construct();
     }
 
