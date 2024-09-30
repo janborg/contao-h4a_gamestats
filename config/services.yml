@@ -22,6 +22,7 @@ services:
     Janborg\H4aGamestats\Cron\UpdateH4aScoresCron:
         arguments:
             - '@contao.framework'
+            - '@contao.cache.entity_tags'
         tags:
             -
                 name: contao.cronjob
@@ -31,6 +32,7 @@ services:
     Janborg\H4aGamestats\Cron\UpdateH4aTimelineCron:
         arguments:
             - '@contao.framework'
+            - '@contao.cache.entity_tags'
         tags:
             -
                 name: contao.cronjob
