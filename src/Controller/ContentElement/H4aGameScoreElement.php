@@ -18,18 +18,13 @@ use Contao\ContentModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\Routing\ScopeMatcher;
-use Contao\CoreBundle\ServiceAnnotation\ContentElement;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
 use Contao\Template;
 use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @ContentElement(type=H4aGameScoreElement::TYPE,
- *   category="handball4all",
- *   template="ce_h4a_gamescore",
- * )
- */
+#[AsContentElement(H4aGameScoreElement::TYPE, 'handball4all', 'ce_h4a_gamescore')]
 class H4aGameScoreElement extends AbstractContentElementController
 {
     public const TYPE = 'h4a_gamescore';
