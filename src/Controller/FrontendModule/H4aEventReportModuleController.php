@@ -14,16 +14,15 @@ namespace Janborg\H4aGamestats\Controller\FrontendModule;
 
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
-use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\ModuleModel;
 use Contao\Template;
 use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @FrontendModule(type=H4aEventReportModuleController::TYPE, category="events", template="mod_h4a_event_report")
- */
+
+#[AsFrontendModule(H4aEventReportModuleController::TYPE, 'events', 'mod_h4a_event_report')]
 class H4aEventReportModuleController extends AbstractFrontendModuleController
 {
     public const TYPE = 'h4a_event_report';
