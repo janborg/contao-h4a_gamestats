@@ -17,13 +17,12 @@ use Contao\CalendarEventsModel;
 use Contao\ContentModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
-use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\Template;
 use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 
 #[AsContentElement(H4aTimelineElement::TYPE, 'handball4all', 'ce_h4a_timeline')]
 class H4aTimelineElement extends AbstractContentElementController

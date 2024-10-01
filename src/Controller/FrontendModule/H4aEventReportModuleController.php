@@ -21,7 +21,6 @@ use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
 #[AsFrontendModule(H4aEventReportModuleController::TYPE, 'events', 'mod_h4a_event_report')]
 class H4aEventReportModuleController extends AbstractFrontendModuleController
 {
