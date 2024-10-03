@@ -12,17 +12,18 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Controller\ContentElement;
 
+use Contao\Date;
+use Contao\Template;
+use Contao\ContentModel;
 use Contao\BackendTemplate;
 use Contao\CalendarEventsModel;
-use Contao\ContentModel;
-use Contao\CoreBundle\Cache\EntityCacheTags;
-use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
-use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
 use Contao\CoreBundle\Routing\ScopeMatcher;
-use Contao\Template;
 use Janborg\H4aGamestats\H4aEventGamestats;
+use Contao\CoreBundle\Cache\EntityCacheTags;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
+use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 
 #[AsContentElement(H4aTimelineElement::TYPE, 'handball4all', 'ce_h4a_timeline')]
 class H4aTimelineElement extends AbstractContentElementController
@@ -38,14 +39,14 @@ class H4aTimelineElement extends AbstractContentElementController
 
     public function getResponse(Template $template, ContentModel $model, Request $request): Response
     {
+        $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
+
         if ($this->scopeMatcher->isBackendRequest($request)) {
             $template = new BackendTemplate('be_wildcard');
-            $template->wildcard = '## H4a Timeline ##';
+            $template->wildcard = Date::parse('d.m.Y', $event->startDate).' | '.$event->title;
 
             return new Response($template->parse());
         }
-
-        $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
 
         $this->h4aEventGamestats->addTimelineToTemplate($template, $event);
 

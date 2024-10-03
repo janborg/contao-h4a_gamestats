@@ -19,6 +19,7 @@ use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
 use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\Date;
 use Contao\Template;
 use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,14 +39,14 @@ class H4aGameScoreElement extends AbstractContentElementController
 
     public function getResponse(Template $template, ContentModel $model, Request $request): Response
     {
+        $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
+
         if ($this->scopeMatcher->isBackendRequest($request)) {
             $template = new BackendTemplate('be_wildcard');
-            $template->wildcard = '## H4a Gamescores ##';
+            $template->wildcard = Date::parse('d.m.Y', $event->startDate).' | '.$event->title;
 
             return new Response($template->parse());
         }
-
-        $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
 
         $this->h4aEventGamestats->addHomeStatsToTemplate($template, $event);
         $this->h4aEventGamestats->addGuestStatsToTemplate($template, $event);
