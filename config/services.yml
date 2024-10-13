@@ -19,23 +19,29 @@ services:
 
     Janborg\H4aGamestats\H4aEventGamestats: ~
 
-    Janborg\H4aGamestats\Cron\UpdateH4aScoresCron:
+    h4agamestats.cron.updatescores:
+        class: Janborg\H4aGamestats\Cron\UpdateH4aScoresCron
         arguments:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
+            - '@monolog.logger.contao.cron'
         tags:
             -
                 name: contao.cronjob
                 interval: 'hourly'
                 method: updateScores
+                priority: -50
     
-    Janborg\H4aGamestats\Cron\UpdateH4aTimelineCron:
+    h4agamestats.cron.updatetimeline:
+        class: Janborg\H4aGamestats\Cron\UpdateH4aTimelineCron
         arguments:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
+            - '@monolog.logger.contao.cron'
         tags:
             -
                 name: contao.cronjob
                 interval: 'hourly'
                 method: updateTimeline
+                priority: -100
     

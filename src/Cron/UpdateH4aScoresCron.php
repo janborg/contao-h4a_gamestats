@@ -15,6 +15,7 @@ namespace Janborg\H4aGamestats\Cron;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\CoreBundle\Monolog\SystemLogger;
 use Contao\System;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
@@ -25,6 +26,7 @@ class UpdateH4aScoresCron
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
+        private SystemLogger $systemLogger,
     ) {
         $this->framework->initialize();
     }
@@ -67,11 +69,10 @@ class UpdateH4aScoresCron
             // Spieler der Gast Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
-            System::getContainer()
-                ->get('monolog.logger.contao.cron')
-                ->info('Gamescores aus Bericht Nr. '.$objEvent->sGID
-                    .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
-                    .' über Handball4all gespeichert')
+            $this->systemLogger
+                ->info('Gamescores aus Bericht Nr. ' . $objEvent->sGID
+                    . ' für Spiel ' . $objEvent->gGameID . ' ' . $h4areportparser->heim_name . ' - ' . $h4areportparser->gast_name
+                    . ' über Handball4all gespeichert')
             ;
 
             $this->entityCacheTags->invalidateTagsFor($objEvent);
