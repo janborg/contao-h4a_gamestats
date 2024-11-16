@@ -237,7 +237,7 @@ class TabulaConverter
         }
 
         if ($this->isEncodeUTF8()) {
-            $javaOptions[] = '-Dfile.encoding=UTF8';
+            $javaOptions[] = '-Dfile.encoding=UTF-8';
         }
 
         $javaOptions[] = '-jar';
