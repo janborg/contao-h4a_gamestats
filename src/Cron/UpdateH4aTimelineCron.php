@@ -16,7 +16,6 @@ use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Monolog\SystemLogger;
-use Contao\System;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\Helper;
@@ -67,9 +66,9 @@ class UpdateH4aTimelineCron
             H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
 
             $this->systemLogger
-                ->info('Timeline aus Bericht Nr. ' . $objEvent->sGID
-                    . ' für Spiel ' . $objEvent->gGameID . ' ' . $h4areportparser->heim_name . ' - ' . $h4areportparser->gast_name
-                    . ' über Handball4all gespeichert')
+                ->info('Timeline aus Bericht Nr. '.$objEvent->sGID
+                    .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
+                    .' über Handball4all gespeichert')
             ;
 
             $this->entityCacheTags->invalidateTagsFor($objEvent);

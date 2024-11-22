@@ -72,12 +72,12 @@ class H4aReportParser
 
         if (!$filesystem->exists($projectDir.'/var/tmp')) {
             $filesystem->mkdir($projectDir.'/var/tmp');
-        };
+        }
 
-        $outfilename = 'report_' . $this->reportID . '.pdf';
-        $outFilenameConverted = 'converted_report_' . $this->reportID . '.json';
-        $outputPath = $projectDir . '/var/tmp/' . $outfilename;
-        $outputPathConverted = $projectDir . '/var/tmp/' . $outFilenameConverted;
+        $outfilename = 'report_'.$this->reportID.'.pdf';
+        $outFilenameConverted = 'converted_report_'.$this->reportID.'.json';
+        $outputPath = $projectDir.'/var/tmp/'.$outfilename;
+        $outputPathConverted = $projectDir.'/var/tmp/'.$outFilenameConverted;
 
         $ch = curl_init($this->reportUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -98,7 +98,7 @@ class H4aReportParser
                         'pages' => 'all',
                         'lattice' => true,
                         'stream' => true,
-                        'outfile' => $outputPathConverted
+                        'outfile' => $outputPathConverted,
                     ],
                 )
                 ->convert()
