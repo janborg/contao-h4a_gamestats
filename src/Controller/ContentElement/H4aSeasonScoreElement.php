@@ -45,7 +45,7 @@ class H4aSeasonScoreElement extends AbstractContentElementController
 
         if ($this->scopeMatcher->isBackendRequest($request)) {
             $objSeason = H4aSeasonModel::findById($model->h4a_season);
-            
+
             $template = new BackendTemplate('be_wildcard');
             $template->wildcard = $objCalendar->title.' | '.$objSeason->season;
 

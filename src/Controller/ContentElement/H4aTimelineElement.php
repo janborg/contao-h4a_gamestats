@@ -12,18 +12,18 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Controller\ContentElement;
 
-use Contao\Date;
-use Contao\Template;
-use Contao\ContentModel;
 use Contao\BackendTemplate;
 use Contao\CalendarEventsModel;
-use Contao\CoreBundle\Routing\ScopeMatcher;
-use Janborg\H4aGamestats\H4aEventGamestats;
+use Contao\ContentModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
+use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
+use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\Date;
+use Contao\Template;
+use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
-use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 
 #[AsContentElement(H4aTimelineElement::TYPE, 'handball4all', 'ce_h4a_timeline')]
 class H4aTimelineElement extends AbstractContentElementController

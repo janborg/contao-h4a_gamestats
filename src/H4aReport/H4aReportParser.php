@@ -14,6 +14,7 @@ namespace Janborg\H4aGamestats\H4aReport;
 
 use Contao\System;
 use Janborg\H4aGamestats\Tabula\TabulaConverter;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class H4aReportParser.
@@ -66,9 +67,17 @@ class H4aReportParser
      */
     public function convertPdfReport(): void
     {
+        $filesystem = new Filesystem();
         $projectDir = System::getContainer()->getParameter('kernel.project_dir');
+
+        if (!$filesystem->exists($projectDir.'/var/tmp')) {
+            $filesystem->mkdir($projectDir.'/var/tmp');
+        }
+
         $outfilename = 'report_'.$this->reportID.'.pdf';
-        $outputPath = $projectDir.'/'.$outfilename;
+        $outFilenameConverted = 'converted_report_'.$this->reportID.'.json';
+        $outputPath = $projectDir.'/var/tmp/'.$outfilename;
+        $outputPathConverted = $projectDir.'/var/tmp/'.$outFilenameConverted;
 
         $ch = curl_init($this->reportUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -82,20 +91,23 @@ class H4aReportParser
 
             $tabula = new TabulaConverter();
 
-            $this->jsonReport = $tabula->setPdf($outputPath)
+            $tabula->setPdf($outputPath)
                 ->setOptions(
                     [
                         'format' => 'json',
                         'pages' => 'all',
                         'lattice' => true,
                         'stream' => true,
+                        'outfile' => $outputPathConverted,
                     ],
                 )
                 ->convert()
             ;
 
-            $this->arrReport = json_decode($this->jsonReport, true);
+            $this->jsonReport = file_get_contents($outputPathConverted);
+            unlink($outputPathConverted);
 
+            $this->arrReport = json_decode($this->jsonReport, true);
             unlink($outputPath);
         } else {
             throw new \Exception('Report is empty.');
