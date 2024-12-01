@@ -42,7 +42,7 @@ class WronglyEncodedPlayerscoresMigration extends AbstractMigration
         $results = $this->connection->fetchAllAssociative(
             "SELECT id, name
                FROM tl_h4a_playerscores
-              WHERE tl_h4a_playerscores.name LIKE '%\?%'"
+              WHERE tl_h4a_playerscores.name LIKE '%\\?%'",
         );
 
         return !empty($results);
@@ -55,11 +55,10 @@ class WronglyEncodedPlayerscoresMigration extends AbstractMigration
         $wronglyEncodedPlayerNames = $this->connection->fetchAllAssociative(
             "SELECT id, pid, name
                FROM tl_h4a_playerscores
-              WHERE tl_h4a_playerscores.name LIKE '%\?%'"
+              WHERE tl_h4a_playerscores.name LIKE '%\\?%'",
         );
 
         foreach ($wronglyEncodedPlayerNames as $playerscore) {
-
             $objCalendarEvent = CalendarEventsModel::findById($playerscore['pid']);
 
             $h4areportparser = new H4aReportParser($objCalendarEvent->sGID);

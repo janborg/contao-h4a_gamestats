@@ -42,7 +42,7 @@ class WronglyEncodedTimelinesMigration extends AbstractMigration
         $results = $this->connection->fetchAllAssociative(
             "SELECT id, action_player
                FROM tl_h4a_timeline
-              WHERE tl_h4a_timeline.action_player LIKE '%\?%'"
+              WHERE tl_h4a_timeline.action_player LIKE '%\\?%'",
         );
 
         return !empty($results);
@@ -55,11 +55,10 @@ class WronglyEncodedTimelinesMigration extends AbstractMigration
         $wronglyEncodedPlayerNames = $this->connection->fetchAllAssociative(
             "SELECT id, pid, action_player
                FROM tl_h4a_timeline
-              WHERE tl_h4a_timeline.action_player LIKE '%\?%'"
+              WHERE tl_h4a_timeline.action_player LIKE '%\\?%'",
         );
 
         foreach ($wronglyEncodedPlayerNames as $player) {
-
             $objCalendarEvent = CalendarEventsModel::findById($player['pid']);
 
             $h4areportparser = new H4aReportParser($objCalendarEvent->sGID);
