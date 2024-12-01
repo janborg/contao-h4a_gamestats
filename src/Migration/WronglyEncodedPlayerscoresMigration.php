@@ -39,36 +39,27 @@ class WronglyEncodedPlayerscoresMigration extends AbstractMigration
             return false;
         }
 
-        $stmt = $this->connection->executeQuery('
-            SELECT id, name FROM tl_h4a_playerscores
-        ');
-
-        $allPlayerNames = $stmt->fetchAllAssociative();
-
-        $wrongEncodedPlayerNames = array_filter(
-            $allPlayerNames,
-            static fn ($player): bool => (bool) preg_match('/\?/', $player['name']),
+        $results = $this->connection->fetchAllAssociative(
+            "SELECT id, name
+               FROM tl_h4a_playerscores
+              WHERE tl_h4a_playerscores.name LIKE '%\?%'"
         );
 
-        return !empty($wrongEncodedPlayerNames);
+        return !empty($results);
     }
 
     public function run(): MigrationResult
     {
         $this->framework->initialize();
 
-        $stmt = $this->connection->executeQuery('
-            SELECT id, pid, name FROM tl_h4a_playerscores
-        ');
-
-        $allPlayerNames = $stmt->fetchAllAssociative();
-
-        $wrongEncodedPlayerNames = array_filter(
-            $allPlayerNames,
-            static fn ($player): bool => (bool) preg_match('/\?/', $player['name']),
+        $wronglyEncodedPlayerNames = $this->connection->fetchAllAssociative(
+            "SELECT id, pid, name
+               FROM tl_h4a_playerscores
+              WHERE tl_h4a_playerscores.name LIKE '%\?%'"
         );
 
-        foreach ($wrongEncodedPlayerNames as $playerscore) {
+        foreach ($wronglyEncodedPlayerNames as $playerscore) {
+
             $objCalendarEvent = CalendarEventsModel::findById($playerscore['pid']);
 
             $h4areportparser = new H4aReportParser($objCalendarEvent->sGID);
@@ -89,7 +80,7 @@ class WronglyEncodedPlayerscoresMigration extends AbstractMigration
 
         return $this->createResult(
             true,
-            'Updated '.\count($wrongEncodedPlayerNames).' playerscore.',
+            'Updated '.\count($wronglyEncodedPlayerNames).' playerscore items.',
         );
     }
 }

@@ -39,36 +39,27 @@ class WronglyEncodedTimelinesMigration extends AbstractMigration
             return false;
         }
 
-        $stmt = $this->connection->executeQuery('
-            SELECT id, action_player FROM tl_h4a_timeline
-        ');
-
-        $allPlayerNames = $stmt->fetchAllAssociative();
-
-        $wrongEncodedPlayerNames = array_filter(
-            $allPlayerNames,
-            static fn ($player): bool => (bool) preg_match('/\?/', $player['action_player']),
+        $results = $this->connection->fetchAllAssociative(
+            "SELECT id, action_player
+               FROM tl_h4a_timeline
+              WHERE tl_h4a_timeline.action_player LIKE '%\?%'"
         );
 
-        return !empty($wrongEncodedPlayerNames);
+        return !empty($results);
     }
 
     public function run(): MigrationResult
     {
         $this->framework->initialize();
 
-        $stmt = $this->connection->executeQuery('
-            SELECT id, pid, action_player FROM tl_h4a_timeline
-        ');
-
-        $allPlayerNames = $stmt->fetchAllAssociative();
-
-        $wrongEncodedPlayerNames = array_filter(
-            $allPlayerNames,
-            static fn ($player): bool => (bool) preg_match('/\?/', $player['action_player']),
+        $wronglyEncodedPlayerNames = $this->connection->fetchAllAssociative(
+            "SELECT id, pid, action_player
+               FROM tl_h4a_timeline
+              WHERE tl_h4a_timeline.action_player LIKE '%\?%'"
         );
 
-        foreach ($wrongEncodedPlayerNames as $player) {
+        foreach ($wronglyEncodedPlayerNames as $player) {
+
             $objCalendarEvent = CalendarEventsModel::findById($player['pid']);
 
             $h4areportparser = new H4aReportParser($objCalendarEvent->sGID);
@@ -86,7 +77,7 @@ class WronglyEncodedTimelinesMigration extends AbstractMigration
 
         return $this->createResult(
             true,
-            'Updated '.\count($wrongEncodedPlayerNames).' timeline item.',
+            'Updated '.\count($wronglyEncodedPlayerNames).' timeline items.',
         );
     }
 }
