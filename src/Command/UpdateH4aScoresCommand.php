@@ -13,15 +13,16 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Command;
 
 use Contao\CalendarEventsModel;
-use Contao\CoreBundle\Cache\EntityCacheTags;
-use Contao\CoreBundle\Framework\ContaoFramework;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
-use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aTabellen\Helper\Helper;
+use Contao\CoreBundle\Cache\EntityCacheTags;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Symfony\Component\Console\Input\InputInterface;
+use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class UpdateH4aScoresCommand.
@@ -29,18 +30,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * @property SymfonyStyle $io
  * @property int          $statusCode
  */
+
+ #[AsCommand(
+    name: 'h4a:update:scores',
+    description: 'Update Scores from h4a.',
+)]
 class UpdateH4aScoresCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'h4a:update:scores';
-
-    /**
-     * @var string
-     */
-    protected static $defaultDescription = 'Update Scores from h4a';
-
+ 
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,

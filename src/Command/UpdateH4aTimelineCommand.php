@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Command;
 
 use Contao\CalendarEventsModel;
-use Contao\CoreBundle\Cache\EntityCacheTags;
-use Contao\CoreBundle\Framework\ContaoFramework;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
-use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\Helper;
+use Contao\CoreBundle\Cache\EntityCacheTags;
 use Symfony\Component\Console\Command\Command;
+use Contao\CoreBundle\Framework\ContaoFramework;
+use Janborg\H4aGamestats\Model\H4aTimelineModel;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -27,17 +28,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property int $statusCode
  */
+#[AsCommand(
+    name: 'h4a:update:timeline',
+    description: 'Update Games Timelines from h4a.',
+)]
 class UpdateH4aTimelineCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'h4a:update:timeline';
-
-    /**
-     * @var string
-     */
-    protected static $defaultDescription = 'Update Games Timelines from h4a';
 
     public function __construct(
         private ContaoFramework $framework,

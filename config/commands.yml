@@ -12,13 +12,9 @@ services:
         arguments:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
-        tags: 
-            - "console.command"
 
     h4a.command.updateTimeline:
         class: Janborg\H4aGamestats\Command\UpdateH4aTimelineCommand
         arguments:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
-        tags: 
-            - "console.command"
