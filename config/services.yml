@@ -25,6 +25,7 @@ services:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.cron'
+            - '@h4atabellen.h4aapihelper'
         tags:
             -
                 name: contao.cronjob
@@ -38,6 +39,7 @@ services:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.cron'
+            - '@h4atabellen.h4aapihelper'
         tags:
             -
                 name: contao.cronjob

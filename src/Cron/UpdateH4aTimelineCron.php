@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Cron;
 
 use Contao\CalendarEventsModel;
-use Contao\CoreBundle\Cache\EntityCacheTags;
-use Contao\CoreBundle\Framework\ContaoFramework;
-use Contao\CoreBundle\Monolog\SystemLogger;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
-use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\Helper;
+use Contao\CoreBundle\Monolog\SystemLogger;
+use Contao\CoreBundle\Cache\EntityCacheTags;
+use Janborg\H4aTabellen\Helper\H4aApiHelper;
+use Contao\CoreBundle\Framework\ContaoFramework;
+use Janborg\H4aGamestats\Model\H4aTimelineModel;
+use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 
 class UpdateH4aTimelineCron
 {
@@ -26,6 +27,7 @@ class UpdateH4aTimelineCron
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
         private SystemLogger $systemLogger,
+        private H4aApiHelper $h4aApiHelper
     ) {
         $this->framework->initialize();
     }
@@ -43,7 +45,7 @@ class UpdateH4aTimelineCron
 
         foreach ($objEvents as $objEvent) {
             if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
-                $sGID = Helper::getReportNo($objEvent->gClassID, $objEvent->gGameNo);
+                $sGID = $this->h4aApiHelper->getReportNo($objEvent->gClassID, $objEvent->gGameNo);
 
                 if (null !== $sGID) {
                     $objEvent->sGID = $sGID;

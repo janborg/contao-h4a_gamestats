@@ -10,8 +10,10 @@ services:
         public: true
         arguments: 
             - '@contao.cache.entity_tags'
+            - '@h4atabellen.h4aapihelper'
 
     Janborg\H4aGamestats\Backend\LookupTimelineController:
         public: true
         arguments: 
             - '@contao.cache.entity_tags'
+            - '@h4atabellen.h4aapihelper'
