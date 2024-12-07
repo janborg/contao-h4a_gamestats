@@ -13,13 +13,12 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Command;
 
 use Contao\CalendarEventsModel;
-use Janborg\H4aTabellen\Helper\Helper;
 use Contao\CoreBundle\Cache\EntityCacheTags;
+use Contao\CoreBundle\Framework\ContaoFramework;
+use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
 use Symfony\Component\Console\Command\Command;
-use Contao\CoreBundle\Framework\ContaoFramework;
-use Janborg\H4aGamestats\Model\H4aTimelineModel;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -43,7 +42,7 @@ class UpdateH4aTimelineCommand extends Command
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
-        private H4aApiHelper $h4aApiHelper
+        private H4aApiHelper $h4aApiHelper,
     ) {
         parent::__construct();
     }

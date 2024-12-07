@@ -13,13 +13,12 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Cron;
 
 use Contao\CalendarEventsModel;
-use Janborg\H4aTabellen\Helper\Helper;
-use Contao\CoreBundle\Monolog\SystemLogger;
 use Contao\CoreBundle\Cache\EntityCacheTags;
-use Janborg\H4aTabellen\Helper\H4aApiHelper;
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\CoreBundle\Monolog\SystemLogger;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
+use Janborg\H4aTabellen\Helper\H4aApiHelper;
 
 class UpdateH4aScoresCron
 {
@@ -27,7 +26,7 @@ class UpdateH4aScoresCron
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
         private SystemLogger $systemLogger,
-        private H4aApiHelper $h4aApiHelper
+        private H4aApiHelper $h4aApiHelper,
     ) {
         $this->framework->initialize();
     }

@@ -39,7 +39,7 @@ class H4aReportFinder
     public function getGameTableByLeagueID(): array
     {
         $url = $this->baseUrl.$this->leagueID;
-        
+
         $httpClient = HttpClient::create();
 
         $response = $httpClient->request('GET', $url);
@@ -74,7 +74,7 @@ class H4aReportFinder
     public function getReportNoByGameNo()
     {
         $url = $this->baseUrl.$this->leagueID;
-        
+
         $httpClient = HttpClient::create();
 
         $response = $httpClient->request('GET', $url);

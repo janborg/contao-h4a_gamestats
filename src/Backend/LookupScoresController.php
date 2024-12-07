@@ -12,21 +12,22 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Backend;
 
-use Contao\Input;
-use Contao\System;
 use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CalendarEventsModel;
-use Janborg\H4aTabellen\Helper\Helper;
 use Contao\CoreBundle\Cache\EntityCacheTags;
-use Janborg\H4aTabellen\Helper\H4aApiHelper;
+use Contao\Input;
+use Contao\System;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
+use Janborg\H4aTabellen\Helper\H4aApiHelper;
 
 class LookupScoresController extends Backend
 {
-    public function __construct(private EntityCacheTags $entityCacheTags, private H4aApiHelper $h4aApiHelper)
-    {
+    public function __construct(
+        private EntityCacheTags $entityCacheTags,
+        private H4aApiHelper $h4aApiHelper,
+    ) {
         parent::__construct();
         $this->import(BackendUser::class, 'User');
     }
