@@ -17,7 +17,7 @@ use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
-use Janborg\H4aTabellen\Helper\Helper;
+use Janborg\H4aTabellen\Helper\H4aApiHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,6 +37,7 @@ class UpdateH4aTimelineCommand extends Command
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
+        private H4aApiHelper $h4aApiHelper,
     ) {
         parent::__construct();
     }
@@ -76,7 +77,7 @@ class UpdateH4aTimelineCommand extends Command
 
             if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
                 $output->writeln('Keine ReportNo (sGID) vorhanden. Versuche ReportNo zu finden ...');
-                $sGID = Helper::getReportNo($objEvent->gClassID, $objEvent->gGameNo);
+                $sGID = $this->h4aApiHelper->getReportNo($objEvent->gClassID, $objEvent->gGameNo);
 
                 if (null !== $sGID) {
                     $objEvent->sGID = $sGID;
