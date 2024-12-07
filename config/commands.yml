@@ -12,6 +12,7 @@ services:
         arguments:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
+            - '@h4atabellen.h4aapihelper'
         tags: 
             - "console.command"
 
@@ -20,5 +21,6 @@ services:
         arguments:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
+            - '@h4atabellen.h4aapihelper'
         tags: 
             - "console.command"

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\H4aReport;
 
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpClient\HttpClient;
 
 class H4aReportFinder
 {
@@ -38,8 +39,12 @@ class H4aReportFinder
     public function getGameTableByLeagueID(): array
     {
         $url = $this->baseUrl.$this->leagueID;
-        dump($this->baseUrl, $this->leagueID, $url);
-        $html = file_get_contents($url);
+
+        $httpClient = HttpClient::create();
+
+        $response = $httpClient->request('GET', $url);
+
+        $html = $response->getContent();
 
         $crawler = new Crawler($html);
 
@@ -69,8 +74,12 @@ class H4aReportFinder
     public function getReportNoByGameNo()
     {
         $url = $this->baseUrl.$this->leagueID;
-        dump($this->baseUrl, $this->leagueID, $url, $this->gameNo);
-        $html = file_get_contents($url);
+
+        $httpClient = HttpClient::create();
+
+        $response = $httpClient->request('GET', $url);
+
+        $html = $response->getContent();
 
         $crawler = new Crawler($html);
 

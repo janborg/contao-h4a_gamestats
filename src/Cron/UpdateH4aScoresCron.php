@@ -18,7 +18,7 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Monolog\SystemLogger;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
-use Janborg\H4aTabellen\Helper\Helper;
+use Janborg\H4aTabellen\Helper\H4aApiHelper;
 
 class UpdateH4aScoresCron
 {
@@ -26,6 +26,7 @@ class UpdateH4aScoresCron
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
         private SystemLogger $systemLogger,
+        private H4aApiHelper $h4aApiHelper,
     ) {
         $this->framework->initialize();
     }
@@ -43,7 +44,7 @@ class UpdateH4aScoresCron
 
         foreach ($objEvents as $objEvent) {
             if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
-                $sGID = Helper::getReportNo($objEvent->gClassID, $objEvent->gGameNo);
+                $sGID = $this->h4aApiHelper->getReportNo($objEvent->gClassID, $objEvent->gGameNo);
 
                 if (null !== $sGID) {
                     $objEvent->sGID = $sGID;

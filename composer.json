@@ -21,7 +21,7 @@
         "contao/core-bundle": "^4.13 || ^5.3",
         "contao/calendar-bundle": "^4.13 || ^5.3",
         "doctrine/dbal": "^3.6",
-        "janborg/contao-h4a_tabellen": "^2.0",
+        "janborg/contao-h4a_tabellen": "^2.5",
         "symfony/config": "^5.4 || ^6.0",
         "symfony/console": "^5.4 || ^6.0",
         "symfony/dependency-injection": "^5.4 || ^6.0",
@@ -29,7 +29,8 @@
         "symfony/http-foundation": "^5.4 || ^6.0",
         "symfony/http-kernel": "^5.4 || ^6.0",
         "symfony/process": "^5.4 || ^6.0",
-        "symfony/filesystem": "^5.4 || ^6.0"
+        "symfony/filesystem": "^5.4 || ^6.0",
+        "symfony/http-client": "^5.4 || ^6.0"
     },
     "require-dev": {
         "contao/easy-coding-standard": "^6.13",

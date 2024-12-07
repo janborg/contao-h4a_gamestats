@@ -20,12 +20,14 @@ use Contao\Input;
 use Contao\System;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
-use Janborg\H4aTabellen\Helper\Helper;
+use Janborg\H4aTabellen\Helper\H4aApiHelper;
 
 class LookupScoresController extends Backend
 {
-    public function __construct(private EntityCacheTags $entityCacheTags)
-    {
+    public function __construct(
+        private EntityCacheTags $entityCacheTags,
+        private H4aApiHelper $h4aApiHelper,
+    ) {
         parent::__construct();
         $this->import(BackendUser::class, 'User');
     }
@@ -37,7 +39,7 @@ class LookupScoresController extends Backend
         $objCalendarEvent = CalendarEventsModel::findById($id);
 
         if (isset($objCalendarEvent->sGID) && '' === $objCalendarEvent->sGID) {
-            $objCalendarEvent->sGID = Helper::getReportNo($objCalendarEvent->gClassID, $objCalendarEvent->gGameNo);
+            $objCalendarEvent->sGID = $this->h4aApiHelper->getReportNo($objCalendarEvent->gClassID, $objCalendarEvent->gGameNo);
             $objCalendarEvent->save();
         }
 
