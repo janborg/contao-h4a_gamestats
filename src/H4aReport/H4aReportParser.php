@@ -76,9 +76,9 @@ class H4aReportParser
         }
 
         $outfilename = 'report_'.$this->reportID.'.pdf';
-
+        $outFilenameConverted = 'converted_report_'.$this->reportID.'.json';
         $outputPath = $projectDir.'/var/tmp/'.$outfilename;
-
+        $outputPathConverted = $projectDir.'/var/tmp/'.$outFilenameConverted;
         $httpClient = HttpClient::create();
 
         $response = $httpClient->request(
@@ -100,10 +100,14 @@ class H4aReportParser
                         'pages' => 'all',
                         'lattice' => true,
                         'stream' => true,
+                        'outfile' => $outputPathConverted,
                     ],
                 )
                 ->convert()
             ;
+
+            $this->jsonReport = file_get_contents($outputPathConverted);
+            unlink($outputPathConverted);
 
             $this->arrReport = json_decode($this->jsonReport, true);
 
