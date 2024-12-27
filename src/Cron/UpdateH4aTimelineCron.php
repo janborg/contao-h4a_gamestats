@@ -25,7 +25,7 @@ class UpdateH4aTimelineCron
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
-        private SystemLogger $systemLogger,
+        private SystemLogger|null $systemLogger,
         private H4aApiHelper $h4aApiHelper,
     ) {
         $this->framework->initialize();
@@ -66,11 +66,9 @@ class UpdateH4aTimelineCron
             // Timeline des Spiels speichern
             H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
 
-            $this->systemLogger
-                ->info('Timeline aus Bericht Nr. '.$objEvent->sGID
+            $this->systemLogger?->info('Timeline aus Bericht Nr. '.$objEvent->sGID
                     .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
-                    .' über Handball4all gespeichert')
-            ;
+                    .' über Handball4all gespeichert');
 
             $this->entityCacheTags->invalidateTagsFor($objEvent);
         }

@@ -16,8 +16,8 @@ use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
+use Contao\CoreBundle\Monolog\SystemLogger;
 use Contao\Input;
-use Contao\System;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
@@ -27,6 +27,7 @@ class LookupScoresController extends Backend
     public function __construct(
         private EntityCacheTags $entityCacheTags,
         private H4aApiHelper $h4aApiHelper,
+        private SystemLogger|null $systemLogger,
     ) {
         parent::__construct();
         $this->import(BackendUser::class, 'User');
@@ -62,10 +63,7 @@ class LookupScoresController extends Backend
         // Spieler der Gastmannschaft speichern
         H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objCalendarEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
-        System::getContainer()
-            ->get('monolog.logger.contao.general')
-            ->info('Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.')
-        ;
+        $this->systemLogger?->info('Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.');
 
         $this->entityCacheTags->invalidateTagsFor($objCalendarEvent);
 
