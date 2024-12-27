@@ -25,7 +25,7 @@ class UpdateH4aScoresCron
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
-        private SystemLogger $systemLogger,
+        private SystemLogger|null $systemLogger,
         private H4aApiHelper $h4aApiHelper,
     ) {
         $this->framework->initialize();
@@ -69,11 +69,9 @@ class UpdateH4aScoresCron
             // Spieler der Gast Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
-            $this->systemLogger
-                ->info('Gamescores aus Bericht Nr. '.$objEvent->sGID
+            $this->systemLogger?->info('Gamescores aus Bericht Nr. '.$objEvent->sGID
                     .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
-                    .' über Handball4all gespeichert')
-            ;
+                    .' über Handball4all gespeichert');
 
             $this->entityCacheTags->invalidateTagsFor($objEvent);
         }
