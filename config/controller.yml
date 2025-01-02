@@ -12,6 +12,7 @@ services:
             - '@contao.cache.entity_tags'
             - '@h4atabellen.h4aapihelper'
             - '@monolog.logger.contao.general'
+            - '@monolog.logger.contao.error'
 
     Janborg\H4aGamestats\Backend\LookupTimelineController:
         public: true
@@ -19,3 +20,4 @@ services:
             - '@contao.cache.entity_tags'
             - '@h4atabellen.h4aapihelper'
             - '@monolog.logger.contao.general'
+            - '@monolog.logger.contao.error'

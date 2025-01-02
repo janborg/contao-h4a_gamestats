@@ -15,17 +15,18 @@ namespace Janborg\H4aGamestats\Cron;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Contao\CoreBundle\Monolog\SystemLogger;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
+use Psr\Log\LoggerInterface;
 
 class UpdateH4aScoresCron
 {
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
-        private SystemLogger|null $systemLogger,
+        private readonly LoggerInterface $contaoCronLogger,
+        private readonly LoggerInterface $contaoErrorLogger,
         private H4aApiHelper $h4aApiHelper,
     ) {
         $this->framework->initialize();
@@ -61,7 +62,14 @@ class UpdateH4aScoresCron
             }
 
             $h4areportparser = new H4aReportParser($objEvent->sGID);
-            $h4areportparser->parseReport();
+
+            try {
+                $h4areportparser->parseReport();
+            } catch (\Exception $e) {
+                $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage());
+
+                return;
+            }
 
             // Spieler der Heim Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
@@ -69,7 +77,7 @@ class UpdateH4aScoresCron
             // Spieler der Gast Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
-            $this->systemLogger?->info('Gamescores aus Bericht Nr. '.$objEvent->sGID
+            $this->contaoCronLogger->info('Gamescores aus Bericht Nr. '.$objEvent->sGID
                     .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
                     .' über Handball4all gespeichert');
 
