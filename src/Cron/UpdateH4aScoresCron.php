@@ -62,7 +62,14 @@ class UpdateH4aScoresCron
             }
 
             $h4areportparser = new H4aReportParser($objEvent->sGID);
-            $h4areportparser->parseReport();
+            
+            try {
+                $h4areportparser->parseReport();    
+            } catch (\Exception $e) {
+                $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage());
+                
+                return;
+            }
 
             // Spieler der Heim Mannschaft speichern
             H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);

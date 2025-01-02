@@ -55,9 +55,17 @@ class LookupScoresController extends Backend
         }
 
         $h4areportparser = new H4aReportParser($sGID);
-
-        $h4areportparser->parseReport();
-
+        
+        try {
+            $h4areportparser->parseReport();    
+        } catch (\Exception $e) {
+            $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
+            
+            $this->redirect($this->getReferer());
+            
+            return;
+        }
+        
         // Spieler der Heimmannschaft speichern
         H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objCalendarEvent->id, $h4areportparser->heim_name, $home_guest = 1);
 

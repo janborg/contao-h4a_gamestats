@@ -62,7 +62,14 @@ class UpdateH4aTimelineCron
             }
 
             $h4areportparser = new H4aReportParser($objEvent->sGID);
-            $h4areportparser->parseReport();
+
+            try {
+                $h4areportparser->parseReport();    
+            } catch (\Exception $e) {
+                $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage());
+                
+                return;
+            }
 
             // Timeline des Spiels speichern
             H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);

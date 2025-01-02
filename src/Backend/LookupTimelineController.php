@@ -56,7 +56,15 @@ class LookupTimelineController extends Backend
 
         $h4areportparser = new H4aReportParser($sGID);
 
-        $h4areportparser->parseReport();
+        try {
+            $h4areportparser->parseReport();    
+        } catch (\Exception $e) {
+            $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
+            
+            $this->redirect($this->getReferer());
+            
+            return;
+        }
 
         H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objCalendarEvent->id);
 
