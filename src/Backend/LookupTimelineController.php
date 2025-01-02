@@ -16,7 +16,7 @@ use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
-use Contao\CoreBundle\Monolog\SystemLogger;
+use Psr\Log\LoggerInterface;
 use Contao\Input;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
@@ -27,7 +27,8 @@ class LookupTimelineController extends Backend
     public function __construct(
         private EntityCacheTags $entityCacheTags,
         private H4aApiHelper $h4aApiHelper,
-        private SystemLogger|null $systemLogger,
+        private readonly LoggerInterface $contaoGeneralLogger,
+        private readonly LoggerInterface $contaoErrorLogger,
     ) {
         parent::__construct();
         $this->import(BackendUser::class, 'User');
@@ -59,7 +60,7 @@ class LookupTimelineController extends Backend
 
         H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objCalendarEvent->id);
 
-        $this->systemLogger?->info('Timeline für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.');
+        $this->contaoGeneralLogger->info('Timeline für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.');
 
         $this->entityCacheTags->invalidateTagsFor($objCalendarEvent);
 
