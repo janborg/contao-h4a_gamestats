@@ -16,11 +16,11 @@ use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
-use Psr\Log\LoggerInterface;
 use Contao\Input;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
+use Psr\Log\LoggerInterface;
 
 class LookupTimelineController extends Backend
 {
@@ -57,13 +57,11 @@ class LookupTimelineController extends Backend
         $h4areportparser = new H4aReportParser($sGID);
 
         try {
-            $h4areportparser->parseReport();    
+            $h4areportparser->parseReport();
         } catch (\Exception $e) {
             $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
-            
+
             $this->redirect($this->getReferer());
-            
-            return;
         }
 
         H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objCalendarEvent->id);

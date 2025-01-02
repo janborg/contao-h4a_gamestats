@@ -104,13 +104,13 @@ class UpdateH4aTimelineCommand extends Command
 
                 continue;
             }
-            
+
             $h4areportparser = new H4aReportParser($objEvent->sGID);
-            
+
             try {
-                $h4areportparser->parseReport();    
+                $h4areportparser->parseReport();
             } catch (\Exception $e) {
-                $output->writeln('<error>Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage().'</error>');                
+                $output->writeln('<error>Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage().'</error>');
                 continue;
             }
             // Spieler der Heim Mannschaft speichern

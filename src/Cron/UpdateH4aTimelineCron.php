@@ -15,10 +15,10 @@ namespace Janborg\H4aGamestats\Cron;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Psr\Log\LoggerInterface;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
+use Psr\Log\LoggerInterface;
 
 class UpdateH4aTimelineCron
 {
@@ -64,17 +64,17 @@ class UpdateH4aTimelineCron
             $h4areportparser = new H4aReportParser($objEvent->sGID);
 
             try {
-                $h4areportparser->parseReport();    
+                $h4areportparser->parseReport();
             } catch (\Exception $e) {
                 $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage());
-                
+
                 return;
             }
 
             // Timeline des Spiels speichern
             H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
 
-            $this->contaoCronLogger?->info('Timeline aus Bericht Nr. '.$objEvent->sGID
+            $this->contaoCronLogger->info('Timeline aus Bericht Nr. '.$objEvent->sGID
                     .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
                     .' über Handball4all gespeichert');
 
