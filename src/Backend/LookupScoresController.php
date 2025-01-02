@@ -16,18 +16,19 @@ use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
-use Contao\CoreBundle\Monolog\SystemLogger;
 use Contao\Input;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
+use Psr\Log\LoggerInterface;
 
 class LookupScoresController extends Backend
 {
     public function __construct(
         private EntityCacheTags $entityCacheTags,
         private H4aApiHelper $h4aApiHelper,
-        private SystemLogger|null $systemLogger,
+        private readonly LoggerInterface $contaoGeneralLogger,
+        private readonly LoggerInterface $contaoErrorLogger,
     ) {
         parent::__construct();
         $this->import(BackendUser::class, 'User');
@@ -55,7 +56,13 @@ class LookupScoresController extends Backend
 
         $h4areportparser = new H4aReportParser($sGID);
 
-        $h4areportparser->parseReport();
+        try {
+            $h4areportparser->parseReport();
+        } catch (\Exception $e) {
+            $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
+
+            $this->redirect($this->getReferer());
+        }
 
         // Spieler der Heimmannschaft speichern
         H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objCalendarEvent->id, $h4areportparser->heim_name, $home_guest = 1);
@@ -63,7 +70,7 @@ class LookupScoresController extends Backend
         // Spieler der Gastmannschaft speichern
         H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objCalendarEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
-        $this->systemLogger?->info('Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.');
+        $this->contaoGeneralLogger->info('Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.');
 
         $this->entityCacheTags->invalidateTagsFor($objCalendarEvent);
 
