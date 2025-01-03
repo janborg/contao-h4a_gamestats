@@ -17,18 +17,18 @@ use Contao\BackendUser;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\Input;
+use Contao\Message;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
-use Psr\Log\LoggerInterface;
+use Contao\CoreBundle\Monolog\SystemLogger;
 
 class LookupScoresController extends Backend
 {
     public function __construct(
         private EntityCacheTags $entityCacheTags,
         private H4aApiHelper $h4aApiHelper,
-        private readonly LoggerInterface $contaoGeneralLogger,
-        private readonly LoggerInterface $contaoErrorLogger,
+        private readonly SystemLogger $systemLogger,
     ) {
         parent::__construct();
         $this->import(BackendUser::class, 'User');
@@ -49,9 +49,11 @@ class LookupScoresController extends Backend
         if (isset($objCalendarEvent->sGID) && '' !== $objCalendarEvent->sGID) {
             $sGID = $objCalendarEvent->sGID;
         } else {
+
+            Message::addError('Spielberichtsnummer nicht gefunden.');
+
             $this->redirect($this->getReferer());
 
-            return; // @phpstan-ignore deadCode.unreachable
         }
 
         $h4areportparser = new H4aReportParser($sGID);
@@ -59,7 +61,9 @@ class LookupScoresController extends Backend
         try {
             $h4areportparser->parseReport();
         } catch (\Exception $e) {
-            $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
+            $this->systemLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
+            
+            Message::addError('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
 
             $this->redirect($this->getReferer());
         }
@@ -70,7 +74,7 @@ class LookupScoresController extends Backend
         // Spieler der Gastmannschaft speichern
         H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objCalendarEvent->id, $h4areportparser->gast_name, $home_guest = 2);
 
-        $this->contaoGeneralLogger->info('Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.');
+        Message::addConfirmation('Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.');
 
         $this->entityCacheTags->invalidateTagsFor($objCalendarEvent);
 
