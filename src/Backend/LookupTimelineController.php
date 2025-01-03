@@ -16,12 +16,12 @@ use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
+use Contao\CoreBundle\Monolog\SystemLogger;
 use Contao\Input;
 use Contao\Message;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
-use Contao\CoreBundle\Monolog\SystemLogger;
 
 class LookupTimelineController extends Backend
 {
@@ -62,7 +62,7 @@ class LookupTimelineController extends Backend
             $this->systemLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
 
             Message::addError('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
-            
+
             $this->redirect($this->getReferer());
         }
 
