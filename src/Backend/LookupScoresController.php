@@ -16,12 +16,12 @@ use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
+use Contao\CoreBundle\Monolog\SystemLogger;
 use Contao\Input;
 use Contao\Message;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
-use Contao\CoreBundle\Monolog\SystemLogger;
 
 class LookupScoresController extends Backend
 {
@@ -49,11 +49,9 @@ class LookupScoresController extends Backend
         if (isset($objCalendarEvent->sGID) && '' !== $objCalendarEvent->sGID) {
             $sGID = $objCalendarEvent->sGID;
         } else {
-
             Message::addError('Spielberichtsnummer nicht gefunden.');
 
             $this->redirect($this->getReferer());
-
         }
 
         $h4areportparser = new H4aReportParser($sGID);
@@ -62,7 +60,7 @@ class LookupScoresController extends Backend
             $h4areportparser->parseReport();
         } catch (\Exception $e) {
             $this->systemLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
-            
+
             Message::addError('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
 
             $this->redirect($this->getReferer());
