@@ -17,18 +17,18 @@ use Contao\BackendUser;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\Input;
+use Contao\Message;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
-use Psr\Log\LoggerInterface;
+use Contao\CoreBundle\Monolog\SystemLogger;
 
 class LookupTimelineController extends Backend
 {
     public function __construct(
         private EntityCacheTags $entityCacheTags,
         private H4aApiHelper $h4aApiHelper,
-        private readonly LoggerInterface $contaoGeneralLogger,
-        private readonly LoggerInterface $contaoErrorLogger,
+        private readonly SystemLogger $systemLogger,
     ) {
         parent::__construct();
         $this->import(BackendUser::class, 'User');
@@ -49,9 +49,9 @@ class LookupTimelineController extends Backend
         if (isset($objCalendarEvent->sGID) && '' !== $objCalendarEvent->sGID) {
             $sGID = $objCalendarEvent->sGID;
         } else {
-            $this->redirect($this->getReferer());
+            Message::addError('Spielberichtsnummer nicht gefunden.');
 
-            return; // @phpstan-ignore deadCode.unreachable
+            $this->redirect($this->getReferer());
         }
 
         $h4areportparser = new H4aReportParser($sGID);
@@ -59,14 +59,16 @@ class LookupTimelineController extends Backend
         try {
             $h4areportparser->parseReport();
         } catch (\Exception $e) {
-            $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
+            $this->systemLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
 
+            Message::addError('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
+            
             $this->redirect($this->getReferer());
         }
 
         H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objCalendarEvent->id);
 
-        $this->contaoGeneralLogger->info('Timeline für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.');
+        Message::addConfirmation('Timeline für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.');
 
         $this->entityCacheTags->invalidateTagsFor($objCalendarEvent);
 
