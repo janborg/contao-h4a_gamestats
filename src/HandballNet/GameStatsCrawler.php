@@ -29,12 +29,24 @@ class GameStatsCrawler
 
     private string $gGameID;
 
+    /**
+     * @var array<mixed>
+     */
     private array $homeLineup;
 
+    /**
+     * @var array<mixed>
+     */
     private array $guestLineup;
 
+    /**
+     * @var array<mixed>
+     */
     private array $timeline;
 
+    /**
+     * @var array<mixed>
+     */
     private array $matchInfo;
 
     private Crawler $crawler;
@@ -80,16 +92,31 @@ class GameStatsCrawler
         return $this->matchInfo['homeTeamResult'].' : '.$this->matchInfo['guestTeamResult'];
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @return array<mixed>
+     */
     public function getHomeLineup(): array
     {
         return $this->homeLineup;
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @return array<mixed>
+     */
     public function getGuestLineup(): array
     {
         return $this->guestLineup;
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @return array<mixed>
+     */
     public function getTimeline(): array
     {
         return $this->timeline;
@@ -177,7 +204,7 @@ class GameStatsCrawler
                             $matchInfo['guestTeamResult'] = $node->text();
                             break;
                     }
-                }
+                },
             );
             $this->matchInfo = $matchInfo;
         } catch (\InvalidArgumentException $e) {
@@ -212,7 +239,7 @@ class GameStatsCrawler
                     $timelineEvents[$i]['standing'] = $liCrawler->filter('div > p')->eq(0)->text();
 
                     $timelineEvents[$i]['eventText'] = $liCrawler->filter('div >p')->eq(1)->text();
-                }
+                },
             );
         } catch (\InvalidArgumentException $e) {
             $this->timeline = array_reverse($timelineEvents, false);

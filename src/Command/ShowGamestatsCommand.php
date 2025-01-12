@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Command;
 
 use Contao\CalendarEventsModel;
-use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Janborg\H4aGamestats\HandballNet\GameStatsCrawler;
 use Symfony\Component\Console\Command\Command;
@@ -42,7 +41,6 @@ class ShowGamestatsCommand extends Command
 
     public function __construct(
         private ContaoFramework $framework,
-        private EntityCacheTags $entityCacheTags,
         private GameStatsCrawler $gameStatsCrawler,
     ) {
         parent::__construct();

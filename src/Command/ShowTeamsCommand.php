@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Command;
 
-use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Janborg\H4aGamestats\HandballNet\TeamsCrawler;
 use Symfony\Component\Console\Command\Command;
@@ -41,7 +40,6 @@ class ShowTeamsCommand extends Command
 
     public function __construct(
         private ContaoFramework $framework,
-        private EntityCacheTags $entityCacheTags,
         private TeamsCrawler $teamsCrawler,
     ) {
         parent::__construct();

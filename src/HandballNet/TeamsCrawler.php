@@ -21,13 +21,14 @@ class TeamsCrawler
 
     private string $clubID;
 
-    private $season;
+    private string $season;
 
     private string $verbandName;
 
+    /**
+     * @var array<mixed>
+     */
     private array $teams;
-
-    private string $verbandShortname;
 
     private Crawler $crawler;
 
@@ -41,14 +42,16 @@ class TeamsCrawler
         $this->verbandName = urlencode($verbandName);
     }
 
-    public function setVerbandShortname(string $verbandShortname): void
+    public function setSeason(string $season): void
     {
-        $this->verbandShortname = urlencode($verbandShortname);
+        $this->season = $season;
     }
 
     /**
      * creates a Crawler and crawls all the teams for a club. Relevant inputs must be
      * set upfront.
+     *
+     * @return array<mixed>
      */
     public function getAllTeams(): array
     {
@@ -96,7 +99,7 @@ class TeamsCrawler
                 $arrTeams[$i]['teamName'] = $node->filter('div.list-item-title')->text();
 
                 $arrTeams[$i]['districtAndClass'] = $node->filter('div.list-item-text')->text();
-            }
+            },
         );
 
         foreach ($arrTeams as &$team) {
