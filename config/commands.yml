@@ -29,3 +29,12 @@ services:
             - '@h4agamestats.handallnet.gamestatscrawler'
         tags: 
             - "console.command"
+        
+    h4a.command.showteams:
+        class: Janborg\H4aGamestats\Command\ShowTeamsCommand
+        arguments:
+            - '@contao.framework'
+            - '@contao.cache.entity_tags'
+            - '@h4agamestats.handallnet.teamscrawler'
+        tags: 
+            - "console.command"
