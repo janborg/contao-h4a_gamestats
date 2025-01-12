@@ -13,14 +13,14 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Command;
 
 use Contao\CalendarEventsModel;
-use Symfony\Component\Console\Helper\Table;
 use Contao\CoreBundle\Cache\EntityCacheTags;
-use Symfony\Component\Console\Command\Command;
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Janborg\H4aGamestats\HandballNet\GameStatsCrawler;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Janborg\H4aGamestats\HandballNet\GameStatsCrawler;
 
 /**
  * Class UpdateLineupCommand.
@@ -51,7 +51,8 @@ class ShowGamestatsCommand extends Command
     protected function configure(): void
     {
         $this->setHelp('This command allows you to update all Stats for game from handball.net.')
-            ->addArgument('gGameID', InputArgument::REQUIRED, 'gGameID from handball.net');
+            ->addArgument('gGameID', InputArgument::REQUIRED, 'gGameID from handball.net')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -60,7 +61,7 @@ class ShowGamestatsCommand extends Command
 
         $gGameID = $input->getArgument('gGameID');
 
-        $objEvent = CalendarEventsModel::findby('gGameID',$gGameID);
+        $objEvent = CalendarEventsModel::findby('gGameID', $gGameID);
 
         if (null === $objEvent) {
             $output->writeln('<info>Es wurde kein Event mit GameID '.$gGameID.' gefunden.</info>');
@@ -77,13 +78,13 @@ class ShowGamestatsCommand extends Command
         $this->gameStatsCrawler->getAllGameStats();
 
         $output->writeln([
-            'Heim: '. $this->gameStatsCrawler->getHomeTeam(),
-            'Gast: '. $this->gameStatsCrawler->getGuestTeam(),
-            'Ergebnis: '. $this->gameStatsCrawler->getMatchResult(),
+            'Heim: '.$this->gameStatsCrawler->getHomeTeam(),
+            'Gast: '.$this->gameStatsCrawler->getGuestTeam(),
+            'Ergebnis: '.$this->gameStatsCrawler->getMatchResult(),
             '',
             '============================================================',
             '',
-            'Heim Aufstellung: '
+            'Heim Aufstellung: ',
         ]);
 
         $tablehome = new Table($output);
@@ -95,7 +96,7 @@ class ShowGamestatsCommand extends Command
             '',
             '============================================================',
             '',
-            'Gast Aufstellung: '
+            'Gast Aufstellung: ',
         ]);
 
         $tableguest = new Table($output);
@@ -107,14 +108,13 @@ class ShowGamestatsCommand extends Command
             '',
             '============================================================',
             '',
-            'Spielverlauf: '
+            'Spielverlauf: ',
         ]);
 
         $tabletimeline = new Table($output);
         $tabletimeline->setHeaders(['Zeit', 'Spielstand', 'Text']);
         $tabletimeline->setRows($this->gameStatsCrawler->getTimeline());
         $tabletimeline->render();
-
 
         return Command::SUCCESS;
     }

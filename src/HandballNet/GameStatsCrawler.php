@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\HandballNet;
 
-use InvalidArgumentException;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -39,7 +38,6 @@ class GameStatsCrawler
     private array $matchInfo;
 
     private Crawler $crawler;
-
 
     public function setClassID(string $classID): void
     {
@@ -69,17 +67,17 @@ class GameStatsCrawler
 
     public function getHomeTeam(): string
     {
-        return $this->matchInfo["homeTeam"];
+        return $this->matchInfo['homeTeam'];
     }
 
     public function getGuestTeam(): string
     {
-        return $this->matchInfo["guestTeam"];
+        return $this->matchInfo['guestTeam'];
     }
 
     public function getMatchResult(): string
     {
-        return $this->matchInfo["homeTeamResult"].' : '.$this->matchInfo["guestTeamResult"];
+        return $this->matchInfo['homeTeamResult'].' : '.$this->matchInfo['guestTeamResult'];
     }
 
     public function getHomeLineup(): array
@@ -97,9 +95,50 @@ class GameStatsCrawler
         return $this->timeline;
     }
 
+    /**
+     * creates a Crawler and crawls all the game stats for a game from handball.net.
+     * Relevant inputs must be set upfront.
+     */
+    public function getAllGameStats(): void
+    {
+        $this->getCrawler();
+
+        $this->crawlMatch();
+
+        $this->crawlLineups();
+
+        $this->crawlTimeline();
+    }
+
+    /**
+     * Creates a Crawler and crawls the lineup for both teams of a game from
+     * handball.net. Relevant inputs must be set upfront.
+     */
+    public function getGameLineups(): void
+    {
+        $this->getCrawler();
+
+        $this->crawlMatch();
+
+        $this->crawlLineups();
+    }
+
+    /**
+     * Creates a Crawler and crawls the timeline of a game from handball.net. Relevant
+     * inputs must be set upfront.
+     */
+    public function getGameTimeline(): void
+    {
+        $this->getCrawler();
+
+        $this->crawlMatch();
+
+        $this->crawlTimeline();
+    }
+
     private function getGameUrl(): string
     {
-        return $this->baseUrl . '/ligen/handball4all.' . $this->verbandName . '.' . $this->classShortName . '_' . $this->verbandShortname . '/spielplan/spieltage/handball4all.' . $this->verbandName . '.' . $this->classID . '/spiele/handball4all.' . $this->verbandName . '.'. $this->gGameID;
+        return $this->baseUrl.'/ligen/handball4all.'.$this->verbandName.'.'.$this->classShortName.'_'.$this->verbandShortname.'/spielplan/spieltage/handball4all.'.$this->verbandName.'.'.$this->classID.'/spiele/handball4all.'.$this->verbandName.'.'.$this->gGameID;
     }
 
     private function getCrawler(): void
@@ -120,25 +159,28 @@ class GameStatsCrawler
         $matchTable = $this->crawler->filterXPath('//div[@id="tickaroo-liveblog"]//table')->first();
 
         $matchInfo = [];
+
         try {
-            $matchTable->filter('td')->each(function (Crawler $node, $i) use (&$matchInfo) {
-                switch ($i) {
-                    case 0:
-                        $matchInfo["homeTeam"] = $node->text();    
-                        break;
-                    case 1:
-                        $matchInfo["homeTeamResult"] = $node->text();
-                        break;
-                    case 2:
-                        $matchInfo["guestTeam"] = $node->text();    
-                        break;
-                    case 3:
-                        $matchInfo["guestTeamResult"] = $node->text();
-                        break;
+            $matchTable->filter('td')->each(
+                static function (Crawler $node, $i) use (&$matchInfo): void {
+                    switch ($i) {
+                        case 0:
+                            $matchInfo['homeTeam'] = $node->text();
+                            break;
+                        case 1:
+                            $matchInfo['homeTeamResult'] = $node->text();
+                            break;
+                        case 2:
+                            $matchInfo['guestTeam'] = $node->text();
+                            break;
+                        case 3:
+                            $matchInfo['guestTeamResult'] = $node->text();
+                            break;
+                    }
                 }
-            });
+            );
             $this->matchInfo = $matchInfo;
-        } catch (InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) {
             $this->matchInfo = $matchInfo;
         }
     }
@@ -149,20 +191,12 @@ class GameStatsCrawler
         $allTables = $this->crawler->filterXPath('//div[@id="aufstellung"]//table/tbody');
 
         // loop through all tables and return the node values as array
-        $arrTables = $allTables->each(function (Crawler $tableCrawler) {
-            $lineupArray = $tableCrawler->filter('tr')->each(function (Crawler $rowCrawler)  {
-                $rowArray = $rowCrawler->filter('td')->each(function (Crawler $cellCrawler)  {
-                    return $cellCrawler->text();
-                });
-                return $rowArray;
-            });
-            return $lineupArray;
-        });
+        $arrTables = $allTables->each(static fn (Crawler $tableCrawler) => $tableCrawler->filter('tr')->each(static fn (Crawler $rowCrawler) => $rowCrawler->filter('td')->each(static fn (Crawler $cellCrawler) => $cellCrawler->text())));
 
         $this->homeLineup = $arrTables[0];
         $this->guestLineup = $arrTables[1];
     }
-    
+
     private function crawlTimeline(): void
     {
         // find the ul element inside the div with id 'tickaroo-liveblog'
@@ -171,59 +205,17 @@ class GameStatsCrawler
         $timelineEvents = [];
 
         try {
-            $ulTimeline->filter('li')->each(function (Crawler $liCrawler, $i) use (&$timelineEvents) {
-                $timelineEvents[$i]["timestamp"] = $liCrawler->filter('div')->eq(0)->filter('span')->text();
-                
-                $timelineEvents[$i]["standing"] = $liCrawler->filter('div > p')->eq(0)->text();
+            $ulTimeline->filter('li')->each(
+                static function (Crawler $liCrawler, $i) use (&$timelineEvents): void {
+                    $timelineEvents[$i]['timestamp'] = $liCrawler->filter('div')->eq(0)->filter('span')->text();
 
-                $timelineEvents[$i]["eventText"] = $liCrawler->filter('div >p')->eq(1)->text();
-            });
-        } catch (InvalidArgumentException $e) {
+                    $timelineEvents[$i]['standing'] = $liCrawler->filter('div > p')->eq(0)->text();
+
+                    $timelineEvents[$i]['eventText'] = $liCrawler->filter('div >p')->eq(1)->text();
+                }
+            );
+        } catch (\InvalidArgumentException $e) {
             $this->timeline = array_reverse($timelineEvents, false);
         }
-    }
-
-    /**
-     * creates a Crawler and crawls all the game stats for a game from handball.net. Relevant inputs must be set upfront.
-     *
-     * @return void
-     */
-    public function getAllGameStats(): void
-    {
-        $this->getCrawler();
-        
-        $this->crawlMatch();
-
-        $this->crawlLineups();
-
-        $this->crawlTimeline();
-    }
-
-    /**
-     * Creates a Crawler and crawls the lineup for both teams of a game from handball.net. Relevant inputs must be set upfront.
-     *
-     * @return void
-     */
-    public function getGameLineups(): void
-    {
-        $this->getCrawler();
-        
-        $this->crawlMatch();
-
-        $this->crawlLineups();
-    }
-
-    /**
-     * Creates a Crawler and crawls the timeline of a game from handball.net. Relevant inputs must be set upfront.
-     *
-     * @return void
-     */
-    public function getGameTimeline(): void
-    {
-        $this->getCrawler();
-        
-        $this->crawlMatch();
-
-        $this->crawlTimeline();
     }
 }

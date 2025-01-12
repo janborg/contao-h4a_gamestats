@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\HandballNet;
 
-use InvalidArgumentException;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -32,7 +31,6 @@ class TeamsCrawler
 
     private Crawler $crawler;
 
-
     public function setClubID(string $clubID): void
     {
         $this->clubID = $clubID;
@@ -48,12 +46,25 @@ class TeamsCrawler
         $this->verbandShortname = urlencode($verbandShortname);
     }
 
+    /**
+     * creates a Crawler and crawls all the teams for a club. Relevant inputs must be
+     * set upfront.
+     */
+    public function getAllTeams(): array
+    {
+        $this->getCrawler();
+
+        $this->crawlTeams();
+
+        return $this->teams;
+    }
+
     private function getClubUrl(): string
     {
-        $cluburl = $this->baseUrl . '/vereine/handball4all.' . $this->verbandName . '.' . $this->clubID;
-        
+        $cluburl = $this->baseUrl.'/vereine/handball4all.'.$this->verbandName.'.'.$this->clubID;
+
         if (isset($this->season)) {
-            $cluburl .= '?' . $this->season;
+            $cluburl .= '?'.$this->season;
         }
 
         return $cluburl;
@@ -76,46 +87,32 @@ class TeamsCrawler
     {
         $divMain = $this->crawler->filterXPath('//body//main');
 
-        $arrTeams =[];
+        $arrTeams = [];
 
-        $divMain->filter('a.list-item')->each(function (Crawler $node, $i) use (&$arrTeams) {
-       
-            $arrTeams[$i]["teamUrl"] = $node->attr('href');
-            
-            $arrTeams[$i]["teamName"] = $node->filter('div.list-item-title')->text();
-            
-            $arrTeams[$i]["districtAndClass"] = $node->filter('div.list-item-text')->text();
-        });
+        $divMain->filter('a.list-item')->each(
+            static function (Crawler $node, $i) use (&$arrTeams): void {
+                $arrTeams[$i]['teamUrl'] = $node->attr('href');
+
+                $arrTeams[$i]['teamName'] = $node->filter('div.list-item-title')->text();
+
+                $arrTeams[$i]['districtAndClass'] = $node->filter('div.list-item-text')->text();
+            }
+        );
 
         foreach ($arrTeams as &$team) {
-            $team["teamID"] = $this->extractTeamID($team["teamUrl"]);
-            $team["districtName"] = explode(" - ", $team["districtAndClass"])[0];
-            $team["className"] = explode(" - ", $team["districtAndClass"])[1];
-            unset($team["districtAndClass"]);
-            unset($team["teamUrl"]);
+            $team['teamID'] = $this->extractTeamID($team['teamUrl']);
+            $team['districtName'] = explode(' - ', $team['districtAndClass'])[0];
+            $team['className'] = explode(' - ', $team['districtAndClass'])[1];
+            unset($team['districtAndClass'], $team['teamUrl']);
         }
 
         $this->teams = $arrTeams;
     }
 
-    /**
-     * creates a Crawler and crawls all the teams for a club. Relevant inputs must be set upfront.
-     *
-     * @return array
-     */
-    public function getAllTeams(): array
-    {
-        $this->getCrawler();
-        
-        $this->crawlTeams();
-
-        return $this->teams;
-    }
-
     private function extractTeamID(string $url): string
     {
         preg_match('/mannschaften\/\w+\.\w+\.(\d+)\//', $url, $matches);
+
         return $matches[1] ?? '';
     }
-
 }

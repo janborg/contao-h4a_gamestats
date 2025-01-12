@@ -12,12 +12,11 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Command;
 
-use Contao\CalendarEventsModel;
-use Symfony\Component\Console\Helper\Table;
 use Contao\CoreBundle\Cache\EntityCacheTags;
-use Symfony\Component\Console\Command\Command;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Janborg\H4aGamestats\HandballNet\TeamsCrawler;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -51,7 +50,8 @@ class ShowTeamsCommand extends Command
     protected function configure(): void
     {
         $this->setHelp('This command allows you to show all Teams for a club from handball.net.')
-            ->addArgument('clubID', InputArgument::REQUIRED, 'clubID from handball.net');
+            ->addArgument('clubID', InputArgument::REQUIRED, 'clubID from handball.net')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -59,9 +59,9 @@ class ShowTeamsCommand extends Command
         $this->framework->initialize();
 
         $this->teamsCrawler->setVerbandName('wuerttemberg');
-        
+
         $this->teamsCrawler->setClubID($input->getArgument('clubID'));
-        
+
         $teams = $this->teamsCrawler->getAllTeams();
 
         $tablehome = new Table($output);
