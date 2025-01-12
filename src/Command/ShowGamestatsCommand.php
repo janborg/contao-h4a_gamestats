@@ -67,10 +67,13 @@ class ShowGamestatsCommand extends Command
             return Command::SUCCESS;
         }
 
+        // Suppress PHPStan undefined property errors @phpstan-ignore-next-line */
+        $this->gameStatsCrawler->setclassID($objEvent->gClassID);
+        /** @phpstan-ignore-next-line */
+        $this->gameStatsCrawler->setclassShortName($objEvent->gClassName);
+
         $this->gameStatsCrawler->setVerbandName('wuerttemberg');
         $this->gameStatsCrawler->setVerbandShortname('hvw');
-        $this->gameStatsCrawler->setclassID($objEvent->gClassID);
-        $this->gameStatsCrawler->setclassShortName($objEvent->gClassName);
         $this->gameStatsCrawler->setgGameID($gGameID);
 
         $this->gameStatsCrawler->getAllGameStats();
