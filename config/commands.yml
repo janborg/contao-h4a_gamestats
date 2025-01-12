@@ -36,3 +36,11 @@ services:
             - '@h4agamestats.handallnet.teamscrawler'
         tags: 
             - "console.command"
+
+    h4a.command.showverbaende:
+        class: Janborg\H4aGamestats\Command\ShowVerbaendeCommand
+        arguments:
+            - '@contao.framework'
+            - '@h4agamestats.handallnet.verbandscrawler'
+        tags: 
+            - "console.command"
