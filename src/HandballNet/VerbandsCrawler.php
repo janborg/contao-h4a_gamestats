@@ -82,7 +82,8 @@ class VerbandsCrawler
 
     private function extractVerbandShortName(string $url): string
     {
-        // find Baden in /verbaende/Baden/ and find Oberliga-Ostsee-Spree in /verbaende/Oberliga-Ostsee-Spree
+        // find Baden in /verbaende/Baden/ and find Oberliga-Ostsee-Spree in
+        // /verbaende/Oberliga-Ostsee-Spree
 
         preg_match('/verbaende\/([\w-]+)/', $url, $matches);
 
