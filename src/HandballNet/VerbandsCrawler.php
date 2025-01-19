@@ -65,11 +65,12 @@ class VerbandsCrawler
 
         $arrVerbaende = [];
 
-        $divMain->filter('a.list-item')->each(
+        // filter for all a-tags with class list-item using filterXPath
+        $divMain->filterXPath('//a[contains(@class, "list-item")]')->each(
             static function (Crawler $node, $i) use (&$arrVerbaende): void {
                 $arrVerbaende[$i]['verbandsUrl'] = $node->attr('href');
 
-                $arrVerbaende[$i]['verbandName'] = $node->filter('div.list-item-title')->text();
+                $arrVerbaende[$i]['verbandName'] = $node->filterXPath('//div[contains(@class, "list-item-title")]')->text();
             },
         );
 
