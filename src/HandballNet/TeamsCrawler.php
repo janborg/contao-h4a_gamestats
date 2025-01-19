@@ -103,7 +103,6 @@ class TeamsCrawler
         // add teamID to array
         foreach ($arrTeams as &$team) {
             $team['teamID'] = $this->extractTeamID($team['teamUrl']);
-            
         }
 
         $this->teams = $arrTeams;

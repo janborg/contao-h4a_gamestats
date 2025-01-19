@@ -2,14 +2,18 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of contao-h4a_gamestats.
+ *
+ * (c) Jan Lünborg
+ *
+ * @license MIT
+ */
+
 namespace Janborg\H4aGamestats\Tests\HandballNet;
 
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpClient\MockHttpClient;
 use Janborg\H4aGamestats\HandballNet\TeamsCrawler;
-use Symfony\Component\HttpClient\Response\MockResponse;
-
+use PHPUnit\Framework\TestCase;
 
 class TeamsCrawlerTest extends TestCase
 {
@@ -23,6 +27,7 @@ class TeamsCrawlerTest extends TestCase
             ['581', 'baden', 'TV Hemsbach'],
         ];
     }
+
     /**
      * @dataProvider clubProvider
      *
@@ -41,7 +46,7 @@ class TeamsCrawlerTest extends TestCase
         $teams = $crawler->getAllTeams();
 
         $this->assertIsArray($teams);
-        
+
         $this->assertArrayHasKey('teamID', $teams[0]);
 
         $this->assertArrayHasKey('teamName', $teams[0]);
@@ -49,5 +54,5 @@ class TeamsCrawlerTest extends TestCase
         $this->assertArrayHasKey('teamUrl', $teams[0]);
 
         $this->assertContainsEquals($clubName, $teams[0]);
-    }      
+    }
 }
