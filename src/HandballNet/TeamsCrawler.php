@@ -92,21 +92,18 @@ class TeamsCrawler
 
         $arrTeams = [];
 
-        $divMain->filter('a.list-item')->each(
+        $divMain->filterXPath('//a[contains(@class, "list-item")]')->each(
             static function (Crawler $node, $i) use (&$arrTeams): void {
                 $arrTeams[$i]['teamUrl'] = $node->attr('href');
 
-                $arrTeams[$i]['teamName'] = $node->filter('div.list-item-title')->text();
-
-                $arrTeams[$i]['districtAndClass'] = $node->filter('div.list-item-text')->text();
+                $arrTeams[$i]['teamName'] = $node->filterXPath('//div[contains(@class, "list-item-title")]')->text();
             },
         );
 
+        // add teamID to array
         foreach ($arrTeams as &$team) {
             $team['teamID'] = $this->extractTeamID($team['teamUrl']);
-            $team['districtName'] = explode(' - ', $team['districtAndClass'])[0];
-            $team['className'] = explode(' - ', $team['districtAndClass'])[1];
-            unset($team['districtAndClass'], $team['teamUrl']);
+            
         }
 
         $this->teams = $arrTeams;

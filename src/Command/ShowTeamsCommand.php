@@ -63,7 +63,7 @@ class ShowTeamsCommand extends Command
         $teams = $this->teamsCrawler->getAllTeams();
 
         $tablehome = new Table($output);
-        $tablehome->setHeaders(['Team', 'ID', 'Bezirk', 'Liga']);
+        $tablehome->setHeaders(['TeamUrl', 'Team', 'TeamID']);
         $tablehome->setRows($teams);
         $tablehome->render();
 
