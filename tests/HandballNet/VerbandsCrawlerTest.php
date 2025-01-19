@@ -13,43 +13,71 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 
 class VerbandsCrawlerTest extends TestCase
 {
-    public function testGetAllVerbaende(): void
+
+    /**
+     * @return array<int, array<int, string>>
+     */
+    public static function verbandProvider(): iterable
+    {
+        return [
+            ['/verbaende/Baden',  'Badischer Handball-Verband',  'Baden'],
+            ['/verbaende/Bayern',  'Bayerischer Handball-Verband',  'Bayern'],
+            ['/verbaende/Berlin',  'Handball-Verband Berlin',  'Berlin'],
+            ['/verbaende/Brandenburg',  'Handball-Verband Brandenburg',  'Brandenburg'],
+            ['/verbaende/Hamburg',  'Hamburger Handball-Verband',  'Hamburg'],
+            ['/verbaende/Hessen',  'Hessischer Handball-Verband',  'Hessen'],
+            ['/verbaende/Mecklenburg-Vorpommern',  'Handball-Verband Meck.-Vorpommern',  'Mecklenburg-Vorpommern'],
+            ['/verbaende/Niedersachsen',  'Handballverband Niedersachsen-Bremen',  'Niedersachsen'],
+            ['/verbaende/Pfalz',  'Pfälzer Handball-Verband',  'Pfalz'],
+            ['/verbaende/Rheinhessen',  'Handball-Verband Rheinhessen',  'Rheinhessen'],
+            ['/verbaende/Rheinland',  'Handball-Verband Rheinland',  'Rheinland'],
+            ['/verbaende/Saar',  'Handball-Verband Saar',  'Saar'],
+            ['/verbaende/Sachsen',  'Handball-Verband Sachsen',  'Sachsen'],
+            ['/verbaende/Sachsen-Anhalt',  'Handball-Verband Sachsen-Anhalt',  'Sachsen-Anhalt'],
+            ['/verbaende/Schleswig-Holstein',  'Handballverband Schleswig-Holstein',  'Schleswig-Holstein'],
+            ['/verbaende/Suedbaden',  'Südbadischer Handball-Verband',  'Suedbaden'],
+            ['/verbaende/Thueringer',  'Thüringer Handball-Verband',  'Thueringer'],
+            ['/verbaende/Westfalen',  'Handball-Verband Westfalen',  'Westfalen'],
+            ['/verbaende/Wuerttemberg',  'Handballverband Württemberg',  'Wuerttemberg'],
+            ['/verbaende/Nordrhein',  'Handball Nordrhein',  'Nordrhein'],
+            ['/verbaende/BW-OL',  'Oberliga Baden-Württemberg',  'BW-OL'],
+            ['/verbaende/HHSH-Ligen',  'Oberliga Hamburg - Schleswig-Holstein',  'HHSH-Ligen'],
+            ['/verbaende/Oberliga-Ostsee-Spree',  'Oberliga Ostsee-Spree',  'Oberliga-Ostsee-Spree'],
+            ['/verbaende/RPS-Ligen',  'Oberliga Rheinland-Pfalz/Saar',  'RPS-Ligen'],
+            ['/verbaende/DHB',  'Deutscher Handballbund',  'DHB'],
+            ['/verbaende/IHF',  'International Handball Federation',  'IHF'],
+            ['/verbaende/EHF',  'European Handball Federation',  'EHF'],
+
+        ];
+    }
+    /**
+     * @dataProvider verbandProvider
+     *
+     * @param string $verbandsUrl
+     * @param string $verbandName
+     * @param string $verbandShortName
+     */
+
+    public function testGetAllVerbaende($verbandsUrl, $verbandName, $verbandShortName): void
     {
         $crawler = new VerbandsCrawler();
 
         $verbaende = $crawler->getAllVerbaende();
 
         $this->assertCount(27, $verbaende);
-        $expected = [
-                    ['verbandsUrl' => '/verbaende/Baden', 'verbandName' => 'Badischer Handball-Verband', 'verbandShortName' => 'Baden'],
-                    ['verbandsUrl' => '/verbaende/Bayern', 'verbandName' => 'Bayerischer Handball-Verband', 'verbandShortName' => 'Bayern'],
-                    ['verbandsUrl' => '/verbaende/Berlin', 'verbandName' => 'Handball-Verband Berlin', 'verbandShortName' => 'Berlin'],
-                    ['verbandsUrl' => '/verbaende/Brandenburg', 'verbandName' => 'Handball-Verband Brandenburg', 'verbandShortName' => 'Brandenburg'],
-                    ['verbandsUrl' => '/verbaende/Hamburg', 'verbandName' => 'Hamburger Handball-Verband', 'verbandShortName' => 'Hamburg'],
-                    ['verbandsUrl' => '/verbaende/Hessen', 'verbandName' => 'Hessischer Handball-Verband', 'verbandShortName' => 'Hessen'],
-                    ['verbandsUrl' => '/verbaende/Mecklenburg-Vorpommern', 'verbandName' => 'Handball-Verband Meck.-Vorpommern', 'verbandShortName' => 'Mecklenburg-Vorpommern'],
-                    ['verbandsUrl' => '/verbaende/Niedersachsen', 'verbandName' => 'Handballverband Niedersachsen-Bremen', 'verbandShortName' => 'Niedersachsen'],
-                    ['verbandsUrl' => '/verbaende/Pfalz', 'verbandName' => 'Pfälzer Handball-Verband', 'verbandShortName' => 'Pfalz'],
-                    ['verbandsUrl' => '/verbaende/Rheinhessen', 'verbandName' => 'Handball-Verband Rheinhessen', 'verbandShortName' => 'Rheinhessen'],
-                    ['verbandsUrl' => '/verbaende/Rheinland', 'verbandName' => 'Handball-Verband Rheinland', 'verbandShortName' => 'Rheinland'],
-                    ['verbandsUrl' => '/verbaende/Saar', 'verbandName' => 'Handball-Verband Saar', 'verbandShortName' => 'Saar'],
-                    ['verbandsUrl' => '/verbaende/Sachsen', 'verbandName' => 'Handball-Verband Sachsen', 'verbandShortName' => 'Sachsen'],
-                    ['verbandsUrl' => '/verbaende/Sachsen-Anhalt', 'verbandName' => 'Handball-Verband Sachsen-Anhalt', 'verbandShortName' => 'Sachsen-Anhalt'],
-                    ['verbandsUrl' => '/verbaende/Schleswig-Holstein', 'verbandName' => 'Handballverband Schleswig-Holstein', 'verbandShortName' => 'Schleswig-Holstein'],
-                    ['verbandsUrl' => '/verbaende/Suedbaden', 'verbandName' => 'Südbadischer Handball-Verband', 'verbandShortName' => 'Suedbaden'],
-                    ['verbandsUrl' => '/verbaende/Thueringer', 'verbandName' => 'Thüringer Handball-Verband', 'verbandShortName' => 'Thueringer'],
-                    ['verbandsUrl' => '/verbaende/Westfalen', 'verbandName' => 'Handball-Verband Westfalen', 'verbandShortName' => 'Westfalen'],
-                    ['verbandsUrl' => '/verbaende/Wuerttemberg', 'verbandName' => 'Handballverband Württemberg', 'verbandShortName' => 'Wuerttemberg'],
-                    ['verbandsUrl' => '/verbaende/Nordrhein', 'verbandName' => 'Handball Nordrhein', 'verbandShortName' => 'Nordrhein'],
-                    ['verbandsUrl' => '/verbaende/BW-OL', 'verbandName' => 'Oberliga Baden-Württemberg', 'verbandShortName' => 'BW-OL'],
-                    ['verbandsUrl' => '/verbaende/HHSH-Ligen', 'verbandName' => 'Oberliga Hamburg - Schleswig-Holstein', 'verbandShortName' => 'HHSH-Ligen'],
-                    ['verbandsUrl' => '/verbaende/Oberliga-Ostsee-Spree', 'verbandName' => 'Oberliga Ostsee-Spree', 'verbandShortName' => 'Oberliga-Ostsee-Spree'],
-                    ['verbandsUrl' => '/verbaende/RPS-Ligen', 'verbandName' => 'Oberliga Rheinland-Pfalz/Saar', 'verbandShortName' => 'RPS-Ligen'],
-                    ['verbandsUrl' => '/verbaende/DHB', 'verbandName' => 'Deutscher Handballbund', 'verbandShortName' => 'DHB'],
-                    ['verbandsUrl' => '/verbaende/IHF', 'verbandName' => 'International Handball Federation', 'verbandShortName' => 'IHF'],
-                    ['verbandsUrl' => '/verbaende/EHF', 'verbandName' => 'European Handball Federation', 'verbandShortName' => 'EHF'],
-                ];
 
-        $this->assertSame($expected, $verbaende);
+        $this->assertIsArray($verbaende);
+
+        $this->assertArrayHasKey('verbandName', $verbaende[0]);
+
+        $this->assertArrayHasKey('verbandShortName', $verbaende[0]);
+
+        $this->assertArrayHasKey('verbandsUrl', $verbaende[0]);
+
+        $this->assertContains(
+            ['verbandsUrl' => $verbandsUrl,
+            'verbandName' => $verbandName,
+            'verbandShortName' => $verbandShortName
+            ], $verbaende);
     }
 }
