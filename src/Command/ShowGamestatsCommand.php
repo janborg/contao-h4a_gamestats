@@ -76,7 +76,7 @@ class ShowGamestatsCommand extends Command
         $this->gameStatsCrawler->setVerbandShortname('hvw');
         $this->gameStatsCrawler->setgGameID($gGameID);
 
-        $this->gameStatsCrawler->getAllGameStats();
+        $this->gameStatsCrawler->crawlAllGameStats();
 
         $output->writeln([
             'Heim: '.$this->gameStatsCrawler->getHomeTeam(),

@@ -126,7 +126,7 @@ class GameStatsCrawler
      * creates a Crawler and crawls all the game stats for a game from handball.net.
      * Relevant inputs must be set upfront.
      */
-    public function getAllGameStats(): void
+    public function crawlAllGameStats(): void
     {
         $this->getCrawler();
 
@@ -141,7 +141,7 @@ class GameStatsCrawler
      * Creates a Crawler and crawls the lineup for both teams of a game from
      * handball.net. Relevant inputs must be set upfront.
      */
-    public function getGameLineups(): void
+    public function crawlGameLineups(): void
     {
         $this->getCrawler();
 
@@ -154,7 +154,7 @@ class GameStatsCrawler
      * Creates a Crawler and crawls the timeline of a game from handball.net. Relevant
      * inputs must be set upfront.
      */
-    public function getGameTimeline(): void
+    public function crawlGameTimeline(): void
     {
         $this->getCrawler();
 
