@@ -68,7 +68,7 @@ class UpdateH4aTimelineCron
             } catch (\Exception $e) {
                 $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage());
 
-                return;
+                continue;
             }
 
             // Timeline des Spiels speichern
