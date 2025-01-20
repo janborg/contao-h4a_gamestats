@@ -68,7 +68,7 @@ class UpdateH4aScoresCron
             } catch (\Exception $e) {
                 $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage());
 
-                return;
+                continue;
             }
 
             // Spieler der Heim Mannschaft speichern
