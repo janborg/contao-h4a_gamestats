@@ -188,7 +188,7 @@ class GameStatsCrawler
         $matchInfo = [];
 
         try {
-            $matchTable->filter('td')->each(
+            $matchTable->filterXpath('//td')->each(
                 static function (Crawler $node, $i) use (&$matchInfo): void {
                     switch ($i) {
                         case 0:
@@ -218,7 +218,9 @@ class GameStatsCrawler
         $allTables = $this->crawler->filterXPath('//div[@id="aufstellung"]//table/tbody');
 
         // loop through all tables and return the node values as array
-        $arrTables = $allTables->each(static fn (Crawler $tableCrawler) => $tableCrawler->filter('tr')->each(static fn (Crawler $rowCrawler) => $rowCrawler->filter('td')->each(static fn (Crawler $cellCrawler) => $cellCrawler->text())));
+        $arrTables = $allTables->each(static fn (Crawler $tableCrawler) => $tableCrawler->filterXPath('//tr')->each(
+            static fn (Crawler $rowCrawler) => $rowCrawler->filterXPath('//td')->each(
+                static fn (Crawler $cellCrawler) => $cellCrawler->text())));
 
         $this->homeLineup = $arrTables[0];
         $this->guestLineup = $arrTables[1];
@@ -232,13 +234,14 @@ class GameStatsCrawler
         $timelineEvents = [];
 
         try {
-            $ulTimeline->filter('li')->each(
+            $ulTimeline->filterXPath('//li')->each(
                 static function (Crawler $liCrawler, $i) use (&$timelineEvents): void {
-                    $timelineEvents[$i]['timestamp'] = $liCrawler->filter('div')->eq(0)->filter('span')->text();
-
-                    $timelineEvents[$i]['standing'] = $liCrawler->filter('div > p')->eq(0)->text();
-
-                    $timelineEvents[$i]['eventText'] = $liCrawler->filter('div >p')->eq(1)->text();
+                    
+                    $timelineEvents[$i]['timestamp'] = $liCrawler->filterXPath('li/div//span')->text();
+                    
+                    $timelineEvents[$i]['standing'] = $liCrawler->filterXPath('li/div/p[1]')->text();
+                    
+                    $timelineEvents[$i]['eventText'] = $liCrawler->filterXPath('li/div/p[2]')->text();
                 },
             );
         } catch (\InvalidArgumentException $e) {
