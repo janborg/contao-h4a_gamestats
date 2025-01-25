@@ -135,6 +135,8 @@ class GameStatsCrawler
         $this->crawlLineups();
 
         $this->crawlTimeline();
+
+        $this->parseTimeline();
     }
 
     /**
@@ -161,6 +163,8 @@ class GameStatsCrawler
         $this->crawlMatch();
 
         $this->crawlTimeline();
+
+        $this->parseTimeline();
     }
 
     private function getGameUrl(): string
@@ -247,5 +251,120 @@ class GameStatsCrawler
         } catch (\InvalidArgumentException $e) {
             $this->timeline = array_reverse($timelineEvents, false);
         }
+    }
+
+    private function parseTimeline(): void
+    {
+        $timeline = $this->timeline;
+
+        $timelineEvents = [];
+
+        foreach ($timeline as $event) {
+            $team = $this->parseTeam($event['eventText']);
+            $playerNo = $this->parsePlayerNo($event['eventText']);
+            $timelineEvents[] = [
+                'timestamp' => $event['timestamp'],
+                'standing' => $event['standing'],
+                'eventType' => $this->parseEventType($event['eventText']),
+                'team' => $team,
+                'playerNo' => $playerNo,
+                'playerName' => $this->parsePlayerName($playerNo, $team),
+                'eventText' => $event['eventText'],
+            ];
+        }
+
+        $this->timeline = $timelineEvents;
+    }
+
+    private function parseEventType(string $eventText): string
+    {
+        $eventText = strtolower($eventText);
+
+        if (str_contains($eventText, '7-meter tor durch')) {
+            return '7m-Tor';
+        }
+
+        if (str_contains($eventText, '7-meter verworfen')) {
+            return '7m-Versuch';
+        }
+
+        if (str_contains($eventText, 'tor durch')) {
+            return 'Tor';
+        }
+
+        if (str_contains($eventText, 'erhält eine 2-minuten strafe')) {
+            return '2-min';
+        }
+
+        if (str_contains($eventText, 'wurde verwarnt')) {
+            return 'Gelb';
+        }
+
+        if (str_contains($eventText, 'wurde disqualifiziert')) {
+            return 'Rot';
+        }
+
+        if (str_contains($eventText, 'auszeit')) {
+            return 'Auszeit';
+        }
+
+        if (str_contains($eventText, 'spielstand 1. halbzeit')) {
+            return 'Halbzeit';
+        }
+
+        if (str_contains($eventText, 'spielstand 2. halbzeit')) {
+            return 'Endstand';
+        }
+
+        return 'unknown';
+    }
+
+    private function parsePlayerNo(string $eventText): string
+    {
+        $eventText = strtolower($eventText);
+
+        $player = '';
+
+        if (preg_match('/\((\d+\.)\)/', $eventText, $matches)) {
+            $player = $matches[1];
+        }
+
+        return $player;
+    }
+
+    private function parsePlayerName(string $playerNo, string $team): string
+    {
+        $player = '';
+
+        if ('home' === $team) {
+            $player = array_filter($this->homeLineup, static fn ($lineup) => $lineup[0] === $playerNo);
+        }
+
+        if ('guest' === $team) {
+            $player = array_filter($this->guestLineup, static fn ($lineup) => $lineup[0] === $playerNo);
+        }
+
+        if (!is_array($player)) {
+            return '';
+        } else {
+            $player = array_values($player);
+        }
+        
+        return isset($player[0][1]) ? $player[0][1] : '';
+    }
+
+    private function parseTeam(string $eventText): string
+    {
+        $team = '';
+
+        if (str_contains($eventText, $this->matchInfo['homeTeam'])) {
+            $team = 'home';
+        }
+
+        if (str_contains($eventText, $this->matchInfo['guestTeam'])) {
+            $team = 'guest';
+        }
+
+        return $team;
     }
 }

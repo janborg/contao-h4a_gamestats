@@ -113,7 +113,7 @@ class ShowGamestatsCommand extends Command
         ]);
 
         $tabletimeline = new Table($output);
-        $tabletimeline->setHeaders(['Zeit', 'Spielstand', 'Text']);
+        $tabletimeline->setHeaders(['Zeit', 'Spielstand', 'Typ','Team', 'Nr.', 'Name', 'Text']);
         $tabletimeline->setRows($this->gameStatsCrawler->getTimeline());
         $tabletimeline->render();
 
