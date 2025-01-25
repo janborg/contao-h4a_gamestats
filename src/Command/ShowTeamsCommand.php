@@ -12,13 +12,17 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Command;
 
-use Contao\CoreBundle\Framework\ContaoFramework;
-use Janborg\H4aGamestats\HandballNet\TeamsCrawler;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Command\Command;
+use Contao\CoreBundle\Framework\ContaoFramework;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Janborg\H4aGamestats\HandballNet\TeamsCrawler;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Janborg\H4aGamestats\HandballNet\VerbandsCrawler;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 /**
  * Class UpdateLineupCommand.
@@ -41,6 +45,7 @@ class ShowTeamsCommand extends Command
     public function __construct(
         private ContaoFramework $framework,
         private TeamsCrawler $teamsCrawler,
+        private VerbandsCrawler $verbandsCrawler,
     ) {
         parent::__construct();
     }
@@ -48,7 +53,9 @@ class ShowTeamsCommand extends Command
     protected function configure(): void
     {
         $this->setHelp('This command allows you to show all Teams for a club from handball.net.')
-            ->addArgument('clubID', InputArgument::REQUIRED, 'clubID from handball.net')
+            ->addOption('clubID', null, InputOption::VALUE_REQUIRED , 'clubID from handball.net')
+            ->addOption('verband', null, InputOption::VALUE_REQUIRED , 'verband from handball.net')
+            ->addOption('season', null, InputOption::VALUE_REQUIRED , 'season from handball.net')
         ;
     }
 
@@ -56,11 +63,54 @@ class ShowTeamsCommand extends Command
     {
         $this->framework->initialize();
 
-        $this->teamsCrawler->setVerbandName('wuerttemberg');
+        $io = new SymfonyStyle($input, $output);
 
-        $this->teamsCrawler->setClubID($input->getArgument('clubID'));
+        $clubID = $input->getOption('clubID');
 
-        $teams = $this->teamsCrawler->getAllTeams();
+        if (!$clubID) {
+            $io->error('Bitte die Club ID (--clubID) angeben');
+            return Command::FAILURE;
+        }
+
+        $this->teamsCrawler->setClubID($clubID);
+
+        $verband = $input->getOption('verband');
+
+        if (!$verband) {    
+            $verbaende = $this->verbandsCrawler->getAllVerbaende();
+
+            $verbaendeShorts = array_map(function ($verband) {
+                return $verband['verbandShortName'];
+            }, $verbaende);
+
+            $question = new ChoiceQuestion(
+                'Bitte wählen Sie den Verband aus, in dem der verein spielt:',
+                $verbaendeShorts,
+                null
+            );
+
+            $question->setErrorMessage('Verband %s ist ungültig.');
+
+            $verband = $io->askQuestion($question);
+        }
+
+        $this->teamsCrawler->setVerbandName($verband);        
+
+        $season = $input->getOption('season');
+
+        if ($season) {
+            $this->teamsCrawler->setSeason($season);
+        }
+
+        try {
+            $teams = $this->teamsCrawler->getAllTeams();
+        } catch (\Exception $e) {
+            $io->error($e->getMessage());
+
+            return Command::FAILURE;
+        }
+        
+        $io->info('Teams for ClubID: '.$clubID.' (Verband: '.$verband.'in der Saison: '.$season.')');
 
         $tablehome = new Table($output);
         $tablehome->setHeaders(['TeamUrl', 'Team', 'TeamID']);

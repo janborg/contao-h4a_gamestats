@@ -34,6 +34,7 @@ services:
         arguments:
             - '@contao.framework'
             - '@h4agamestats.handallnet.teamscrawler'
+            - '@h4agamestats.handallnet.verbandscrawler'
         tags: 
             - "console.command"
 
