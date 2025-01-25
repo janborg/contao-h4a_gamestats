@@ -39,7 +39,7 @@ class TeamsCrawler
 
     public function setVerbandName(string $verbandName): void
     {
-        $this->verbandName = urlencode($verbandName);
+        $this->verbandName = urlencode(strtolower($verbandName));
     }
 
     public function setSeason(string $season): void
@@ -67,7 +67,7 @@ class TeamsCrawler
         $cluburl = $this->baseUrl.'/vereine/handball4all.'.$this->verbandName.'.'.$this->clubID;
 
         if (isset($this->season)) {
-            $cluburl .= '?'.$this->season;
+            $cluburl .= '?season='.$this->season;
         }
 
         return $cluburl;
