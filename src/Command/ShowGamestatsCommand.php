@@ -13,13 +13,15 @@ declare(strict_types=1);
 namespace Janborg\H4aGamestats\Command;
 
 use Contao\CalendarEventsModel;
-use Contao\CoreBundle\Framework\ContaoFramework;
-use Janborg\H4aGamestats\HandballNet\GameStatsCrawler;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Command\Command;
+use Contao\CoreBundle\Framework\ContaoFramework;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Janborg\H4aGamestats\HandballNet\GameStatsCrawler;
 
 /**
  * Class UpdateLineupCommand.
@@ -50,6 +52,9 @@ class ShowGamestatsCommand extends Command
     {
         $this->setHelp('This command allows you to update all Stats for game from handball.net.')
             ->addArgument('gGameID', InputArgument::REQUIRED, 'gGameID from handball.net')
+            ->addOption('verband', null, InputOption::VALUE_REQUIRED, 'Verband', '')
+            ->addOption('classID', null, InputOption::VALUE_REQUIRED, 'Liga ID', '')
+            ->addOption('classShort', null, InputOption::VALUE_REQUIRED, 'Ligakürzel mit Bezirk', '')
         ;
     }
 
@@ -57,24 +62,38 @@ class ShowGamestatsCommand extends Command
     {
         $this->framework->initialize();
 
+        $io = new SymfonyStyle($input, $output);
+
         $gGameID = $input->getArgument('gGameID');
 
-        $objEvent = CalendarEventsModel::findby('gGameID', $gGameID);
+        if (!$gGameID) {
+            $io->error('Bitte Game ID angeben!');
 
-        if (null === $objEvent) {
-            $output->writeln('<info>Es wurde kein Event mit GameID '.$gGameID.' gefunden.</info>');
-
-            return Command::SUCCESS;
+            return Command::FAILURE;
         }
 
-        // Suppress PHPStan undefined property errors @phpstan-ignore-next-line */
-        $this->gameStatsCrawler->setclassID($objEvent->gClassID);
-        /** @phpstan-ignore-next-line */
-        $this->gameStatsCrawler->setclassShortName($objEvent->gClassName);
-
-        $this->gameStatsCrawler->setVerbandName('wuerttemberg');
-        $this->gameStatsCrawler->setVerbandShortname('hvw');
         $this->gameStatsCrawler->setgGameID($gGameID);
+
+        if ($input->getOption('verband')) {
+            $this->gameStatsCrawler->setVerbandName($input->getOption('verband'));
+        } else {
+            $verband = $io->ask('Verband: ', 'wuerttemberg');
+            $this->gameStatsCrawler->setVerbandName($verband);
+        }
+
+        if ($input->getOption('classID')) {
+            $this->gameStatsCrawler->setClassShortName($input->getOption('classID'));
+        } else {
+            $classShortName = $io->ask('Liga ID: ', '126171');
+            $this->gameStatsCrawler->setClassID($classShortName);
+        }
+
+        if ($input->getOption('classShort')) {
+            $this->gameStatsCrawler->setclassShortName($input->getOption('classShort'));
+        } else {
+            $classShort = $io->ask('Ligakürzel mit Bezirk: ', 'm-bol_hf');
+            $this->gameStatsCrawler->setclassShortName($classShort);
+        }
 
         $this->gameStatsCrawler->crawlAllGameStats();
 
