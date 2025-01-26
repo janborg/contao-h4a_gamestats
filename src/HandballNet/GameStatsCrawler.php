@@ -21,8 +21,6 @@ class GameStatsCrawler
 
     private string $verbandName;
 
-    private string $verbandShortname;
-
     private string $classID;
 
     private string $classShortName;
@@ -70,11 +68,6 @@ class GameStatsCrawler
     public function setVerbandName(string $verbandName): void
     {
         $this->verbandName = urlencode($verbandName);
-    }
-
-    public function setVerbandShortname(string $verbandShortname): void
-    {
-        $this->verbandShortname = urlencode($verbandShortname);
     }
 
     public function getHomeTeam(): string
@@ -169,7 +162,7 @@ class GameStatsCrawler
 
     private function getGameUrl(): string
     {
-        return $this->baseUrl.'/ligen/handball4all.'.$this->verbandName.'.'.$this->classShortName.'_'.$this->verbandShortname.'/spielplan/spieltage/handball4all.'.$this->verbandName.'.'.$this->classID.'/spiele/handball4all.'.$this->verbandName.'.'.$this->gGameID;
+        return $this->baseUrl.'/ligen/handball4all.'.$this->verbandName.'.'.$this->classShortName.'/spielplan/spieltage/handball4all.'.$this->verbandName.'.'.$this->classID.'/spiele/handball4all.'.$this->verbandName.'.'.$this->gGameID;
     }
 
     private function getCrawler(): void
