@@ -18,6 +18,7 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,18 +30,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * @property SymfonyStyle $io
  * @property int          $statusCode
  */
+#[AsCommand(
+    name: 'h4a:update:scores',
+    description: 'Update Scores from h4a.',
+)]
 class UpdateH4aScoresCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'h4a:update:scores';
-
-    /**
-     * @var string
-     */
-    protected static $defaultDescription = 'Update Scores from h4a';
-
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,

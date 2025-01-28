@@ -13,8 +13,6 @@ services:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
             - '@h4atabellen.h4aapihelper'
-        tags: 
-            - "console.command"
 
     h4a.command.updateTimeline:
         class: Janborg\H4aGamestats\Command\UpdateH4aTimelineCommand
@@ -22,5 +20,3 @@ services:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
             - '@h4atabellen.h4aapihelper'
-        tags: 
-            - "console.command"
