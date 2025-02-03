@@ -53,10 +53,3 @@ services:
         class: Janborg\H4aGamestats\HandballNet\GameStatsCrawler
         public: true
 
-    h4agamestats.handallnet.teamscrawler:
-        class: Janborg\H4aGamestats\HandballNet\TeamsCrawler
-        public: true
-
-    h4agamestats.handallnet.verbandscrawler:
-        class: Janborg\H4aGamestats\HandballNet\VerbandsCrawler
-        public: true
