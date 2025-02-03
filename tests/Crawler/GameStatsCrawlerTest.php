@@ -10,9 +10,9 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Janborg\H4aGamestats\Tests\HandballNet;
+namespace Janborg\H4aGamestats\Tests\Crawler;
 
-use Janborg\H4aGamestats\HandballNet\GameStatsCrawler;
+use Janborg\H4aGamestats\Crawler\GameStatsCrawler;
 use PHPUnit\Framework\TestCase;
 
 class GameStatsCrawlerTest extends TestCase
@@ -26,9 +26,9 @@ class GameStatsCrawlerTest extends TestCase
     public static function gameProvider(): iterable
     {
         return [
-            ['126171', 'm-bol', 'wuerttemberg', 'hf', '7763026'],
-            ['123391', 'f-vl-1', 'wuerttemberg', 'hvw', '7791901'],
-            ['118111', 'm-ll-rnt', 'baden', 'bhv', '7636856'],   
+            ['126171', 'm-bol_hf', 'wuerttemberg', '7763026'],
+            ['123391', 'f-vl-1_hvw', 'wuerttemberg',  '7791901'],
+            ['118111', 'm-ll-rnt_bhv', 'baden', '7636856'],   
         ];
     }
 
@@ -38,10 +38,9 @@ class GameStatsCrawlerTest extends TestCase
      * @param string $classID
      * @param string $className
      * @param string $verbandName
-     * @param string $verbandShortName
      * @param string $gameID
      */
-     public function testcrawlAllGameStats($classID, $className, $verbandName, $verbandShortName, $gameID): void
+     public function testcrawlAllGameStats($classID, $className, $verbandName, $gameID): void
     {
         $this->crawler = new GameStatsCrawler();
 
@@ -50,7 +49,6 @@ class GameStatsCrawlerTest extends TestCase
         /** @phpstan-ignore-next-line */
         $this->crawler->setclassShortName($className);
         $this->crawler->setVerbandName($verbandName);
-        $this->crawler->setVerbandShortname($verbandShortName);
         $this->crawler->setgGameID($gameID);
 
         $this->crawler->crawlAllGameStats();

@@ -49,7 +49,7 @@ services:
                 method: updateTimeline
                 priority: -100
     
-    h4agamestats.handallnet.gamestatscrawler:
-        class: Janborg\H4aGamestats\HandballNet\GameStatsCrawler
+    h4agamestats.crawler.gamestatscrawler:
+        class: Janborg\H4aGamestats\Crawler\GameStatsCrawler
         public: true
 

@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Janborg\H4aGamestats\HandballNet;
+namespace Janborg\H4aGamestats\Crawler;
 
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;

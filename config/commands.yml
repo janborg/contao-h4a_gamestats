@@ -25,7 +25,7 @@ services:
         class: Janborg\H4aGamestats\Command\ShowGamestatsCommand
         arguments:
             - '@contao.framework'
-            - '@h4agamestats.handallnet.gamestatscrawler'
+            - '@h4agamestats.crawler.gamestatscrawler'
         tags: 
             - "console.command"
         
