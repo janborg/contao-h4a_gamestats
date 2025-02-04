@@ -52,6 +52,7 @@ class ShowGamestatsCommand extends Command
     {
         $this->setHelp('This command allows you to update all Stats for game from handball.net.')
             ->addArgument('gGameID', InputArgument::REQUIRED, 'gGameID from handball.net')
+            ->addOption('provider', null, InputOption::VALUE_REQUIRED, 'Provider', '')
             ->addOption('verband', null, InputOption::VALUE_REQUIRED, 'Verband', '')
             ->addOption('classID', null, InputOption::VALUE_REQUIRED, 'Liga ID', '')
             ->addOption('classShort', null, InputOption::VALUE_REQUIRED, 'Ligakürzel mit Bezirk', '')
@@ -73,6 +74,13 @@ class ShowGamestatsCommand extends Command
         }
 
         $this->gameStatsCrawler->setgGameID($gGameID);
+
+        if ($input->getOption('provider')) {
+            $this->gameStatsCrawler->setProvider($input->getOption('provider'));
+        } else {
+            $provider = $io->ask('Provider: ', 'handball4all');
+            $this->gameStatsCrawler->setProvider($provider);
+        }
 
         if ($input->getOption('verband')) {
             $this->gameStatsCrawler->setVerbandName($input->getOption('verband'));

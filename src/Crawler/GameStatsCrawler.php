@@ -19,6 +19,8 @@ class GameStatsCrawler
 {
     private string $baseUrl = 'https://www.handball.net';
 
+    private string $provider; 
+
     private string $verbandName;
 
     private string $classID;
@@ -48,6 +50,11 @@ class GameStatsCrawler
     private array $matchInfo;
 
     private Crawler $crawler;
+
+    public function setProvider(string $provider)
+    {
+        $this->provider = $provider;
+    }
 
     public function setClassID(string $classID): void
     {
@@ -162,7 +169,7 @@ class GameStatsCrawler
 
     private function getGameUrl(): string
     {
-        return $this->baseUrl.'/ligen/handball4all.'.$this->verbandName.'.'.$this->classShortName.'/spielplan/spieltage/handball4all.'.$this->verbandName.'.'.$this->classID.'/spiele/handball4all.'.$this->verbandName.'.'.$this->gGameID;
+        return $this->baseUrl.'/ligen/'.$this->provider.'.'.$this->verbandName.'.'.$this->classShortName.'/spielplan/spieltage/'.$this->provider.'.'.$this->verbandName.'.'.$this->classID.'/spiele/'.$this->provider.'.'.$this->verbandName.'.'.$this->gGameID;
     }
 
     private function getCrawler(): void
