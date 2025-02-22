@@ -71,8 +71,8 @@ class H4aTimelineModel extends Model
     {
         foreach ($timelineEvents as $timelineEvent) {
             $objTimelineEvent = self::findBy(
-                ['pid = ?', 'matchtime = ?'],
-                [$pid, $timelineEvent['matchtime']],
+                ['pid = ?', 'matchtime = ?', 'action_type = ?'],
+                [$pid, $timelineEvent['matchtime'], $timelineEvent['action_type']],
             );
 
             if (null === $objTimelineEvent) {
@@ -85,7 +85,7 @@ class H4aTimelineModel extends Model
             $objTimelineEvent->currentscore = $timelineEvent['currentscore'];
             $objTimelineEvent->action_team = $timelineEvent['action_team'];
             $objTimelineEvent->action_player = $timelineEvent['action_player'];
-            $objTimelineEvent->action_player_number = $timelineEvent['action_player_number'];
+            $objTimelineEvent->action_player_number = rtrim($timelineEvent['action_player_number'], '.');
             $objTimelineEvent->action_type = $timelineEvent['action_type'];
 
             $objTimelineEvent->save();

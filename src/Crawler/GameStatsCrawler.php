@@ -241,9 +241,9 @@ class GameStatsCrawler
             $ulTimeline->filterXPath('//li')->each(
                 static function (Crawler $liCrawler, $i) use (&$timelineEvents): void {
                     
-                    $timelineEvents[$i]['timestamp'] = $liCrawler->filterXPath('li/div//span')->text();
+                    $timelineEvents[$i]['matchtime'] = $liCrawler->filterXPath('li/div//span')->text();
                     
-                    $timelineEvents[$i]['standing'] = $liCrawler->filterXPath('li/div/p[1]')->text();
+                    $timelineEvents[$i]['currentscore'] = $liCrawler->filterXPath('li/div/p[1]')->text();
                     
                     $timelineEvents[$i]['eventText'] = $liCrawler->filterXPath('li/div/p[2]')->text();
                 },
@@ -263,12 +263,12 @@ class GameStatsCrawler
             $team = $this->parseTeam($event['eventText']);
             $playerNo = $this->parsePlayerNo($event['eventText']);
             $timelineEvents[] = [
-                'timestamp' => $event['timestamp'],
-                'standing' => $event['standing'],
-                'eventType' => $this->parseEventType($event['eventText']),
-                'team' => $team,
-                'playerNo' => $playerNo,
-                'playerName' => $this->parsePlayerName($playerNo, $team),
+                'matchtime' => $event['matchtime'],
+                'currentscore' => $event['currentscore'],
+                'action_type' => $this->parseEventType($event['eventText']),
+                'action_team' => $team,
+                'action_player_number' => $playerNo,
+                'action_player' => $this->parsePlayerName($playerNo, $team),
                 'eventText' => $event['eventText'],
             ];
         }
@@ -336,11 +336,11 @@ class GameStatsCrawler
     {
         $player = '';
 
-        if ('home' === $team) {
+        if ($this->matchInfo['homeTeam'] === $team) {
             $player = array_filter($this->homeLineup, static fn ($lineup) => $lineup[0] === $playerNo);
         }
 
-        if ('guest' === $team) {
+        if ($this->matchInfo['guestTeam'] === $team) {
             $player = array_filter($this->guestLineup, static fn ($lineup) => $lineup[0] === $playerNo);
         }
 
@@ -358,11 +358,11 @@ class GameStatsCrawler
         $team = '';
 
         if (str_contains($eventText, $this->matchInfo['homeTeam'])) {
-            $team = 'home';
+            $team = $this->matchInfo['homeTeam'];
         }
 
         if (str_contains($eventText, $this->matchInfo['guestTeam'])) {
-            $team = 'guest';
+            $team = $this->matchInfo['guestTeam'];
         }
 
         return $team;
