@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Janborg\H4aGamestats\Crawler\GameStatsCrawler;
 
 /**
- * Class UpdateLineupCommand.
+ * Class ShowGamestatsCommand.
  *
  * @property SymfonyStyle $io
  * @property int          $statusCode
@@ -39,7 +39,7 @@ class ShowGamestatsCommand extends Command
     /**
      * @var string
      */
-    protected static $defaultDescription = 'Update Lineup and scores from handballnet';
+    protected static $defaultDescription = 'Show Lineups and Timeline for a Game from handball.net';
 
     public function __construct(
         private ContaoFramework $framework,

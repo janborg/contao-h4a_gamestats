@@ -163,6 +163,6 @@ class tl_h4a_timeline extends Backend
 
     public function listTimelineActions($arrRow)
     {
-        return '<div class="tl_content_left">'.$arrRow['matchtime'].' - '.$arrRow['action_type'].' - '.$arrRow['action_team'].' <span style="color:#999;padding-left:3px"> (Spieler: '.$arrRow['action_player'].' ('.$arrRow['action_player_number'].') | Spielstand:'.$arrRow['currentscore'].')</span>'."</div>\n";
+        return '<div class="tl_content_left">'.$arrRow['matchtime'].' - '.$arrRow['action_type'].' | Spielstand: '.$arrRow['currentscore'].' <span style="color:#999;padding-left:3px"> (Spieler: '.$arrRow['action_player'].' ('.$arrRow['action_player_number'].', '.$arrRow['action_team'].') </span>'."</div>\n";
     }
 }
