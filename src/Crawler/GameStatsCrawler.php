@@ -292,11 +292,15 @@ class GameStatsCrawler
             return 'Tor';
         }
 
-        if (str_contains($eventText, 'erhält eine 2-minuten strafe')) {
+        if (str_contains($eventText, '2-minuten strafe')) {
             return '2-min';
         }
 
         if (str_contains($eventText, 'wurde verwarnt')) {
+            return 'Gelb';
+        }
+
+        if (str_contains($eventText, 'verwarnung')) {
             return 'Gelb';
         }
 
@@ -315,6 +319,11 @@ class GameStatsCrawler
         if (str_contains($eventText, 'spielstand 2. halbzeit')) {
             return 'Endstand';
         }
+
+        if (str_contains($eventText, 'spielabschluss')) {
+            return 'Spielabschluss';
+        }
+
 
         return 'unknown';
     }
