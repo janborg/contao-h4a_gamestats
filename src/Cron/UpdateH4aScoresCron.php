@@ -26,7 +26,6 @@ class UpdateH4aScoresCron
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
         private readonly LoggerInterface $contaoCronLogger,
-        private readonly LoggerInterface $contaoErrorLogger,
         private H4aApiHelper $h4aApiHelper,
     ) {
         $this->framework->initialize();
@@ -66,7 +65,7 @@ class UpdateH4aScoresCron
             try {
                 $h4areportparser->parseReport();
             } catch (\Exception $e) {
-                $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage());
+                $this->contaoCronLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage());
 
                 continue;
             }

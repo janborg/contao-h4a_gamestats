@@ -25,7 +25,6 @@ services:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.cron'
-            - '@monolog.logger.contao.error'
             - '@h4atabellen.h4aapihelper'
         tags:
             -
@@ -40,7 +39,6 @@ services:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.cron'
-            - '@monolog.logger.contao.error'
             - '@h4atabellen.h4aapihelper'
             - '@h4agamestats.crawler.gamestatscrawler'
         tags:

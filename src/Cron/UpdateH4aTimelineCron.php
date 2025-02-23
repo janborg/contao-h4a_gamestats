@@ -26,7 +26,6 @@ class UpdateH4aTimelineCron
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
         private readonly LoggerInterface $contaoCronLogger,
-        private readonly LoggerInterface $contaoErrorLogger,
         private H4aApiHelper $h4aApiHelper,
         private GameStatsCrawler $gameStatsCrawler,
     ) {
@@ -61,6 +60,13 @@ class UpdateH4aTimelineCron
             $this->gameStatsCrawler->crawlAllGameStats();
     
             $timeline = $this->gameStatsCrawler->getTimeline();
+
+            if (empty($timeline)) {
+                $this->contaoCronLogger->info('Timeline für Spiel '.$objEvent->gGameID.' '.$this->gameStatsCrawler->getHomeTeam().' - '.$this->gameStatsCrawler->getGuestTeam()
+                .' konnte nicht gefunden werden.');
+                continue;
+            }
+
     
             H4aTimelineModel::saveTimeline($timeline, $objEvent->id);
 
