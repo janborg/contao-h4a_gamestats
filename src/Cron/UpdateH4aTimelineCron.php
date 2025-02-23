@@ -15,7 +15,7 @@ namespace Janborg\H4aGamestats\Cron;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Janborg\H4aGamestats\Crawler\GameStatsCrawler;;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
 use Psr\Log\LoggerInterface;
@@ -28,6 +28,7 @@ class UpdateH4aTimelineCron
         private readonly LoggerInterface $contaoCronLogger,
         private readonly LoggerInterface $contaoErrorLogger,
         private H4aApiHelper $h4aApiHelper,
+        private GameStatsCrawler $gameStatsCrawler,
     ) {
         $this->framework->initialize();
     }
@@ -44,39 +45,27 @@ class UpdateH4aTimelineCron
         }
 
         foreach ($objEvents as $objEvent) {
-            if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
-                $sGID = $this->h4aApiHelper->getReportNo($objEvent->gClassID, $objEvent->gGameNo);
-
-                if (null !== $sGID) {
-                    $objEvent->sGID = $sGID;
-                    $objEvent->save();
-                } else {
-                    continue;
-                }
-            }
-
+     
             $objTimeline = H4aTimelineModel::findBy('pid', $objEvent->id);
 
             if (null !== $objTimeline) {
                 continue;
             }
 
-            $h4areportparser = new H4aReportParser($objEvent->sGID);
+            $this->gameStatsCrawler->setgGameID($objEvent->gGameID);
+            $this->gameStatsCrawler->setProvider($objEvent->provider); 
+            $this->gameStatsCrawler->setVerbandName($objEvent->verband); 
+            $this->gameStatsCrawler->setClassShortName($objEvent->gClassName);
+            $this->gameStatsCrawler->setClassID($objEvent->gClassID);
+    
+            $this->gameStatsCrawler->crawlAllGameStats();
+    
+            $timeline = $this->gameStatsCrawler->getTimeline();
+    
+            H4aTimelineModel::saveTimeline($timeline, $objEvent->id);
 
-            try {
-                $h4areportparser->parseReport();
-            } catch (\Exception $e) {
-                $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage());
-
-                continue;
-            }
-
-            // Timeline des Spiels speichern
-            H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
-
-            $this->contaoCronLogger->info('Timeline aus Bericht Nr. '.$objEvent->sGID
-                    .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
-                    .' über Handball4all gespeichert');
+            $this->contaoCronLogger->info('Timeline für Spiel '.$objEvent->gGameID.' '.$this->gameStatsCrawler->getHomeTeam().' - '.$this->gameStatsCrawler->getGuestTeam()
+                    .' über Handball.net gespeichert');
 
             $this->entityCacheTags->invalidateTagsFor($objEvent);
         }

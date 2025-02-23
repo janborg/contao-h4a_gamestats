@@ -15,7 +15,7 @@ namespace Janborg\H4aGamestats\Command;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Janborg\H4aGamestats\Crawler\GameStatsCrawler;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -38,6 +38,7 @@ class UpdateH4aTimelineCommand extends Command
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
         private H4aApiHelper $h4aApiHelper,
+        private GameStatsCrawler $gameStatsCrawler,
     ) {
         parent::__construct();
     }
@@ -75,22 +76,6 @@ class UpdateH4aTimelineCommand extends Command
                 '-----------------------------------------------------',
             ]);
 
-            if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
-                $output->writeln('Keine ReportNo (sGID) vorhanden. Versuche ReportNo zu finden ...');
-                $sGID = $this->h4aApiHelper->getReportNo($objEvent->gClassID, $objEvent->gGameNo);
-
-                if (null !== $sGID) {
-                    $objEvent->sGID = $sGID;
-                    $objEvent->save();
-                    $output->writeln('<info>ReportNo (sGID) '.$sGID.' gefunden.</info>');
-                } else {
-                    $output->writeln('<error>Keine Reportnummer vorhanden... Skipped</error>');
-                    continue;
-                }
-            }
-
-            $output->writeln('Timeline aus Spielbericht '.$objEvent->sGID.' abrufen...');
-
             // check, ob bereits Timeline zum H4a-Event vorhanden sind:
             $objPlayerscores = H4aTimelineModel::findBy('pid', $objEvent->id);
 
@@ -100,17 +85,18 @@ class UpdateH4aTimelineCommand extends Command
                 continue;
             }
 
-            $h4areportparser = new H4aReportParser($objEvent->sGID);
-
-            try {
-                $h4areportparser->parseReport();
-            } catch (\Exception $e) {
-                $output->writeln('<error>Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage().'</error>');
-                continue;
-            }
-            // Spieler der Heim Mannschaft speichern
-            H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
-
+            $this->gameStatsCrawler->setgGameID($objEvent->gGameID);
+            $this->gameStatsCrawler->setProvider($objEvent->provider); 
+            $this->gameStatsCrawler->setVerbandName($objEvent->verband); 
+            $this->gameStatsCrawler->setClassShortName($objEvent->gClassName);
+            $this->gameStatsCrawler->setClassID($objEvent->gClassID);
+    
+            $this->gameStatsCrawler->crawlAllGameStats();
+    
+            $timeline = $this->gameStatsCrawler->getTimeline();
+    
+            H4aTimelineModel::saveTimeline($timeline, $objEvent->id);
+    
             $output->writeln('<info>Timeline für Spiel '.$objEvent->gGameID.' gespeichert.</info>');
 
             $this->entityCacheTags->invalidateTagsFor($objEvent);
