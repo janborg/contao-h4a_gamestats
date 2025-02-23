@@ -72,7 +72,9 @@ class H4aPlayerscoresModel extends Model
 {
     protected static $strTable = 'tl_h4a_playerscores';
 
-    /**
+    /** 
+     * Save Playerscores from h4a report.
+     * 
      * @param array<mixed> $players
      * @param int          $pid
      * @param string       $teamname
@@ -113,6 +115,49 @@ class H4aPlayerscoresModel extends Model
             $objPlayerscore->suspensions = $suspensions;
             $objPlayerscore->red_card = $player['red_card'];
             $objPlayerscore->blue_card = $player['blue_card'];
+            $objPlayerscore->save();
+        }
+    }
+
+    /** 
+     * Save playerscores from handballnet.
+     * 
+     * @param array<mixed> $players
+     * @param int          $pid
+     * @param string       $teamname
+     * @param int          $home_guest
+     */
+    public static function saveHandballnetPlayerscores($players, $pid, $teamname, $home_guest): void
+    {
+        foreach ($players as $player) {
+            if (empty($player['suspensions'])) {
+                $suspensions = 0;
+            } else {
+                $suspensions = $player['suspensions'];
+            }
+
+            $objPlayerscore = self::findBy(
+                ['pid = ?', 'name = ?'],
+                [$pid, $player['name']],
+            );
+
+            if (null === $objPlayerscore) {
+                $objPlayerscore = new self();
+            }
+
+            $objPlayerscore->pid = $pid;
+            $objPlayerscore->tstamp = time();
+            $objPlayerscore->team_name = $teamname;
+            $objPlayerscore->is_home_or_guest = $home_guest;
+            $objPlayerscore->number = rtrim($player['number'], '.');
+            $objPlayerscore->name = $player['name'];
+            $objPlayerscore->goals = (int) $player['goals'];
+            $objPlayerscore->penalty_goals = $player['penalty_goals'] ?? 0;
+            $objPlayerscore->penalty_tries = $player['penalty_tries'] ?? 0;
+            $objPlayerscore->yellow_card = $player['yellow_card'] ?? 0;
+            $objPlayerscore->suspensions = $suspensions;
+            $objPlayerscore->red_card = $player['red_card'] ?? 0;
+            $objPlayerscore->blue_card = $player['blue_card'] ?? 0;
             $objPlayerscore->save();
         }
     }

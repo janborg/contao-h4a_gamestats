@@ -19,15 +19,14 @@ use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Monolog\SystemLogger;
 use Contao\Input;
 use Contao\Message;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Janborg\H4aGamestats\Crawler\GameStatsCrawler;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
-use Janborg\H4aTabellen\Helper\H4aApiHelper;
 
 class LookupScoresController extends Backend
 {
     public function __construct(
         private EntityCacheTags $entityCacheTags,
-        private H4aApiHelper $h4aApiHelper,
+        private GameStatsCrawler $gameStatsCrawler,
         private readonly SystemLogger $systemLogger,
     ) {
         parent::__construct();
@@ -40,37 +39,35 @@ class LookupScoresController extends Backend
 
         $objCalendarEvent = CalendarEventsModel::findById($id);
 
-        if (isset($objCalendarEvent->sGID) && '' === $objCalendarEvent->sGID) {
-            $objCalendarEvent->sGID = $this->h4aApiHelper->getReportNo($objCalendarEvent->gClassID, $objCalendarEvent->gGameNo);
-            $objCalendarEvent->save();
-        }
-
-        // check if sGID is set and not empty
-        if (isset($objCalendarEvent->sGID) && '' !== $objCalendarEvent->sGID) {
-            $sGID = $objCalendarEvent->sGID;
-        } else {
-            Message::addError('Spielberichtsnummer nicht gefunden.');
-
-            $this->redirect($this->getReferer());
-        }
-
-        $h4areportparser = new H4aReportParser($sGID);
+        $this->gameStatsCrawler->setgGameID($objCalendarEvent->gGameID);
+        $this->gameStatsCrawler->setProvider($objCalendarEvent->provider);
+        $this->gameStatsCrawler->setVerbandName($objCalendarEvent->verband);
+        $this->gameStatsCrawler->setClassShortName($objCalendarEvent->gClassName);
+        $this->gameStatsCrawler->setClassID($objCalendarEvent->gClassID);
 
         try {
-            $h4areportparser->parseReport();
+            $this->gameStatsCrawler->crawlGameLineups();
         } catch (\Exception $e) {
-            $this->systemLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
+            $this->systemLogger->error('Fehler beim Abrufen der Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
 
-            Message::addError('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
+            Message::addError('Fehler beim Abrufen der Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
 
             $this->redirect($this->getReferer());
         }
 
         // Spieler der Heimmannschaft speichern
-        H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objCalendarEvent->id, $h4areportparser->heim_name, $home_guest = 1);
+        H4aPlayerscoresModel::saveHandballnetPlayerscores(
+            $this->gameStatsCrawler->getHomeLineup(),
+            $objCalendarEvent->id,
+            $this->gameStatsCrawler->getHomeTeam(),
+            1);
 
         // Spieler der Gastmannschaft speichern
-        H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objCalendarEvent->id, $h4areportparser->gast_name, $home_guest = 2);
+        H4aPlayerscoresModel::saveHandballnetPlayerscores(
+            $this->gameStatsCrawler->getGuestLineup(),
+            $objCalendarEvent->id,
+            $this->gameStatsCrawler->getGuestTeam(),
+            2);
 
         Message::addConfirmation('Playerscores für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.'] gespeichert.');
 

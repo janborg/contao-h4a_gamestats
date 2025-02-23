@@ -222,12 +222,34 @@ class GameStatsCrawler
         $allTables = $this->crawler->filterXPath('//div[@id="aufstellung"]//table/tbody');
 
         // loop through all tables and return the node values as array
-        $arrTables = $allTables->each(static fn (Crawler $tableCrawler) => $tableCrawler->filterXPath('//tr')->each(
-            static fn (Crawler $rowCrawler) => $rowCrawler->filterXPath('//td')->each(
-                static fn (Crawler $cellCrawler) => $cellCrawler->text())));
+        $arrTables = $allTables->each(
+            static fn (Crawler $tableCrawler) => $tableCrawler->filterXPath('//tr')->each(
+                static fn (Crawler $rowCrawler) => $rowCrawler->filterXPath('//td')->each(
+                    static fn (Crawler $cellCrawler) => $cellCrawler->text())));
 
-        isset($arrTables[0]) ? $this->homeLineup = $arrTables[0] : $this->homeLineup = [];
-        isset($arrTables[1]) ? $this->guestLineup = $arrTables[1] : $this->guestLineup = [];
+        if (isset($arrTables[0])) {
+            foreach ($arrTables[0] as $key => $value) {
+                $this->homeLineup[$key]['number'] = $value[0];
+                $this->homeLineup[$key]['name'] = $value[1];
+                $this->homeLineup[$key]['goals'] = $value[2];
+                $this->homeLineup[$key]['suspensions'] = $value[3];
+                $this->homeLineup[$key]['cards'] = $value[4];
+            }
+        } else {
+            $this->homeLineup = [];
+        }
+
+        if (isset($arrTables[1])) {
+            foreach ($arrTables[1] as $key => $value) {
+                $this->guestLineup[$key]['number'] = $value[0];
+                $this->guestLineup[$key]['name'] = $value[1];
+                $this->guestLineup[$key]['goals'] = $value[2];
+                $this->guestLineup[$key]['suspensions'] = $value[3];
+                $this->guestLineup[$key]['cards'] = $value[4];
+            }
+        } else {
+            $this->guestLineup = [];
+        }
     }
 
     private function crawlTimeline(): void
