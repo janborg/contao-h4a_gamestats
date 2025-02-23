@@ -12,19 +12,18 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Command;
 
-use Contao\CalendarEventsModel;
-use Symfony\Component\Console\Helper\Table;
-use Janborg\H4aTabellen\HandballNet\Verband;
-use Janborg\H4aTabellen\HandballNet\Provider;
-use Symfony\Component\Console\Command\Command;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Janborg\H4aGamestats\Crawler\GameStatsCrawler;
+use Janborg\H4aTabellen\HandballNet\Provider;
+use Janborg\H4aTabellen\HandballNet\Verband;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Class ShowGamestatsCommand.
@@ -84,7 +83,7 @@ class ShowGamestatsCommand extends Command
             $question = new ChoiceQuestion(
                 'Bitte wählen Sie den Provider des Vereins:',
                 array_column(Provider::cases(), 'value'),
-                null
+                null,
             );
             $question->setErrorMessage('Bitte gültigen Provider angeben');
 
@@ -98,7 +97,7 @@ class ShowGamestatsCommand extends Command
             $question = new ChoiceQuestion(
                 'Bitte wählen Sie den Verband aus, in dem der Verein spielt:',
                 array_column(Verband::cases(), 'value'),
-                null
+                null,
             );
 
             $question->setErrorMessage('Verband %s ist ungültig.');
@@ -159,7 +158,7 @@ class ShowGamestatsCommand extends Command
         ]);
 
         $tabletimeline = new Table($output);
-        $tabletimeline->setHeaders(['Zeit', 'Spielstand', 'Typ','Team', 'Nr.', 'Name', 'Text']);
+        $tabletimeline->setHeaders(['Zeit', 'Spielstand', 'Typ', 'Team', 'Nr.', 'Name', 'Text']);
         $tabletimeline->setRows($this->gameStatsCrawler->getTimeline());
         $tabletimeline->render();
 

@@ -15,9 +15,8 @@ namespace Janborg\H4aGamestats\Cron;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Janborg\H4aGamestats\Crawler\GameStatsCrawler;;
+use Janborg\H4aGamestats\Crawler\GameStatsCrawler;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
-use Janborg\H4aTabellen\Helper\H4aApiHelper;
 use Psr\Log\LoggerInterface;
 
 class UpdateH4aTimelineCron
@@ -26,7 +25,6 @@ class UpdateH4aTimelineCron
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
         private readonly LoggerInterface $contaoCronLogger,
-        private H4aApiHelper $h4aApiHelper,
         private GameStatsCrawler $gameStatsCrawler,
     ) {
         $this->framework->initialize();
@@ -44,7 +42,6 @@ class UpdateH4aTimelineCron
         }
 
         foreach ($objEvents as $objEvent) {
-     
             $objTimeline = H4aTimelineModel::findBy('pid', $objEvent->id);
 
             if (null !== $objTimeline) {
@@ -52,22 +49,21 @@ class UpdateH4aTimelineCron
             }
 
             $this->gameStatsCrawler->setgGameID($objEvent->gGameID);
-            $this->gameStatsCrawler->setProvider($objEvent->provider); 
-            $this->gameStatsCrawler->setVerbandName($objEvent->verband); 
+            $this->gameStatsCrawler->setProvider($objEvent->provider);
+            $this->gameStatsCrawler->setVerbandName($objEvent->verband);
             $this->gameStatsCrawler->setClassShortName($objEvent->gClassName);
             $this->gameStatsCrawler->setClassID($objEvent->gClassID);
-    
+
             $this->gameStatsCrawler->crawlAllGameStats();
-    
+
             $timeline = $this->gameStatsCrawler->getTimeline();
 
             if (empty($timeline)) {
-                $this->contaoCronLogger->info('Timeline für Spiel '.$objEvent->gGameID.' '.$this->gameStatsCrawler->getHomeTeam().' - '.$this->gameStatsCrawler->getGuestTeam()
+                $this->contaoCronLogger->info('Timeline für Spiel '.$objEvent->gGameID.' / '.$objEvent->gClassName.' / '.$this->gameStatsCrawler->getHomeTeam().' - '.$this->gameStatsCrawler->getGuestTeam()
                 .' konnte nicht gefunden werden.');
                 continue;
             }
 
-    
             H4aTimelineModel::saveTimeline($timeline, $objEvent->id);
 
             $this->contaoCronLogger->info('Timeline für Spiel '.$objEvent->gGameID.' '.$this->gameStatsCrawler->getHomeTeam().' - '.$this->gameStatsCrawler->getGuestTeam()

@@ -19,7 +19,6 @@ services:
         arguments:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
-            - '@h4atabellen.h4aapihelper'
             - '@h4agamestats.crawler.gamestatscrawler'
 
     h4a.command.showgamestats:

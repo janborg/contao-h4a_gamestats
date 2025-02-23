@@ -17,7 +17,6 @@ use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Janborg\H4aGamestats\Crawler\GameStatsCrawler;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
-use Janborg\H4aTabellen\Helper\H4aApiHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,7 +36,6 @@ class UpdateH4aTimelineCommand extends Command
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
-        private H4aApiHelper $h4aApiHelper,
         private GameStatsCrawler $gameStatsCrawler,
     ) {
         parent::__construct();
@@ -86,23 +84,23 @@ class UpdateH4aTimelineCommand extends Command
             }
 
             $this->gameStatsCrawler->setgGameID($objEvent->gGameID);
-            $this->gameStatsCrawler->setProvider($objEvent->provider); 
-            $this->gameStatsCrawler->setVerbandName($objEvent->verband); 
+            $this->gameStatsCrawler->setProvider($objEvent->provider);
+            $this->gameStatsCrawler->setVerbandName($objEvent->verband);
             $this->gameStatsCrawler->setClassShortName($objEvent->gClassName);
             $this->gameStatsCrawler->setClassID($objEvent->gClassID);
-    
+
             $this->gameStatsCrawler->crawlAllGameStats();
-    
+
             $timeline = $this->gameStatsCrawler->getTimeline();
-            
+
             if (empty($timeline)) {
                 $output->writeln('<error>Keine Timeline-Daten gefunden.</error>');
-    
+
                 continue;
             }
 
             H4aTimelineModel::saveTimeline($timeline, $objEvent->id);
-    
+
             $output->writeln('<info>Timeline für Spiel '.$objEvent->gGameID.' gespeichert.</info>');
 
             $this->entityCacheTags->invalidateTagsFor($objEvent);

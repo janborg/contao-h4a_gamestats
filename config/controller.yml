@@ -17,6 +17,4 @@ services:
         public: true
         arguments: 
             - '@contao.cache.entity_tags'
-            - '@h4atabellen.h4aapihelper'
             - '@h4agamestats.crawler.gamestatscrawler'
-            - '@monolog.logger.contao.error'

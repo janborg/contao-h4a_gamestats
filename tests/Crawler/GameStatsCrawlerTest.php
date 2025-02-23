@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 class GameStatsCrawlerTest extends TestCase
 {
-
     private GameStatsCrawler $crawler;
 
     /**
@@ -35,21 +34,21 @@ class GameStatsCrawlerTest extends TestCase
             ['124981', 'm-ol_sbhv', 'suedbaden', '7861736', 'handball4all'],
             ['120936', 'hvw-fol1_hvwf', 'westfalen', '7389871', 'handball4all'],
             ['126171', 'm-bol_hf', 'wuerttemberg', '7763026', 'handball4all'],
-            ['123391', 'f-vl-1_hvw', 'wuerttemberg',  '7791901', 'handball4all'],       
+            ['123391', 'f-vl-1_hvw', 'wuerttemberg', '7791901', 'handball4all'],
             ['379357.14-runde', '157646', 'bhv', '7767122', 'nuliga'],
-            ['366210.1-runde', '152393', 'hvbr', '7671726', 'nuliga'], //brandenburg
-            ['372105.3-runde', '155063', 'hvberlin', '7784509', 'nuliga'], //berlin
-            ['371042.6-runde', '154669', 'hhv', '7623845', 'nuliga'], //hessen
-            ['371868.4-runde', '154802', 'hvmv', '7652794', 'nuliga'], //mecklenburg-vorpommern
-            ['372705.3-runde', '155319', 'hvn', '7668661', 'nuliga'], //niedersachsen
-            ['374269.6-runde', '155966', 'hvr', '7782979', 'nuliga'], //rheinland
-            ['367548.8-runde', '153074', 'hvs', '7654809', 'nuliga'], //sachsen
-            ['376187.7-runde', '156890', 'thv', '7658971', 'nuliga'], //thueringen
-            ['363743.6-runde', '151636', 'hnr', '7650477', 'nuliga'], //nordrhein
-            //['', '', 'sachsen-anhalt', ''],
+            ['366210.1-runde', '152393', 'hvbr', '7671726', 'nuliga'], // brandenburg
+            ['372105.3-runde', '155063', 'hvberlin', '7784509', 'nuliga'], // berlin
+            ['371042.6-runde', '154669', 'hhv', '7623845', 'nuliga'], // hessen
+            ['371868.4-runde', '154802', 'hvmv', '7652794', 'nuliga'], // mecklenburg-vorpommern
+            ['372705.3-runde', '155319', 'hvn', '7668661', 'nuliga'], // niedersachsen
+            ['374269.6-runde', '155966', 'hvr', '7782979', 'nuliga'], // rheinland
+            ['367548.8-runde', '153074', 'hvs', '7654809', 'nuliga'], // sachsen
+            ['376187.7-runde', '156890', 'thv', '7658971', 'nuliga'], // thueringen
+            ['363743.6-runde', '151636', 'hnr', '7650477', 'nuliga'], // nordrhein
+            // ['', '', 'sachsen-anhalt', ''],
             ['18208', '16059', 'dhbdata', '83588', 'sportradar'],
-            //['', '', 'ehf', '', 'sportradar'],
-            //['wm', 'wm_2025.hauptrunde-gruppe-i.2', 'ihf', '2375931', 'sid'], // wettbewerbe statt ligen
+            // ['', '', 'ehf', '', 'sportradar'], ['wm', 'wm_2025.hauptrunde-gruppe-i.2',
+            // 'ihf', '2375931', 'sid'], // wettbewerbe statt ligen
         ];
     }
 
@@ -82,13 +81,12 @@ class GameStatsCrawlerTest extends TestCase
      * @param string $gameID
      * @param string $provider
      */
-     public function testcrawlAllGameStats($classID, $className, $verbandName, $gameID, $provider): void
+    public function testcrawlAllGameStats($classID, $className, $verbandName, $gameID, $provider): void
     {
         $this->crawler = new GameStatsCrawler();
 
-        // Suppress PHPStan undefined property errors @phpstan-ignore-next-line */
         $this->crawler->setclassID($classID);
-        /** @phpstan-ignore-next-line */
+
         $this->crawler->setclassShortName($className);
         $this->crawler->setVerbandName($verbandName);
         $this->crawler->setProvider($provider);
@@ -102,6 +100,5 @@ class GameStatsCrawlerTest extends TestCase
         $this->assertIsArray($this->crawler->getGuestLineup());
         $this->assertIsArray($this->crawler->getTimeline());
         $this->assertIsString($this->crawler->getMatchResult());
-        
     }
 }

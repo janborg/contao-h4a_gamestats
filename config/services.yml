@@ -39,7 +39,6 @@ services:
             - '@contao.framework'
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.cron'
-            - '@h4atabellen.h4aapihelper'
             - '@h4agamestats.crawler.gamestatscrawler'
         tags:
             -

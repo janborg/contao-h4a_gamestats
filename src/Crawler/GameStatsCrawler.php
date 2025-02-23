@@ -19,7 +19,7 @@ class GameStatsCrawler
 {
     private string $baseUrl = 'https://www.handball.net';
 
-    private string $provider; 
+    private string $provider;
 
     private string $verbandName;
 
@@ -51,7 +51,7 @@ class GameStatsCrawler
 
     private Crawler $crawler;
 
-    public function setProvider(string $provider)
+    public function setProvider(string $provider): void
     {
         $this->provider = $provider;
     }
@@ -226,9 +226,8 @@ class GameStatsCrawler
             static fn (Crawler $rowCrawler) => $rowCrawler->filterXPath('//td')->each(
                 static fn (Crawler $cellCrawler) => $cellCrawler->text())));
 
-
         isset($arrTables[0]) ? $this->homeLineup = $arrTables[0] : $this->homeLineup = [];
-        isset($arrTables[1]) ? $this->guestLineup = $arrTables[1] : $this->guestLineup = [];                    
+        isset($arrTables[1]) ? $this->guestLineup = $arrTables[1] : $this->guestLineup = [];
     }
 
     private function crawlTimeline(): void
@@ -241,11 +240,10 @@ class GameStatsCrawler
         try {
             $ulTimeline->filterXPath('//li')->each(
                 static function (Crawler $liCrawler, $i) use (&$timelineEvents): void {
-                    
                     $timelineEvents[$i]['matchtime'] = $liCrawler->filterXPath('li/div//span')->text();
-                    
+
                     $timelineEvents[$i]['currentscore'] = $liCrawler->filterXPath('li/div/p[1]')->text();
-                    
+
                     $timelineEvents[$i]['eventText'] = $liCrawler->filterXPath('li/div/p[2]')->text();
                 },
             );
@@ -258,6 +256,7 @@ class GameStatsCrawler
     {
         if (!isset($this->timeline)) {
             $this->timeline = [];
+
             return;
         }
 
@@ -330,7 +329,6 @@ class GameStatsCrawler
             return 'Spielabschluss';
         }
 
-
         return 'unknown';
     }
 
@@ -359,13 +357,12 @@ class GameStatsCrawler
             $player = array_filter($this->guestLineup, static fn ($lineup) => $lineup[0] === $playerNo);
         }
 
-        if (!is_array($player)) {
+        if (!\is_array($player)) {
             return '';
-        } else {
-            $player = array_values($player);
         }
-        
-        return isset($player[0][1]) ? $player[0][1] : '';
+        $player = array_values($player);
+
+        return $player[0][1] ?? '';
     }
 
     private function parseTeam(string $eventText): string
