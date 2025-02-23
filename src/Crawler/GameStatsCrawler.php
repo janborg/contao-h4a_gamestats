@@ -226,8 +226,9 @@ class GameStatsCrawler
             static fn (Crawler $rowCrawler) => $rowCrawler->filterXPath('//td')->each(
                 static fn (Crawler $cellCrawler) => $cellCrawler->text())));
 
-        $this->homeLineup = $arrTables[0];
-        $this->guestLineup = $arrTables[1];
+
+        isset($arrTables[0]) ? $this->homeLineup = $arrTables[0] : $this->homeLineup = [];
+        isset($arrTables[1]) ? $this->guestLineup = $arrTables[1] : $this->guestLineup = [];                    
     }
 
     private function crawlTimeline(): void
@@ -255,6 +256,11 @@ class GameStatsCrawler
 
     private function parseTimeline(): void
     {
+        if (!isset($this->timeline)) {
+            $this->timeline = [];
+            return;
+        }
+
         $timeline = $this->timeline;
 
         $timelineEvents = [];

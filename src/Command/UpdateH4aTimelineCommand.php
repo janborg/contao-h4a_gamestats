@@ -94,7 +94,13 @@ class UpdateH4aTimelineCommand extends Command
             $this->gameStatsCrawler->crawlAllGameStats();
     
             $timeline = $this->gameStatsCrawler->getTimeline();
+            
+            if (empty($timeline)) {
+                $output->writeln('<error>Keine Timeline-Daten gefunden.</error>');
     
+                continue;
+            }
+
             H4aTimelineModel::saveTimeline($timeline, $objEvent->id);
     
             $output->writeln('<info>Timeline für Spiel '.$objEvent->gGameID.' gespeichert.</info>');
