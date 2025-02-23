@@ -20,9 +20,9 @@ use Contao\CoreBundle\Monolog\SystemLogger;
 use Contao\Input;
 use Contao\Message;
 use Janborg\H4aGamestats\Crawler\GameStatsCrawler;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Helper\H4aApiHelper;
+use Janborg\H4aTabellen\Model\H4aSeasonModel;
 
 class LookupTimelineController extends Backend
 {
@@ -43,8 +43,8 @@ class LookupTimelineController extends Backend
         $objCalendarEvent = CalendarEventsModel::findById($id);
 
         $this->gameStatsCrawler->setgGameID($objCalendarEvent->gGameID);
-        $this->gameStatsCrawler->setProvider('handball4all');
-        $this->gameStatsCrawler->setVerbandName('wuerttemberg');
+        $this->gameStatsCrawler->setProvider($objCalendarEvent->provider); 
+        $this->gameStatsCrawler->setVerbandName($objCalendarEvent->verband); 
         $this->gameStatsCrawler->setClassShortName($objCalendarEvent->gClassName);
         $this->gameStatsCrawler->setClassID($objCalendarEvent->gClassID);
 
