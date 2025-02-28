@@ -372,11 +372,11 @@ class GameStatsCrawler
         $player = '';
 
         if ($this->matchInfo['homeTeam'] === $team) {
-            $player = array_filter($this->homeLineup, static fn ($lineup) => $lineup[0] === $playerNo);
+            $player = array_filter($this->homeLineup, static fn ($lineup) => $lineup['number'] === $playerNo);
         }
 
         if ($this->matchInfo['guestTeam'] === $team) {
-            $player = array_filter($this->guestLineup, static fn ($lineup) => $lineup[0] === $playerNo);
+            $player = array_filter($this->guestLineup, static fn ($lineup) => $lineup['number'] === $playerNo);
         }
 
         if (!\is_array($player)) {
@@ -384,7 +384,7 @@ class GameStatsCrawler
         }
         $player = array_values($player);
 
-        return $player[0][1] ?? '';
+        return $player[0]['name'] ?? '';
     }
 
     private function parseTeam(string $eventText): string
