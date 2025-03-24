@@ -29,6 +29,8 @@ class GameStatsCrawler
 
     private string $gGameID;
 
+    private string $sGID;
+
     /**
      * @var array<mixed>
      */
@@ -92,6 +94,11 @@ class GameStatsCrawler
         return $this->matchInfo['homeTeamResult'].' : '.$this->matchInfo['guestTeamResult'];
     }
 
+    public function getSGid(): string
+    {
+        return $this->sGID;
+    }
+
     /**
      * Undocumented function.
      *
@@ -137,6 +144,8 @@ class GameStatsCrawler
         $this->crawlTimeline();
 
         $this->parseTimeline();
+
+        $this->crawlReport();
     }
 
     /**
@@ -165,6 +174,17 @@ class GameStatsCrawler
         $this->crawlTimeline();
 
         $this->parseTimeline();
+    }
+
+    /**
+     * Creates a Crawler and crawls the report (sGID) of a game from handball.net.
+     * Relevant inputs must be set upfront.
+     */
+    public function crawlReportNo(): void
+    {
+        $this->getCrawler();
+
+        $this->crawlReport();
     }
 
     private function getGameUrl(): string
@@ -229,11 +249,11 @@ class GameStatsCrawler
 
         if (isset($arrTables[0])) {
             foreach ($arrTables[0] as $key => $value) {
-                $this->homeLineup[$key]['number'] = $value[0];
-                $this->homeLineup[$key]['name'] = $value[1];
-                $this->homeLineup[$key]['goals'] = $value[2];
-                $this->homeLineup[$key]['suspensions'] = $value[3];
-                $this->homeLineup[$key]['cards'] = $value[4];
+                $this->homeLineup[$key]['number'] = $value[0] ?? '';
+                $this->homeLineup[$key]['name'] = $value[1] ?? '';
+                $this->homeLineup[$key]['goals'] = $value[2] ?? '';
+                $this->homeLineup[$key]['suspensions'] = $value[3] ?? '';
+                $this->homeLineup[$key]['cards'] = $value[4] ?? '';
             }
         } else {
             $this->homeLineup = [];
@@ -241,11 +261,11 @@ class GameStatsCrawler
 
         if (isset($arrTables[1])) {
             foreach ($arrTables[1] as $key => $value) {
-                $this->guestLineup[$key]['number'] = $value[0];
-                $this->guestLineup[$key]['name'] = $value[1];
-                $this->guestLineup[$key]['goals'] = $value[2];
-                $this->guestLineup[$key]['suspensions'] = $value[3];
-                $this->guestLineup[$key]['cards'] = $value[4];
+                $this->guestLineup[$key]['number'] = $value[0] ?? '';
+                $this->guestLineup[$key]['name'] = $value[1] ?? '';
+                $this->guestLineup[$key]['goals'] = $value[2] ?? '';
+                $this->guestLineup[$key]['suspensions'] = $value[3] ?? '';
+                $this->guestLineup[$key]['cards'] = $value[4] ?? '';
             }
         } else {
             $this->guestLineup = [];
@@ -271,6 +291,20 @@ class GameStatsCrawler
             );
         } catch (\InvalidArgumentException $e) {
             $this->timeline = array_reverse($timelineEvents, false);
+        }
+    }
+
+    private function crawlReport(): void
+    {
+        // filter link with href containing sGID
+        $reportUrl = $this->crawler->filterXPath('//a[contains(@href, "sGID")]')->attr('href');
+
+        $parts = parse_url($reportUrl);
+
+        parse_str($parts['query'], $query);
+
+        if (isset($query['sGID'])) {
+            $this->sGID = $query['sGID'];
         }
     }
 
