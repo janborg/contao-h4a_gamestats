@@ -21,13 +21,13 @@ use Contao\Input;
 use Contao\Message;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
-use Janborg\H4aTabellen\Helper\H4aApiHelper;
+use Janborg\H4aTabellen\Crawler\H4aReportNoCrawler;
 
 class LookupScoresController extends Backend
 {
     public function __construct(
         private EntityCacheTags $entityCacheTags,
-        private H4aApiHelper $h4aApiHelper,
+        private H4aReportNoCrawler $h4aReportNoCrawler,
         private readonly SystemLogger $systemLogger,
     ) {
         parent::__construct();
@@ -41,7 +41,15 @@ class LookupScoresController extends Backend
         $objCalendarEvent = CalendarEventsModel::findById($id);
 
         if (isset($objCalendarEvent->sGID) && '' === $objCalendarEvent->sGID) {
-            $objCalendarEvent->sGID = $this->h4aApiHelper->getReportNo($objCalendarEvent->gClassID, $objCalendarEvent->gGameNo);
+
+            $this->h4aReportNoCrawler->setProvider($objCalendarEvent->provider);
+            $this->h4aReportNoCrawler->setClassID($objCalendarEvent->gClassID);
+            $this->h4aReportNoCrawler->setClassShortName($objCalendarEvent->gClassName);
+            $this->h4aReportNoCrawler->setgGameID($objCalendarEvent->gGameID);
+            $this->h4aReportNoCrawler->setVerbandName($objCalendarEvent->verband);
+            $this->h4aReportNoCrawler->crawlReportNo();
+
+            $objCalendarEvent->sGID = $this->h4aReportNoCrawler->getSGid();
             $objCalendarEvent->save();
         }
 

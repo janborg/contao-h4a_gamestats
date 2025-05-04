@@ -17,7 +17,7 @@ use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
-use Janborg\H4aTabellen\Helper\H4aApiHelper;
+use Janborg\H4aTabellen\Crawler\H4aReportNoCrawler;
 use Psr\Log\LoggerInterface;
 
 class UpdateH4aScoresCron
@@ -27,7 +27,7 @@ class UpdateH4aScoresCron
         private EntityCacheTags $entityCacheTags,
         private readonly LoggerInterface $contaoCronLogger,
         private readonly LoggerInterface $contaoErrorLogger,
-        private H4aApiHelper $h4aApiHelper,
+        private H4aReportNoCrawler $h4aReportNoCrawler,
     ) {
         $this->framework->initialize();
     }
@@ -45,9 +45,17 @@ class UpdateH4aScoresCron
 
         foreach ($objEvents as $objEvent) {
             if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
-                $sGID = $this->h4aApiHelper->getReportNo($objEvent->gClassID, $objEvent->gGameNo);
 
-                if (null !== $sGID) {
+                $this->h4aReportNoCrawler->setProvider($objEvent->provider);
+                $this->h4aReportNoCrawler->setClassID($objEvent->gClassID);
+                $this->h4aReportNoCrawler->setClassShortName($objEvent->gClassName);
+                $this->h4aReportNoCrawler->setgGameID($objEvent->gGameID);
+                $this->h4aReportNoCrawler->setVerbandName($objEvent->verband);
+                $this->h4aReportNoCrawler->crawlReportNo();
+    
+                $sGID = $this->h4aReportNoCrawler->getSGid();
+
+                if (null !== $sGID && '' !== $sGID) {
                     $objEvent->sGID = $sGID;
                     $objEvent->save();
                 } else {

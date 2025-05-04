@@ -26,7 +26,7 @@ services:
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.cron'
             - '@monolog.logger.contao.error'
-            - '@h4atabellen.h4aapihelper'
+            - '@h4atabellen.crawler.reportnocrawler'
         tags:
             -
                 name: contao.cronjob
@@ -41,7 +41,7 @@ services:
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.cron'
             - '@monolog.logger.contao.error'
-            - '@h4atabellen.h4aapihelper'
+            - '@h4atabellen.crawler.reportnocrawler'
         tags:
             -
                 name: contao.cronjob
