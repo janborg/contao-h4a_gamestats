@@ -41,16 +41,15 @@ class LookupTimelineController extends Backend
         $objCalendarEvent = CalendarEventsModel::findById($id);
 
         if (isset($objCalendarEvent->sGID) && '' === $objCalendarEvent->sGID) {
+            $this->h4aReportNoCrawler->setProvider($objCalendarEvent->provider);
+            $this->h4aReportNoCrawler->setClassID($objCalendarEvent->gClassID);
+            $this->h4aReportNoCrawler->setClassShortName($objCalendarEvent->gClassName);
+            $this->h4aReportNoCrawler->setgGameID($objCalendarEvent->gGameID);
+            $this->h4aReportNoCrawler->setVerbandName($objCalendarEvent->verband);
+            $this->h4aReportNoCrawler->crawlReportNo();
 
-                $this->h4aReportNoCrawler->setProvider($objCalendarEvent->provider);
-                $this->h4aReportNoCrawler->setClassID($objCalendarEvent->gClassID);
-                $this->h4aReportNoCrawler->setClassShortName($objCalendarEvent->gClassName);
-                $this->h4aReportNoCrawler->setgGameID($objCalendarEvent->gGameID);
-                $this->h4aReportNoCrawler->setVerbandName($objCalendarEvent->verband);
-                $this->h4aReportNoCrawler->crawlReportNo();
-    
-                $objCalendarEvent->sGID = $this->h4aReportNoCrawler->getSGid();
-                $objCalendarEvent->save();
+            $objCalendarEvent->sGID = $this->h4aReportNoCrawler->getSGid();
+            $objCalendarEvent->save();
         }
 
         // check if sGID is set and not empty

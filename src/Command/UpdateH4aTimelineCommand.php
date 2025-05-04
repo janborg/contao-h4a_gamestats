@@ -84,7 +84,7 @@ class UpdateH4aTimelineCommand extends Command
                 $this->h4aReportNoCrawler->setgGameID($objEvent->gGameID);
                 $this->h4aReportNoCrawler->setVerbandName($objEvent->verband);
                 $this->h4aReportNoCrawler->crawlReportNo();
-    
+
                 $sGID = $this->h4aReportNoCrawler->getSGid();
 
                 if (null !== $sGID && '' !== $sGID) {

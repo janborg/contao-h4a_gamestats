@@ -41,7 +41,6 @@ class LookupScoresController extends Backend
         $objCalendarEvent = CalendarEventsModel::findById($id);
 
         if (isset($objCalendarEvent->sGID) && '' === $objCalendarEvent->sGID) {
-
             $this->h4aReportNoCrawler->setProvider($objCalendarEvent->provider);
             $this->h4aReportNoCrawler->setClassID($objCalendarEvent->gClassID);
             $this->h4aReportNoCrawler->setClassShortName($objCalendarEvent->gClassName);

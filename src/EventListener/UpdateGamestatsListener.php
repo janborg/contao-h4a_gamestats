@@ -12,29 +12,31 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\EventListener;
 
-use Contao\CoreBundle\Monolog\SystemLogger;
+use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
-use Janborg\H4aGamestats\Model\H4aTimelineModel;
+use Contao\CoreBundle\Monolog\SystemLogger;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
-use Janborg\H4aTabellen\Event\H4aReportUpdatedEvent;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
+use Janborg\H4aGamestats\Model\H4aTimelineModel;
+use Janborg\H4aTabellen\Event\H4aReportUpdatedEvent;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 /**
- * @property ReportUpdateEvent $event
- * @property CalendarEventsModelk $calendarEvent
+ * @property H4aReportUpdatedEvent $event
+ * @property CalendarEventsModel   $calendarEvent
  */
-
 class UpdateGamestatsListener
 {
+    public H4aReportUpdatedEvent $event;
+
+    private CalendarEventsModel $calendarEvent;
+
     public function __construct(
         private readonly SystemLogger $systemLogger,
-        private readonly EntityCacheTags $entityCacheTags
+        private readonly EntityCacheTags $entityCacheTags,
     ) {
     }
-    /**
-     * @var H4aReportUpdateEvent
-     */
+
     #[AsEventListener(event: H4aReportUpdatedEvent::class)]
     public function onH4aReportUpdatedEvent(H4aReportUpdatedEvent $event): void
     {
@@ -47,7 +49,7 @@ class UpdateGamestatsListener
             $h4areportparser->parseReport();
         } catch (\Exception $e) {
             $this->systemLogger->error(
-                'Error while parsing report: ' . $e->getMessage()
+                'Error while parsing report: '.$e->getMessage(),
             );
 
             return;
