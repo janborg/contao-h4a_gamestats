@@ -46,7 +46,13 @@ class LookupTimelineController extends Backend
             $this->h4aReportNoCrawler->setClassShortName($objCalendarEvent->gClassName);
             $this->h4aReportNoCrawler->setgGameID($objCalendarEvent->gGameID);
             $this->h4aReportNoCrawler->setVerbandName($objCalendarEvent->verband);
-            $this->h4aReportNoCrawler->crawlReportNo();
+
+            try {
+                $this->h4aReportNoCrawler->crawlReportNo();
+            } catch (\Exception $e) {
+                Message::addError('Fehler beim Abrufen der Spielberichtsnummer für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
+                $this->redirect($this->getReferer());
+            }
 
             $objCalendarEvent->sGID = $this->h4aReportNoCrawler->getSGid();
             $objCalendarEvent->save();

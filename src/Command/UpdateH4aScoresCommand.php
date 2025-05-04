@@ -85,7 +85,13 @@ class UpdateH4aScoresCommand extends Command
                 $this->h4aReportNoCrawler->setClassShortName($objEvent->gClassName);
                 $this->h4aReportNoCrawler->setgGameID($objEvent->gGameID);
                 $this->h4aReportNoCrawler->setVerbandName($objEvent->verband);
-                $this->h4aReportNoCrawler->crawlReportNo();
+
+                try {
+                    $this->h4aReportNoCrawler->crawlReportNo();
+                } catch (\Exception $e) {
+                    $output->writeln('<error>Fehler beim Crawl der ReportNo: '.$e->getMessage().'</error>');
+                    continue;
+                }
 
                 $sGID = $this->h4aReportNoCrawler->getSGid();
 
@@ -114,7 +120,7 @@ class UpdateH4aScoresCommand extends Command
             try {
                 $h4areportparser->parseReport();
             } catch (\Exception $e) {
-                $output->writeln('<error>Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage().'</error>');
+                $output->writeln('<error>Fehler beim Parsing des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage().'</error>');
 
                 continue;
             }

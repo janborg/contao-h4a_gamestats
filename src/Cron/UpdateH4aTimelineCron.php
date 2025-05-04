@@ -50,7 +50,12 @@ class UpdateH4aTimelineCron
                 $this->h4aReportNoCrawler->setClassShortName($objEvent->gClassName);
                 $this->h4aReportNoCrawler->setgGameID($objEvent->gGameID);
                 $this->h4aReportNoCrawler->setVerbandName($objEvent->verband);
-                $this->h4aReportNoCrawler->crawlReportNo();
+
+                try {
+                    $this->h4aReportNoCrawler->crawlReportNo();
+                } catch (\Exception $e) {
+                    continue;
+                }
 
                 $sGID = $this->h4aReportNoCrawler->getSGid();
 
