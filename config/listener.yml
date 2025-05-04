@@ -15,3 +15,9 @@ services:
             - '@database_connection'
 
     Janborg\H4aGamestats\EventListener\DataContainer\UnsetH4aGamestatsOperationCallback: ~
+
+    h4agamestats.h4aupdatereport.listener:
+        class: Janborg\H4aGamestats\EventListener\UpdateGamestatsListener
+        arguments:
+            - '@monolog.logger.contao.error'
+            - '@contao.cache.entity_tags'
