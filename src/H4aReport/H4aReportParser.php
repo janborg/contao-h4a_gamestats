@@ -326,8 +326,7 @@ class H4aReportParser
             // Spielernummer und Team (zwischen den Klammern) => (?:\((.*?)\))?
             preg_match('/
             (?:\s*(.*?))?        # was vor den klammern ist
-            (?:\((.*?)\))?       # was in den klammern ist
-            (?:$)                 # ende des strings erwartet
+            (?:\((.*?)\))       # was in den klammern ist
             /isx', $action, $matches);
 
             if (isset($matches[2]) && null !== $matches[2]) {
