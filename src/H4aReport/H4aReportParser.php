@@ -260,11 +260,7 @@ class H4aReportParser
 
             $parsedTimeline[$key]['action_player_number'] = $arrplayer['number'];
 
-            if (isset($arrplayer['number']) && '' !== $arrplayer['number']) {
-                $parsedTimeline[$key]['action_player'] = $this->parseActionPlayerName($arrplayer);
-            } else {
-                $parsedTimeline[$key]['action_player'] = '';
-            }
+            $parsedTimeline[$key]['action_player'] = $arrplayer['name'];
         }
 
         return $parsedTimeline;
@@ -318,29 +314,68 @@ class H4aReportParser
     {
         $action_exploded = explode(' ', $action);
 
-        if ('Auszeit' === $action_exploded[0]) {
-            $parsedPlayer['team'] = str_replace('Auszeit ', '', $action);
-            $parsedPlayer['number'] = '';
-            $parsedPlayer['name'] = '';
-        } else {
-            // Spielernummer und Team (zwischen den Klammern) => (?:\((.*?)\))?
-            preg_match('/
-            (?:\s*(.*?))?        # was vor den klammern ist
-            (?:\((.*?)\))       # was in den klammern ist
-            /isx', $action, $matches);
-
-            if (isset($matches[2]) && null !== $matches[2]) {
-                $arrNumberAndTeam = explode(', ', $matches[2]);
-
-                $parsedPlayer['number'] = $arrNumberAndTeam[0];
-
-                $parsedPlayer['team'] = $arrNumberAndTeam[1];
-            } else {
+        switch ($action_exploded[0]) {
+            case 'Auszeit':
+                $parsedPlayer['team'] = str_replace('Auszeit ', '', $action);
                 $parsedPlayer['number'] = '';
+                $parsedPlayer['name'] = '';    
+                break;
+            
+            default:
+                // Spielernummer und Team (zwischen den Klammern) => (?:\((.*?)\))?
+                preg_match('/
+                (?:\s*(.*?))?        # was vor den klammern ist
+                (?:\((.*?)\))       # was in den klammern ist
+                /isx', $action, $matches);
 
-                $parsedPlayer['team'] = '';
+                if (isset($matches[2]) && null !== $matches[2]) {
+                    $arrNumberAndTeam = explode(', ', $matches[2]);
+
+                    $parsedPlayer['number'] = $arrNumberAndTeam[0];
+
+                    $parsedPlayer['team'] = $arrNumberAndTeam[1];
+                } else {
+                    $parsedPlayer['number'] = '';
+
+                    $parsedPlayer['team'] = '';
+                }
+
+                $allplayers = array_merge($this->home_team, $this->guest_team);
+
+                // Filter array for player number
+                if (!empty($parsedPlayer['number'])) {
+                    $filteredPlayers = array_filter(
+                        $allplayers,
+                        static function ($player) use ($parsedPlayer) {
+                            return $player['number'] === $parsedPlayer['number'];
+                        }
+                    );
+
+                    $filteredPlayers = array_values($filteredPlayers);
+
+                    switch (count($filteredPlayers)) {
+                        case 1:
+                            $parsedPlayer['name'] = reset($filteredPlayers)['name'];
+                            break;
+                        
+                        case 2:
+                            foreach ($filteredPlayers as $player) {
+                                if (strpos($action, $player['name'])) {
+                                    $parsedPlayer['name'] = $player['name'];
+                                    continue;
+                                }
+                            }
+                            break;
+                    
+                        default:
+                            $parsedPlayer['name'] = 'unbekannt';
+                        break;
+                    }
+                } else {
+                    $parsedPlayer['name'] = 'unbekannt';
+                }
+                break;
             }
-        }
 
         return $parsedPlayer;
     }
@@ -352,35 +387,5 @@ class H4aReportParser
     {
         // $matchTime = explode(':', $matchTime); return $matchTime[0] * 60 + $matchTime[1];
         return $matchTime;
-    }
-
-    /**
-     * @param array<mixed> $arrplayer
-     */
-    private function parseActionPlayerName(array $arrplayer): string
-    {
-        $allplayers = array_merge($this->home_team, $this->guest_team);
-        $player_name = array_filter(
-            $allplayers,
-            static function ($player) use ($arrplayer) {
-                if (
-                    // mehrstufiges filter_array
-                    $arrplayer['number'] === $player['number']
-                    && $arrplayer['team'] === $player['team']
-                ) {
-                    return true;
-                }
-
-                return false;
-            },
-        );
-        // Array neu ordnen
-        $player_name = array_values($player_name);
-
-        if (!empty($player_name)) {
-            return $player_name[0]['name'];
-        }
-
-        return 'unbekannt';
     }
 }
