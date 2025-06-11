@@ -208,7 +208,7 @@ class H4aReportParser
             $playerstats[$key] = [
                 'team' => $players_team,
                 'number' => $teammember[0]['text'],
-                'name' => $teammember[1]['text'],
+                'name' => trim(preg_replace('/\([^)]+\)/', '', $teammember[1]['text'])),
                 'goals' => empty($teammember[5]['text']) ? 0 : $teammember[5]['text'],
                 'penalty_goals' => empty($penalties[1]) ? 0 : $penalties[1],
                 'penalty_tries' => empty($penalties[0]) ? 0 : $penalties[0],
