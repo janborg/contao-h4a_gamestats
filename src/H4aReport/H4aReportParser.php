@@ -306,6 +306,7 @@ class H4aReportParser
             '2-min' => '2-min',
             'Auszeit' => 'Auszeit',
             'Disqualifikation' => 'Disqualifikation',
+            'Trikotwechsel' => 'Trikotwechsel',
             default => 'Sonstiges',
         };
     }
