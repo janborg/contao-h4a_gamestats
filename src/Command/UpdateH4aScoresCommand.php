@@ -14,15 +14,16 @@ namespace Janborg\H4aGamestats\Command;
 
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
-use Contao\CoreBundle\Framework\ContaoFramework;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
-use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
-use Janborg\H4aTabellen\Crawler\H4aReportNoCrawler;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Janborg\H4aTabellen\Crawler\H4aReportNoCrawler;
+use Symfony\Component\Console\Input\InputInterface;
+use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class UpdateH4aScoresCommand.
@@ -46,7 +47,9 @@ class UpdateH4aScoresCommand extends Command
 
     protected function configure(): void
     {
-        $this->setHelp('This command allows you to update all Scores for h4a-Events, that have no scores yet.');
+        $this->setHelp('This command allows you to update all Scores for h4a-Events, that have no scores yet.')
+            ->addOption('update-all', null, InputOption::VALUE_NONE, 'Force Update for already existing timelines.');
+     
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -108,13 +111,16 @@ class UpdateH4aScoresCommand extends Command
             $output->writeln('Playerscores aus Spielbericht '.$objEvent->sGID.' abrufen...');
 
             // check, ob bereits Scores zum H4a-Event vorhanden sind:
-            $objPlayerscores = H4aPlayerscoresModel::findBy('pid', $objEvent->id);
+            if (!$input->getOption('update-all')) {
+            
+                $objPlayerscores = H4aPlayerscoresModel::findBy('pid', $objEvent->id);
 
-            if (null !== $objPlayerscores) {
-                $output->writeln('<comment>Playerscores bereits vorhanden. Überspringe Spielbericht...</comment>');
-
-                continue;
+                if (null !== $objPlayerscores) {
+                    $output->writeln('<comment>Playerscores bereits vorhanden. Überspringe Spielbericht...</comment>');
+                    continue;
+                }
             }
+
             $h4areportparser = new H4aReportParser($objEvent->sGID);
 
             try {
