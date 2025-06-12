@@ -15,6 +15,7 @@ namespace Janborg\H4aGamestats\Command;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\Date;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Crawler\H4aReportNoCrawler;
@@ -73,11 +74,9 @@ class UpdateH4aTimelineCommand extends Command
         ]);
 
         foreach ($objEvents as $objEvent) {
-            $season = $objEvent->getRelated('h4a_season');
-
             $output->writeln([
                 '',
-                $season->season.': Spiel '.$objEvent->gGameID.' '.$objEvent->title.':',
+                Date::parse('d.m.Y', $objEvent->startDate).': Spiel '.$objEvent->gGameID.' '.$objEvent->title.':',
                 '-----------------------------------------------------',
             ]);
 
