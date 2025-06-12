@@ -12,19 +12,19 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\Command;
 
-use Contao\Date;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
-use Symfony\Component\Console\Command\Command;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Contao\Date;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
-use Janborg\H4aTabellen\Crawler\H4aReportNoCrawler;
-use Symfony\Component\Console\Input\InputInterface;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
+use Janborg\H4aTabellen\Crawler\H4aReportNoCrawler;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Class UpdateH4aScoresCommand.
