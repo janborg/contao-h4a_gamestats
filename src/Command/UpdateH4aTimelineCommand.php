@@ -14,14 +14,14 @@ namespace Janborg\H4aGamestats\Command;
 
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
-use Symfony\Component\Console\Command\Command;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Janborg\H4aGamestats\Model\H4aTimelineModel;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Crawler\H4aReportNoCrawler;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -46,7 +46,8 @@ class UpdateH4aTimelineCommand extends Command
     protected function configure(): void
     {
         $this->setHelp('This command allows you to update all Timeline Data for h4a-Events, that have no timelines yet.')
-            ->addOption('update-all', null, InputOption::VALUE_NONE, 'Force Update for already existing timelines.');
+            ->addOption('update-all', null, InputOption::VALUE_NONE, 'Force Update for already existing timelines.')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -56,6 +57,7 @@ class UpdateH4aTimelineCommand extends Command
         $objEvents = CalendarEventsModel::findby(
             ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'h4a_resultComplete = ?'],
             [date('Y-m-d'), true],
+            ['eager' => true],
         );
 
         if (null === $objEvents) {
@@ -71,9 +73,11 @@ class UpdateH4aTimelineCommand extends Command
         ]);
 
         foreach ($objEvents as $objEvent) {
+            $season = $objEvent->getRelated('h4a_season');
+
             $output->writeln([
                 '',
-                'Spiel '.$objEvent->gGameID.' '.$objEvent->title.':',
+                $season->season.': Spiel '.$objEvent->gGameID.' '.$objEvent->title.':',
                 '-----------------------------------------------------',
             ]);
 
@@ -117,7 +121,7 @@ class UpdateH4aTimelineCommand extends Command
                     continue;
                 }
             }
-            
+
             $h4areportparser = new H4aReportParser($objEvent->sGID);
 
             try {

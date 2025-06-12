@@ -318,9 +318,9 @@ class H4aReportParser
             case 'Auszeit':
                 $parsedPlayer['team'] = str_replace('Auszeit ', '', $action);
                 $parsedPlayer['number'] = '';
-                $parsedPlayer['name'] = '';    
+                $parsedPlayer['name'] = '';
                 break;
-            
+
             default:
                 // Spielernummer und Team (zwischen den Klammern) => (?:\((.*?)\))?
                 preg_match('/
@@ -346,18 +346,16 @@ class H4aReportParser
                 if (!empty($parsedPlayer['number'])) {
                     $filteredPlayers = array_filter(
                         $allplayers,
-                        static function ($player) use ($parsedPlayer) {
-                            return $player['number'] === $parsedPlayer['number'];
-                        }
+                        static fn ($player) => $player['number'] === $parsedPlayer['number'],
                     );
 
                     $filteredPlayers = array_values($filteredPlayers);
 
-                    switch (count($filteredPlayers)) {
+                    switch (\count($filteredPlayers)) {
                         case 1:
                             $parsedPlayer['name'] = reset($filteredPlayers)['name'];
                             break;
-                        
+
                         case 2:
                             foreach ($filteredPlayers as $player) {
                                 if (strpos($action, $player['name'])) {
@@ -366,16 +364,16 @@ class H4aReportParser
                                 }
                             }
                             break;
-                    
+
                         default:
                             $parsedPlayer['name'] = 'unbekannt';
-                        break;
+                            break;
                     }
                 } else {
                     $parsedPlayer['name'] = 'unbekannt';
                 }
                 break;
-            }
+        }
 
         return $parsedPlayer;
     }
