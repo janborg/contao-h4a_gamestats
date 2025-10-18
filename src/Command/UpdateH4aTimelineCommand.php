@@ -18,7 +18,6 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Date;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
-use Janborg\H4aTabellen\Crawler\H4aReportNoCrawler;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,7 +38,6 @@ class UpdateH4aTimelineCommand extends Command
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
-        private H4aReportNoCrawler $h4aReportNoCrawler,
     ) {
         parent::__construct();
     }
@@ -81,30 +79,8 @@ class UpdateH4aTimelineCommand extends Command
             ]);
 
             if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
-                $output->writeln('Keine ReportNo (sGID) vorhanden. Versuche ReportNo zu finden ...');
-
-                $this->h4aReportNoCrawler->setProvider($objEvent->provider);
-                $this->h4aReportNoCrawler->setClassID($objEvent->gClassID);
-                $this->h4aReportNoCrawler->setClassShortName($objEvent->gClassName);
-                $this->h4aReportNoCrawler->setgGameID($objEvent->gGameID);
-                $this->h4aReportNoCrawler->setVerbandName($objEvent->verband);
-
-                try {
-                    $this->h4aReportNoCrawler->crawlReportNo();
-                } catch (\Exception $e) {
-                    $output->writeln('<error>Fehler beim Crawl der ReportNo: '.$e->getMessage().'</error>');
-                    continue;
-                }
-
-                $sGID = $this->h4aReportNoCrawler->getSGid();
-
-                if (null !== $sGID && '' !== $sGID) {
-                    $objEvent->sGID = $sGID;
-                    $objEvent->save();
-                    $output->writeln('<info>ReportNo (sGID) '.$sGID.' gefunden.</info>');
-                } else {
-                    $output->writeln('<error>Keine Reportnummer vorhanden... Skipped</error>');
-                    continue;
+                $output->writeln('Keine ReportNo (sGID) vorhanden.'); 
+                continue;
                 }
             }
 
