@@ -56,9 +56,11 @@ class H4aSeasonScoreElement extends AbstractContentElementController
             array_filter($seasons, static fn ($season) => (int) $season['h4a_saison'] === $model->h4a_season),
         );
 
-        $classID = $saison[0]['h4a_liga'] ?? null;
+        $className = $saison[0]['liga_shortname'] ?? null;
 
-        $playerscores = H4aPlayerscoresModel::findScoresByClassIdAndTeamName($classID, $model->my_team_name);
+        $saison_id = $saison[0]['h4a_saison'] ?? null;
+
+        $playerscores = H4aPlayerscoresModel::findScoresBySeasonAndClassNameAndTeamName($saison_id, $className, $model->my_team_name);
 
         $template->playerscores = $playerscores;
 

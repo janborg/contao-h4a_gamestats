@@ -238,6 +238,48 @@ class H4aPlayerscoresModel extends Model
     }
 
     /**
+     * @param string $season
+     * @param string $classShortname
+     * @param string $team_name
+     *
+     * @return array<mixed>
+     */
+    public static function findScoresBySeasonAndClassNameAndTeamName($season, $className, $team_name)
+    {
+        $db = System::getContainer()->get('database_connection');
+
+        $stmt = $db->executeQuery(
+            'SELECT
+                ps.`name`
+                , COUNT(ce.`gGameID`) AS `games`
+                , SUM(ps.`goals`) AS `goals`
+                , SUM(ps.`penalty_goals`) AS `penalty_goals`
+                , SUM(ps.`penalty_tries`) AS `penalty_tries`
+                , SUM(ps.`yellow_card`) AS `yellow_cards`
+                , SUM(ps.`suspensions`) AS `suspensions`
+                , SUM(ps.`red_card`) AS `red_cards`
+                , SUM(ps.`blue_card`) AS `blue_cards`
+            FROM
+                `tl_h4a_playerscores` ps
+            JOIN
+                `tl_calendar_events` ce
+            ON
+                ps.`pid` = ce.`id`
+            WHERE
+                ce.`h4a_season` = ? AND
+                ce.`gClassName` = ? AND
+                ps.`team_name`= ?
+            GROUP BY
+                ps.`name`
+            ORDER BY
+                ps.`name` ASC',
+            [$season, $className, $team_name],
+        );
+
+        return $stmt->fetchAllAssociative();
+    }
+
+    /**
      * @param int    $pid
      * @param string $home_guest (1 = home, 2 = guest)
      *
