@@ -83,9 +83,9 @@ class UpdateH4aScoresCommand extends Command
 
             if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
                 $output->writeln('Keine ReportNo (sGID) vorhanden.');
-                    continue;
-                }
+                continue;
             }
+            
 
             $output->writeln('Playerscores aus Spielbericht '.$objEvent->sGID.' abrufen...');
 

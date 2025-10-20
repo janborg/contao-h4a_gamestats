@@ -81,7 +81,6 @@ class UpdateH4aTimelineCommand extends Command
             if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
                 $output->writeln('Keine ReportNo (sGID) vorhanden.'); 
                 continue;
-                }
             }
 
             $output->writeln('Timeline aus Spielbericht '.$objEvent->sGID.' abrufen...');
