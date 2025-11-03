@@ -239,7 +239,7 @@ class H4aPlayerscoresModel extends Model
 
     /**
      * @param string $season
-     * @param string $classShortname
+     * @param string $className
      * @param string $team_name
      *
      * @return array<mixed>

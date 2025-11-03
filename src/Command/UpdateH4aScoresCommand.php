@@ -18,7 +18,6 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Date;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
-use Janborg\H4aTabellen\Crawler\H4aReportNoCrawler;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -85,7 +84,6 @@ class UpdateH4aScoresCommand extends Command
                 $output->writeln('Keine ReportNo (sGID) vorhanden.');
                 continue;
             }
-            
 
             $output->writeln('Playerscores aus Spielbericht '.$objEvent->sGID.' abrufen...');
 
