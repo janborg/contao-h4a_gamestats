@@ -20,17 +20,17 @@ use Symfony\Component\HttpClient\HttpClient;
 /**
  * Class H4aReportParser.
  *
- * @property array        $home_team
- * @property array        $guest_team
- * @property string       $heim_name
- * @property string       $gast_name
- * @property array        $timeline
- * @property string       $reportUrl
- * @property string       $jsonReport
- * @property array<mixed> $arrReport
- * @property string       $gameNo
- * @property array<mixed> $zuschauer
- * @property array<mixed> $schiedsrichter
+ * @property array<string, mixed> $home_team
+ * @property array<string, mixed> $guest_team
+ * @property string               $heim_name
+ * @property string               $gast_name
+ * @property array<string, mixed> $timeline
+ * @property string               $reportUrl
+ * @property string               $jsonReport
+ * @property array<mixed>         $arrReport
+ * @property string               $gameNo
+ * @property array<mixed>         $zuschauer
+ * @property array<mixed>         $schiedsrichter
  */
 class H4aReportParser
 {
