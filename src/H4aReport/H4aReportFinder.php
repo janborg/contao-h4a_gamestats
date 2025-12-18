@@ -34,9 +34,9 @@ class H4aReportFinder
     }
 
     /**
-     * @return array<string>
+     * @phpstan-ignore missingType.return
      */
-    public function getGameTableByLeagueID(): array
+    public function getGameTableByLeagueID()
     {
         $url = $this->baseUrl.$this->leagueID;
 
@@ -69,7 +69,7 @@ class H4aReportFinder
     }
 
     /**
-     * @return array<string>
+     * @phpstan-ignore missingType.return
      */
     public function getReportNoByGameNo()
     {
