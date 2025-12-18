@@ -16,8 +16,7 @@ parameters:
         - Contao\Template
 
     excludePaths:
-        - %currentWorkingDirectory%/src/Resources/*
-        - %currentWorkingDirectory%/src/Tabula/TabulaConverter
+        - %currentWorkingDirectory%/src/Tabula/*
 
     ignoreErrors:
         - '#Access to an undefined property Contao\\DataContainer::\$activeRecord#'
