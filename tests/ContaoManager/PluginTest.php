@@ -29,6 +29,7 @@ class PluginTest extends TestCase
         /** @var BundleConfig $config */
         $config = (new Plugin())->getBundles($parser)[0];
 
+        // @phpstan-ignore method.alreadyNarrowedType 
         $this->assertInstanceOf(BundleConfig::class, $config);
         $this->assertSame(JanborgH4aGamestatsBundle::class, $config->getName());
         $this->assertSame([ContaoCoreBundle::class, JanborgH4aTabellenBundle::class], $config->getLoadAfter());
