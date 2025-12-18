@@ -59,7 +59,7 @@ class UpdateH4aScoresCron
 
                 $sGID = $this->h4aReportNoCrawler->getSGid();
 
-                if (null !== $sGID && '' !== $sGID) {
+                if (!empty($sGID)) {
                     $objEvent->sGID = $sGID;
                     $objEvent->save();
                 } else {

@@ -98,7 +98,7 @@ class UpdateH4aTimelineCommand extends Command
 
                 $sGID = $this->h4aReportNoCrawler->getSGid();
 
-                if (null !== $sGID && '' !== $sGID) {
+                if (!empty($sGID)) {
                     $objEvent->sGID = $sGID;
                     $objEvent->save();
                     $output->writeln('<info>ReportNo (sGID) '.$sGID.' gefunden.</info>');
