@@ -20,17 +20,17 @@ use Symfony\Component\HttpClient\HttpClient;
 /**
  * Class H4aReportParser.
  *
- * @property array        $home_team
- * @property array        $guest_team
- * @property string       $heim_name
- * @property string       $gast_name
- * @property array        $timeline
- * @property string       $reportUrl
- * @property string       $jsonReport
- * @property array<mixed> $arrReport
- * @property string       $gameNo
- * @property array<mixed> $zuschauer
- * @property array<mixed> $schiedsrichter
+ * @property array<string, mixed> $home_team
+ * @property array<string, mixed> $guest_team
+ * @property string               $heim_name
+ * @property string               $gast_name
+ * @property array<string, mixed> $timeline
+ * @property string               $reportUrl
+ * @property string               $jsonReport
+ * @property array<mixed>         $arrReport
+ * @property string               $gameNo
+ * @property array<mixed>         $zuschauer
+ * @property array<mixed>         $schiedsrichter
  */
 class H4aReportParser
 {
@@ -328,7 +328,7 @@ class H4aReportParser
                 (?:\((.*?)\))       # was in den klammern ist
                 /isx', $action, $matches);
 
-                if (isset($matches[2]) && null !== $matches[2]) {
+                if (!empty($matches[2])) {
                     $arrNumberAndTeam = explode(', ', $matches[2]);
 
                     $parsedPlayer['number'] = $arrNumberAndTeam[0];
