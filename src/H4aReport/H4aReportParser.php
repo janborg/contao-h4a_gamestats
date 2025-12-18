@@ -328,7 +328,7 @@ class H4aReportParser
                 (?:\((.*?)\))       # was in den klammern ist
                 /isx', $action, $matches);
 
-                if (isset($matches[2]) && null !== $matches[2]) {
+                if (!empty($matches[2])) {
                     $arrNumberAndTeam = explode(', ', $matches[2]);
 
                     $parsedPlayer['number'] = $arrNumberAndTeam[0];
