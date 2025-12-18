@@ -21,6 +21,7 @@ class JanborgH4aGamestatsBundleTest extends TestCase
     {
         $bundle = new JanborgH4aGamestatsBundle();
 
+        // @phpstan-ignore method.alreadyNarrowedType
         $this->assertInstanceOf(JanborgH4aGamestatsBundle::class, $bundle);
     }
 }
