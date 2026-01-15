@@ -13,10 +13,6 @@ services:
             calls:
                 - ['setContainer', ['@Psr\Container\ContainerInterface']]
 
-        Symfony\Component\DependencyInjection\ContainerAwareInterface:
-            calls:
-                - ['setContainer', ['@service_container']]
-
     Janborg\H4aGamestats\H4aEventGamestats: ~
 
     h4agamestats.cron.updatescores:
