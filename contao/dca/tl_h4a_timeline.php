@@ -106,21 +106,18 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
         ],
         'matchtime' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['matchtime'],
-            'exclude' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50'],
             'sql' => "varchar(32) unsigned NOT NULL default ''",
         ],
         'currentscore' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['currentscore'],
-            'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 7, 'tl_class' => 'w50'],
             'sql' => "varchar(7) unsigned NOT NULL default ''",
         ],
         'action_team' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_team'],
-            'exclude' => true,
             'filter' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 48, 'tl_class' => 'w50'],
@@ -128,7 +125,6 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
         ],
         'action_player' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_player'],
-            'exclude' => true,
             'filter' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 48, 'tl_class' => 'w50'],
@@ -136,7 +132,6 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
         ],
         'action_player_number' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_player_number'],
-            'exclude' => true,
             'filter' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 2, 'tl_class' => 'w50'],
@@ -144,7 +139,6 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
         ],
         'action_type' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_type'],
-            'exclude' => true,
             'filter' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 32, 'tl_class' => 'w50'],

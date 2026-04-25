@@ -36,7 +36,6 @@ $GLOBALS['TL_DCA']['tl_content']['palettes'][H4aTimelineElement::TYPE] = '{type_
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['team_calendar'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_content']['team_calendar'],
-    'exclude' => true,
     'search' => true,
     'inputType' => 'select',
     'foreignKey' => 'tl_calendar.title',
@@ -47,7 +46,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['team_calendar'] = [
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['h4a_season'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_content']['h4a_season'],
-    'exclude' => true,
     'search' => true,
     'inputType' => 'select',
     'foreignKey' => 'tl_h4a_seasons.season',
@@ -58,7 +56,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['h4a_season'] = [
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['h4a_event_id'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_content']['h4a_event_id'],
-    'exclude' => true,
     'search' => true,
     'inputType' => 'select',
     'eval' => ['includeBlankOption' => true, 'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50', 'chosen' => true],
