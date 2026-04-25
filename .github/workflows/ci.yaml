@@ -63,6 +63,9 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          show-progress: false
+          persist-credentials: false
 
       - name: Install the dependencies
         run: composer update --no-interaction ${{matrix.composer}}
