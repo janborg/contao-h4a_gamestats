@@ -19,7 +19,7 @@ use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
 use Contao\CoreBundle\Routing\ScopeMatcher;
-use Contao\Template;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aTabellen\Model\H4aSeasonModel;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +36,7 @@ class H4aSeasonScoreElement extends AbstractContentElementController
     ) {
     }
 
-    public function getResponse(Template $template, ContentModel $model, Request $request): Response
+    public function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
     {
         // get h4a_classID and h4aseason from calendar
         $objCalendar = CalendarModel::findById($model->team_calendar);
