@@ -1,17 +1,11 @@
 services:
     _defaults:
         autoconfigure: true
-        public: true
-        autowire: true
 
     _instanceof:
         Contao\CoreBundle\Framework\FrameworkAwareInterface:
             calls:
                 - ['setFramework', ['@contao.framework']]
-
-        Symfony\Bundle\FrameworkBundle\Controller\AbstractController:
-            calls:
-                - ['setContainer', ['@Psr\Container\ContainerInterface']]
 
     Janborg\H4aGamestats\H4aEventGamestats: ~
 

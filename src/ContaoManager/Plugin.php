@@ -21,15 +21,14 @@ use Janborg\H4aTabellen\JanborgH4aTabellenBundle;
 
 class Plugin implements BundlePluginInterface
 {
-    public function getBundles(ParserInterface $parser)
+    public function getBundles(ParserInterface $parser): array
     {
         return [
-            BundleConfig::create(JanborgH4aGamestatsBundle::class)->setLoadAfter(
-                [
+            BundleConfig::create(JanborgH4aGamestatsBundle::class)
+                ->setLoadAfter([
                     ContaoCoreBundle::class,
                     JanborgH4aTabellenBundle::class,
-                ],
-            ),
+                ]),
         ];
     }
 }
