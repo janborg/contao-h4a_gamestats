@@ -19,8 +19,8 @@ use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
 use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\Date;
-use Contao\Template;
 use Janborg\H4aGamestats\H4aEventGamestats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +37,7 @@ class H4aGameScoreElement extends AbstractContentElementController
     ) {
     }
 
-    public function getResponse(Template $template, ContentModel $model, Request $request): Response
+    public function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
     {
         $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
 
