@@ -113,7 +113,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
         ],
         'team_name' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['team_name'],
-            'exclude' => true,
             'sorting' => true,
             'filter' => true,
             'search' => true,
@@ -124,7 +123,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
         'name' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['name'],
-            'exclude' => true,
             'sorting' => true,
             'search' => true,
             'inputType' => 'text',
@@ -134,7 +132,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
         'goals' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['goals'],
-            'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 2, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(2) unsigned NOT NULL default '0'",
@@ -142,7 +139,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
         'penalty_goals' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['penalty_goals'],
-            'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 2, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(2) unsigned NOT NULL default '0'",
@@ -150,7 +146,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
         'penalty_tries' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['penalty_tries'],
-            'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 2, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(2) unsigned NOT NULL default '0'",
@@ -158,7 +153,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
         'yellow_card' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['yellow_card'],
-            'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 1, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(1) unsigned NOT NULL default '0'",
@@ -166,7 +160,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
         'suspensions' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['suspensions'],
-            'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 1, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(1) unsigned NOT NULL default '0'",
@@ -174,7 +167,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
         'red_card' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['red_card'],
-            'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 10, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(10) unsigned NOT NULL default '0'",
@@ -182,7 +174,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
         'blue_card' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['blue_card'],
-            'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 1, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(1) unsigned NOT NULL default '0'",
@@ -191,7 +182,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
         'is_home_or_guest' => [
             'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['home_or_guest'],
             'default' => 1,
-            'exclude' => true,
             'search' => true,
             'inputType' => 'radio',
             'options' => [1 => 'Heim', 2 => 'Gast'],
