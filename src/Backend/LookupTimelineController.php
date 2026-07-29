@@ -21,13 +21,11 @@ use Contao\Input;
 use Contao\Message;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
-use Janborg\H4aTabellen\Crawler\H4aReportNoCrawler;
 
 class LookupTimelineController extends Backend
 {
     public function __construct(
         private EntityCacheTags $entityCacheTags,
-        private H4aReportNoCrawler $h4aReportNoCrawler,
         private readonly SystemLogger $systemLogger,
     ) {
         parent::__construct();
@@ -40,29 +38,11 @@ class LookupTimelineController extends Backend
 
         $objCalendarEvent = CalendarEventsModel::findById($id);
 
-        if (isset($objCalendarEvent->sGID) && '' === $objCalendarEvent->sGID) {
-            $this->h4aReportNoCrawler->setProvider($objCalendarEvent->provider);
-            $this->h4aReportNoCrawler->setClassID($objCalendarEvent->gClassID);
-            $this->h4aReportNoCrawler->setClassShortName($objCalendarEvent->gClassName);
-            $this->h4aReportNoCrawler->setgGameID($objCalendarEvent->gGameID);
-            $this->h4aReportNoCrawler->setVerbandName($objCalendarEvent->verband);
-
-            try {
-                $this->h4aReportNoCrawler->crawlReportNo();
-            } catch (\Exception $e) {
-                Message::addError('Fehler beim Abrufen der Spielberichtsnummer für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
-                $this->redirect($this->getReferer());
-            }
-
-            $objCalendarEvent->sGID = $this->h4aReportNoCrawler->getSGid();
-            $objCalendarEvent->save();
-        }
-
         // check if sGID is set and not empty
         if (isset($objCalendarEvent->sGID) && '' !== $objCalendarEvent->sGID) {
             $sGID = $objCalendarEvent->sGID;
         } else {
-            Message::addError('Spielberichtsnummer nicht gefunden.');
+            Message::addError('Spielberichtsnummer nicht vorhanden.');
 
             $this->redirect($this->getReferer());
         }
