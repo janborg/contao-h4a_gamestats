@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.0.5](https://github.com/janborg/contao-h4a_gamestats/compare/v3.0.4...v3.0.5) (2026-07-29)
+
+
+### Bug Fixes
+
+* remove AbstractController amd ContainerAwareInterface in services.yaml ([#56](https://github.com/janborg/contao-h4a_gamestats/issues/56)) ([05ddaf9](https://github.com/janborg/contao-h4a_gamestats/commit/05ddaf9f51da3e5bb5d81d755c67f9be66447304))
+
+
+### Miscellaneous Chores
+
+* various cleanups and fixes ([#57](https://github.com/janborg/contao-h4a_gamestats/issues/57)) ([415c790](https://github.com/janborg/contao-h4a_gamestats/commit/415c790c41853011201151fa2d29137ba92823f0))
+
 ## [3.0.4](https://github.com/janborg/contao-h4a_gamestats/compare/v3.0.3...v3.0.4) (2026-07-27)
 
 
