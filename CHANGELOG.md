@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.4](https://github.com/janborg/contao-h4a_gamestats/compare/v3.0.3...v3.0.4) (2026-07-27)
+
+
+### Miscellaneous Chores
+
+* bump googleapis/release-please-action in the github-actions group ([22ca782](https://github.com/janborg/contao-h4a_gamestats/commit/22ca7823e6e382a0e9a9ad782b93a7daf737b92a))
+* improve ci and dependabot ([#52](https://github.com/janborg/contao-h4a_gamestats/issues/52)) ([918069a](https://github.com/janborg/contao-h4a_gamestats/commit/918069a1782aaf86695bc10d53c376a644a44561))
+
 ## [3.0.3](https://github.com/janborg/contao-h4a_gamestats/compare/v3.0.2...v3.0.3) (2026-02-28)
 
 

@@ -2,48 +2,54 @@ name: CI
 
 on:
   pull_request: ~
-  push: ~
+  push:
+    branches:
+      - main
+      - '3.x'
+      - '4.x'
 
 jobs:
   ecs:
-    name: ECS
+    name: ECS (PHP 8.4)
     runs-on: ubuntu-latest
     steps:
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
-          extensions: dom, fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, pcre, pdo_mysql, zlib
+          php-version: '8.4'
+          extensions: dom, fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, pcre, pdo_mysql, sqlite, zlib
           coverage: none
-
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install the dependencies
-        run: composer install --no-interaction --no-suggest
-
-      - name: Check the coding style
-        run: vendor/bin/ecs check src tests --config ecs.php --ansi --fix
+      - run: composer install --no-interaction --no-suggest --no-scripts
+      - name: Check coding style
+        run: vendor/bin/ecs check src tests --config ecs.php --ansi --no-progress-bar
 
   phpstan:
-    name: phpstan
+    name: PHPStan (PHP 8.4)
     runs-on: ubuntu-latest
     steps:
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
-          extensions: dom, fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, pcre, pdo_mysql, zlib
+          php-version: '8.4'
+          extensions: dom, fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, pcre, pdo_mysql, sqlite, zlib
           coverage: none
-
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install the dependencies
-        run: composer install --no-interaction --no-suggest
-
-      - name: Analyze the code
+      - run: composer install --no-interaction --no-suggest --no-scripts
+      - name: Analyze code
         run: vendor/bin/phpstan analyse src tests --configuration phpstan.neon --no-progress --ansi
+
+  depcheck:
+    name: Dependency Analyser (PHP 8.4)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: dom, fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, pcre, pdo_mysql, sqlite, zlib
+          coverage: none
+      - run: composer install --no-interaction --no-suggest --no-scripts
+      - name: Check dependencies
+        run: vendor/bin/composer-dependency-analyser --config=composer-dependency-analyser.php
 
   tests:
     name: 'Unit tests (PHP ${{ matrix.php }} / Composer Flags ${{matrix.composer}})'
@@ -54,11 +60,11 @@ jobs:
         php: [ 8.3, 8.4, 8.5 ]
         composer: [ '--prefer-stable', '--prefer-lowest']
     steps:
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, pcre, pdo_mysql, zlib
+          extensions: dom, fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, pcre, pdo_mysql, sqlite, zlib
           coverage: none
 
       - name: Checkout
