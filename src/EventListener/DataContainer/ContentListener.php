@@ -28,8 +28,7 @@ class ContentListener
     public function __construct(
         public ContaoFramework $contaoFramework,
         public Connection $connection,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<mixed>
@@ -91,9 +90,13 @@ class ContentListener
     #[AsCallback(table: 'tl_content', target: 'fields.my_team_id.options')]
     public function HandballnetMyTeamIdOptionsCallback(DataContainer $dc): array
     {
+        $options = [];
+
         $myTeam = HandballnetTeamsModel::findOneByHandballnet_tournament_id($dc->activeRecord->handballnet_game_tournament);
 
-        $options[] = $myTeam->handballnet_team_id;
+        if (isset($myTeam)) {
+            $options[] = $myTeam->handballnet_team_id;
+        }
 
         return $options;
     }
@@ -104,9 +107,13 @@ class ContentListener
     #[AsCallback(table: 'tl_content', target: 'fields.my_team_name.options')]
     public function HandballnetMyTeamNmeOptionsCallback(DataContainer $dc): array
     {
+        $options = [];
+
         $myTeam = HandballnetTeamsModel::findOneByHandballnet_tournament_id($dc->activeRecord->handballnet_game_tournament);
 
-        $options[] = $myTeam->my_team_name;
+        if (isset($myTeam)) {
+            $options[] = $myTeam->my_team_name;
+        }
 
         return $options;
     }
@@ -132,7 +139,7 @@ class ContentListener
         $options = [];
 
         while ($row = $stmt->fetchAssociative()) {
-            $options[$row['id']] = date('d.m.Y', (int) $row['startDate']).' / '.$row['title'];
+            $options[$row['id']] = date('d.m.Y', (int) $row['startDate']) . ' / ' . $row['title'];
         }
 
         return $options;
