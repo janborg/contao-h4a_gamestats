@@ -15,7 +15,7 @@ namespace Janborg\H4aGamestats\EventListener;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Monolog\SystemLogger;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Janborg\H4aGamestats\HandballNet\HandballnetGamestatsParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Janborg\H4aTabellen\Event\H4aReportUpdatedEvent;
@@ -34,6 +34,7 @@ class UpdateGamestatsListener
     public function __construct(
         private readonly SystemLogger $systemLogger,
         private readonly EntityCacheTags $entityCacheTags,
+        private readonly HandballnetGamestatsParser $gamestatsParser,
     ) {
     }
 
@@ -43,26 +44,28 @@ class UpdateGamestatsListener
         $this->event = $event;
         $this->calendarEvent = $event->getCalendarEvent();
 
-        $h4areportparser = new H4aReportParser($this->calendarEvent->sGID);
+        if (!isset($this->calendarEvent->handballnet_game_id) || '' === $this->calendarEvent->handballnet_game_id) {
+            return;
+        }
 
         try {
-            $h4areportparser->parseReport();
+            $this->gamestatsParser->parseGame($this->calendarEvent->handballnet_game_id);
         } catch (\Exception $e) {
             $this->systemLogger->error(
-                'Error while parsing report: '.$e->getMessage(),
+                'Error while fetching game stats: '.$e->getMessage(),
             );
 
             return;
         }
 
         // Spieler der Heim Mannschaft speichern
-        H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $this->calendarEvent->id, $h4areportparser->heim_name, $home_guest = 1);
+        H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->home_team, $this->calendarEvent->id, $this->gamestatsParser->heim_name, 1);
 
         // Spieler der Gast Mannschaft speichern
-        H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $this->calendarEvent->id, $h4areportparser->gast_name, $home_guest = 2);
+        H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->guest_team, $this->calendarEvent->id, $this->gamestatsParser->gast_name, 2);
 
         // Timeline des Spiels speichern
-        H4aTimelineModel::saveTimeline($h4areportparser->timeline, $this->calendarEvent->id);
+        H4aTimelineModel::saveTimeline($this->gamestatsParser->timeline, $this->calendarEvent->id);
 
         $this->entityCacheTags->invalidateTagsFor($this->calendarEvent);
     }

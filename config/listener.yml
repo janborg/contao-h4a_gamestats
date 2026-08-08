@@ -21,3 +21,4 @@ services:
         arguments:
             - '@monolog.logger.contao.error'
             - '@contao.cache.entity_tags'
+            - '@Janborg\H4aGamestats\HandballNet\HandballnetGamestatsParser'
