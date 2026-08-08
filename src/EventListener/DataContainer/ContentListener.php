@@ -91,9 +91,13 @@ class ContentListener
     #[AsCallback(table: 'tl_content', target: 'fields.my_team_id.options')]
     public function HandballnetMyTeamIdOptionsCallback(DataContainer $dc): array
     {
+        $options = [];
+
         $myTeam = HandballnetTeamsModel::findOneByHandballnet_tournament_id($dc->activeRecord->handballnet_game_tournament);
 
-        $options[] = $myTeam->handballnet_team_id;
+        if (isset($myTeam)) {
+            $options[] = $myTeam->handballnet_team_id;
+        }
 
         return $options;
     }
@@ -104,9 +108,13 @@ class ContentListener
     #[AsCallback(table: 'tl_content', target: 'fields.my_team_name.options')]
     public function HandballnetMyTeamNmeOptionsCallback(DataContainer $dc): array
     {
+        $options = [];
+
         $myTeam = HandballnetTeamsModel::findOneByHandballnet_tournament_id($dc->activeRecord->handballnet_game_tournament);
 
-        $options[] = $myTeam->my_team_name;
+        if (isset($myTeam)) {
+            $options[] = $myTeam->my_team_name;
+        }
 
         return $options;
     }
