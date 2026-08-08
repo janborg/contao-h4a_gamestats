@@ -15,7 +15,7 @@ namespace Janborg\H4aGamestats\Cron;
 use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Janborg\H4aGamestats\HandballNet\HandballnetGamestatsParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Psr\Log\LoggerInterface;
 
@@ -26,6 +26,7 @@ class UpdateH4aScoresCron
         private EntityCacheTags $entityCacheTags,
         private readonly LoggerInterface $contaoCronLogger,
         private readonly LoggerInterface $contaoErrorLogger,
+        private readonly HandballnetGamestatsParser $gamestatsParser,
     ) {
         $this->framework->initialize();
     }
@@ -33,7 +34,7 @@ class UpdateH4aScoresCron
     public function updateScores(): void
     {
         $objEvents = CalendarEventsModel::findby(
-            ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'h4a_resultComplete = ?'],
+            ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'hn_resultComplete = ?'],
             [date('Y-m-d'), true],
         );
 
@@ -42,7 +43,7 @@ class UpdateH4aScoresCron
         }
 
         foreach ($objEvents as $objEvent) {
-            if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
+            if (!isset($objEvent->handballnet_game_id) || '' === $objEvent->handballnet_game_id) {
                 continue;
             }
 
@@ -52,25 +53,23 @@ class UpdateH4aScoresCron
                 continue;
             }
 
-            $h4areportparser = new H4aReportParser($objEvent->sGID);
-
             try {
-                $h4areportparser->parseReport();
+                $this->gamestatsParser->parseGame($objEvent->handballnet_game_id);
             } catch (\Exception $e) {
-                $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage());
+                $this->contaoErrorLogger->error('Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->handballnet_game_id.' ['.$objEvent->title.']: '.$e->getMessage());
 
                 continue;
             }
 
             // Spieler der Heim Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
+            H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->home_team, $objEvent->id, $this->gamestatsParser->heim_name, 1);
 
             // Spieler der Gast Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
+            H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->guest_team, $objEvent->id, $this->gamestatsParser->gast_name, 2);
 
-            $this->contaoCronLogger->info('Gamescores aus Bericht Nr. '.$objEvent->sGID
-                    .' für Spiel '.$objEvent->gGameID.' '.$h4areportparser->heim_name.' - '.$h4areportparser->gast_name
-                    .' über Handball4all gespeichert');
+            $this->contaoCronLogger->info('Gamescores für Spiel '.$objEvent->handballnet_game_id
+                    .' '.$this->gamestatsParser->heim_name.' - '.$this->gamestatsParser->gast_name
+                    .' über handball.net gespeichert');
 
             $this->entityCacheTags->invalidateTagsFor($objEvent);
         }

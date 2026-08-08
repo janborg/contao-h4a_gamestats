@@ -20,13 +20,14 @@ services:
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.cron'
             - '@monolog.logger.contao.error'
+            - '@Janborg\H4aGamestats\HandballNet\HandballnetGamestatsParser'
         tags:
             -
                 name: contao.cronjob
                 interval: 'hourly'
                 method: updateScores
                 priority: -50
-    
+
     h4agamestats.cron.updatetimeline:
         class: Janborg\H4aGamestats\Cron\UpdateH4aTimelineCron
         arguments:
@@ -34,6 +35,7 @@ services:
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.cron'
             - '@monolog.logger.contao.error'
+            - '@Janborg\H4aGamestats\HandballNet\HandballnetGamestatsParser'
         tags:
             -
                 name: contao.cronjob
