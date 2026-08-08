@@ -46,7 +46,7 @@ class LookupScoresController extends Backend
         } else {
             Message::addError('Spielberichtsnummer für Spiel mit ID nicht vorhanden.');
 
-        $this->redirect($this->urlGenerator->generate('contao_backend', ['do' => 'calendar', 'table' => 'tl_h4a_playerscores', 'id' => $id]));
+            $this->redirect($this->urlGenerator->generate('contao_backend', ['do' => 'calendar', 'table' => 'tl_h4a_playerscores', 'id' => $id]));
         }
 
         $h4areportparser = new H4aReportParser($sGID);
@@ -58,7 +58,7 @@ class LookupScoresController extends Backend
 
             Message::addError('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
 
-        $this->redirect($this->urlGenerator->generate('contao_backend', ['do' => 'calendar', 'table' => 'tl_h4a_playerscores', 'id' => $id]));
+            $this->redirect($this->urlGenerator->generate('contao_backend', ['do' => 'calendar', 'table' => 'tl_h4a_playerscores', 'id' => $id]));
         }
 
         // Spieler der Heimmannschaft speichern
@@ -72,6 +72,5 @@ class LookupScoresController extends Backend
         $this->entityCacheTags->invalidateTagsFor($objCalendarEvent);
 
         $this->redirect($this->urlGenerator->generate('contao_backend', ['do' => 'calendar', 'table' => 'tl_h4a_playerscores', 'id' => $id]));
-
     }
 }
