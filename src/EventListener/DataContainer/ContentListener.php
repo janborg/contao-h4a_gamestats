@@ -28,7 +28,8 @@ class ContentListener
     public function __construct(
         public ContaoFramework $contaoFramework,
         public Connection $connection,
-    ) {}
+    ) {
+    }
 
     /**
      * @return array<mixed>
@@ -139,7 +140,7 @@ class ContentListener
         $options = [];
 
         while ($row = $stmt->fetchAssociative()) {
-            $options[$row['id']] = date('d.m.Y', (int) $row['startDate']) . ' / ' . $row['title'];
+            $options[$row['id']] = date('d.m.Y', (int) $row['startDate']).' / '.$row['title'];
         }
 
         return $options;
