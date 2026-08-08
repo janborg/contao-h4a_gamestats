@@ -17,6 +17,7 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\DataContainer;
 use Doctrine\DBAL\Connection;
 use Janborg\H4aTabellen\Model\HandballnetSeasonsModel;
+use Janborg\H4aTabellen\Model\HandballnetTeamsModel;
 
 /**
  * @property ContaoFramework $contaoFramework
@@ -27,11 +28,10 @@ class ContentListener
     public function __construct(
         public ContaoFramework $contaoFramework,
         public Connection $connection,
-    ) {}
-
+    ) {
+    }
 
     /**
-     *
      * @return array<mixed>
      */
     #[AsCallback(table: 'tl_content', target: 'fields.handballnet_game_season.options')]
@@ -59,7 +59,6 @@ class ContentListener
     }
 
     /**
-     *
      * @return array<mixed>
      */
     #[AsCallback(table: 'tl_content', target: 'fields.handballnet_game_tournament.options')]
@@ -86,9 +85,33 @@ class ContentListener
         return $options;
     }
 
+    /**
+     * @return array<mixed>
+     */
+    #[AsCallback(table: 'tl_content', target: 'fields.my_team_id.options')]
+    public function HandballnetMyTeamIdOptionsCallback(DataContainer $dc): array
+    {
+        $myTeam = HandballnetTeamsModel::findOneByHandballnet_tournament_id($dc->activeRecord->handballnet_game_tournament);
+
+        $options[] = $myTeam->handballnet_team_id;
+
+        return $options;
+    }
 
     /**
-     *
+     * @return array<mixed>
+     */
+    #[AsCallback(table: 'tl_content', target: 'fields.my_team_name.options')]
+    public function HandballnetMyTeamNmeOptionsCallback(DataContainer $dc): array
+    {
+        $myTeam = HandballnetTeamsModel::findOneByHandballnet_tournament_id($dc->activeRecord->handballnet_game_tournament);
+
+        $options[] = $myTeam->my_team_name;
+
+        return $options;
+    }
+
+    /**
      * @return array<mixed>
      */
     #[AsCallback(table: 'tl_content', target: 'fields.handballnet_game_id.options')]
@@ -109,7 +132,7 @@ class ContentListener
         $options = [];
 
         while ($row = $stmt->fetchAssociative()) {
-            $options[$row['id']] = date('d.m.Y', (int) $row['startDate']) . ' / ' . $row['title'];
+            $options[$row['id']] = date('d.m.Y', (int) $row['startDate']).' / '.$row['title'];
         }
 
         return $options;

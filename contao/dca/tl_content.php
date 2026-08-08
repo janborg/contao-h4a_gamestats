@@ -34,7 +34,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes'][H4aGameScoreElement::TYPE] = '
 ';
 $GLOBALS['TL_DCA']['tl_content']['palettes'][H4aSeasonScoreElement::TYPE] = '
     {type_legend},type,headline;
-    {h4a_legend},team_calendar,handballnet_club,handballnet_season,my_team_name;
+    {h4a_legend},team_calendar,handballnet_game_season,handballnet_game_tournament,my_team_id,my_team_name;
     {template_legend:hide}customTpl;
     {expert_legend:hide},cssID
 ';
@@ -54,7 +54,14 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['team_calendar'] = [
     'inputType' => 'select',
     'foreignKey' => 'tl_calendar.title',
     'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
-    'eval' => ['includeBlankOption' => true, 'mandatory' => true, 'maxlength' => 10, 'tl_class' => 'w50', 'chosen' => true, 'submitOnChange' => true],
+    'eval' => [
+        'includeBlankOption' => true, 
+        'mandatory' => true, 
+        'maxlength' => 10, 
+        'tl_class' => 'w50', 
+        'chosen' => true, 
+        'submitOnChange' => true
+        ],
     'sql' => 'int(10) unsigned NOT NULL default 0',
 ];
 $GLOBALS['TL_DCA']['tl_content']['fields']['handballnet_game_season'] = [
@@ -86,6 +93,26 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['handballnet_game_id'] = [
         'mandatory' => false,
         'tl_class' => 'w50',
         'includeBlankOption' => true,
+        'chosen' => true,
+        'submitOnChange' => true,
+    ],
+    'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
+];
+$GLOBALS['TL_DCA']['tl_content']['fields']['my_team_id'] = [
+    'inputType' => 'select',
+    'eval' => [
+        'mandatory' => false,
+        'tl_class' => 'w50',
+        'chosen' => true,
+        'submitOnChange' => true,
+    ],
+    'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
+];
+$GLOBALS['TL_DCA']['tl_content']['fields']['my_team_name'] = [
+    'inputType' => 'select',
+    'eval' => [
+        'mandatory' => false,
+        'tl_class' => 'w50',
         'chosen' => true,
         'submitOnChange' => true,
     ],

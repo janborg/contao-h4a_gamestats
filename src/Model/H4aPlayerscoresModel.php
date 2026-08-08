@@ -316,4 +316,46 @@ class H4aPlayerscoresModel extends Model
 
         return $stmt->fetchAllAssociative();
     }
+
+    /**
+     * TODO: Dringend sauberer umbauen mit den handballnet Strukturen!
+     *
+     * @param string $tournament_id
+     * @param string $team_name
+     *
+     * @return array<mixed>
+     */
+    public static function findScoresByTournamentIdAndTeamName($tournament_id, $team_name)
+    {
+        $db = System::getContainer()->get('database_connection');
+
+        $stmt = $db->executeQuery(
+            'SELECT
+                ps.`name`
+                , COUNT(ce.`gGameID`) AS `games`
+                , SUM(ps.`goals`) AS `goals`
+                , SUM(ps.`penalty_goals`) AS `penalty_goals`
+                , SUM(ps.`penalty_tries`) AS `penalty_tries`
+                , SUM(ps.`yellow_card`) AS `yellow_cards`
+                , SUM(ps.`suspensions`) AS `suspensions`
+                , SUM(ps.`red_card`) AS `red_cards`
+                , SUM(ps.`blue_card`) AS `blue_cards`
+            FROM
+                `tl_h4a_playerscores` ps
+            JOIN
+                `tl_calendar_events` ce
+            ON
+                ps.`pid` = ce.`id`
+            WHERE
+                ce.`handballnet_tournament_id` = ? AND
+                ps.`team_name`= ?
+            GROUP BY
+                ps.`name`
+            ORDER BY
+                ps.`name` ASC',
+            [$tournament_id, $team_name],
+        );
+
+        return $stmt->fetchAllAssociative();
+    }
 }
