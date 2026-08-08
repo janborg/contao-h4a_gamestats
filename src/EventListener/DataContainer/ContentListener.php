@@ -81,4 +81,33 @@ class ContentListener
 
         return $options;
     }
+
+    /**
+     * @Callback(table="tl_content", target="fields.handballnet_game_id.options")
+     *
+     * @return array<mixed>
+     */
+    public function HandballnetGameIdOptionsCallback(DataContainer $dc): array
+    {
+        $stmt = $this->connection->executeQuery(
+            'SELECT
+                `id`, `title`, `startDate`
+            FROM
+                `tl_calendar_events`
+            WHERE
+                `pid` = ? AND
+                `handballnet_tournament_id` = ?
+            ORDER BY `startDate`',
+            [$dc->activeRecord->team_calendar, $dc->activeRecord->handballnet_tournament_id],
+        );
+
+        $options = [];
+
+        while ($row = $stmt->fetchAssociative()) {
+            $options[$row['id']] = date('d.m.Y', (int) $row['startDate']).' / '.$row['title'];
+        }
+
+        return $options;
+    }
+
 }
