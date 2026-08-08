@@ -81,15 +81,7 @@ class H4aPlayerscoresModel extends Model
     public static function savePlayerscores($players, $pid, $teamname, $home_guest): void
     {
         foreach ($players as $player) {
-            if (!empty($player['3rd_suspension'])) {
-                $suspensions = 3;
-            } elseif (!empty($player['2nd_suspension'])) {
-                $suspensions = 2;
-            } elseif (!empty($player['1st_suspension'])) {
-                $suspensions = 1;
-            } else {
-                $suspensions = 0;
-            }
+            $suspensions = (int) ($player['suspensions'] ?? 0);
 
             $objPlayerscore = self::findBy(
                 ['pid = ?', 'name = ?'],
@@ -169,7 +161,7 @@ class H4aPlayerscoresModel extends Model
         $stmt = $db->executeQuery(
             'SELECT
                 ps.`name`
-                , COUNT(ce.`gGameID`) AS `games`
+                , COUNT(ce.`id`) AS `games`
                 , SUM(ps.`goals`) AS `goals`
                 , SUM(ps.`penalty_goals`) AS `penalty_goals`
                 , SUM(ps.`penalty_tries`) AS `penalty_tries`
@@ -210,7 +202,7 @@ class H4aPlayerscoresModel extends Model
         $stmt = $db->executeQuery(
             'SELECT
                 ps.`name`
-                , COUNT(ce.`gGameID`) AS `games`
+                , COUNT(ce.`id`) AS `games`
                 , SUM(ps.`goals`) AS `goals`
                 , SUM(ps.`penalty_goals`) AS `penalty_goals`
                 , SUM(ps.`penalty_tries`) AS `penalty_tries`
@@ -251,7 +243,7 @@ class H4aPlayerscoresModel extends Model
         $stmt = $db->executeQuery(
             'SELECT
                 ps.`name`
-                , COUNT(ce.`gGameID`) AS `games`
+                , COUNT(ce.`id`) AS `games`
                 , SUM(ps.`goals`) AS `goals`
                 , SUM(ps.`penalty_goals`) AS `penalty_goals`
                 , SUM(ps.`penalty_tries`) AS `penalty_tries`
@@ -332,7 +324,7 @@ class H4aPlayerscoresModel extends Model
         $stmt = $db->executeQuery(
             'SELECT
                 ps.`name`
-                , COUNT(ce.`gGameID`) AS `games`
+                , COUNT(ce.`id`) AS `games`
                 , SUM(ps.`goals`) AS `goals`
                 , SUM(ps.`penalty_goals`) AS `penalty_goals`
                 , SUM(ps.`penalty_tries`) AS `penalty_tries`

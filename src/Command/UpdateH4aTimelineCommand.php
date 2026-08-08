@@ -16,7 +16,7 @@ use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Date;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Janborg\H4aGamestats\HandballNet\HandballnetGamestatsParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -38,6 +38,7 @@ class UpdateH4aTimelineCommand extends Command
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
+        private readonly HandballnetGamestatsParser $gamestatsParser,
     ) {
         parent::__construct();
     }
@@ -54,13 +55,13 @@ class UpdateH4aTimelineCommand extends Command
         $this->framework->initialize();
 
         $objEvents = CalendarEventsModel::findby(
-            ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'h4a_resultComplete = ?'],
+            ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'hn_resultComplete = ?'],
             [date('Y-m-d'), true],
             ['eager' => true],
         );
 
         if (null === $objEvents) {
-            $output->writeln('<info>Es wurden keine Events mit ReportNo (sGID) gefunden.</info>');
+            $output->writeln('<info>Es wurden keine Events mit handball.net Spiel-ID gefunden.</info>');
 
             return Command::SUCCESS;
         }
@@ -74,16 +75,16 @@ class UpdateH4aTimelineCommand extends Command
         foreach ($objEvents as $objEvent) {
             $output->writeln([
                 '',
-                Date::parse('d.m.Y', $objEvent->startDate).': Spiel '.$objEvent->gGameID.' '.$objEvent->title.':',
+                Date::parse('d.m.Y', $objEvent->startDate).': Spiel '.$objEvent->handballnet_game_id.' '.$objEvent->title.':',
                 '-----------------------------------------------------',
             ]);
 
-            if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
-                $output->writeln('Keine ReportNo (sGID) vorhanden.');
+            if (!isset($objEvent->handballnet_game_id) || '' === $objEvent->handballnet_game_id) {
+                $output->writeln('Keine handball.net Spiel-ID vorhanden.');
                 continue;
             }
 
-            $output->writeln('Timeline aus Spielbericht '.$objEvent->sGID.' abrufen...');
+            $output->writeln('Timeline für Spiel '.$objEvent->handballnet_game_id.' abrufen...');
 
             // check, ob bereits Timeline zum H4a-Event vorhanden sind:
             if (!$input->getOption('update-all')) {
@@ -96,18 +97,16 @@ class UpdateH4aTimelineCommand extends Command
                 }
             }
 
-            $h4areportparser = new H4aReportParser($objEvent->sGID);
-
             try {
-                $h4areportparser->parseReport();
+                $this->gamestatsParser->parseGame($objEvent->handballnet_game_id);
             } catch (\Exception $e) {
-                $output->writeln('<error>Fehler beim Parsing des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage().'</error>');
+                $output->writeln('<error>Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->handballnet_game_id.' ['.$objEvent->title.']: '.$e->getMessage().'</error>');
                 continue;
             }
-            // Spieler der Heim Mannschaft speichern
-            H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objEvent->id);
+            // Timeline des Spiels speichern
+            H4aTimelineModel::saveTimeline($this->gamestatsParser->timeline, $objEvent->id);
 
-            $output->writeln('<info>Timeline für Spiel '.$objEvent->gGameID.' gespeichert.</info>');
+            $output->writeln('<info>Timeline für Spiel '.$objEvent->handballnet_game_id.' gespeichert.</info>');
 
             $this->entityCacheTags->invalidateTagsFor($objEvent);
         }

@@ -16,7 +16,7 @@ use Contao\CalendarEventsModel;
 use Contao\CoreBundle\Cache\EntityCacheTags;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Date;
-use Janborg\H4aGamestats\H4aReport\H4aReportParser;
+use Janborg\H4aGamestats\HandballNet\HandballnetGamestatsParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -40,6 +40,7 @@ class UpdateH4aScoresCommand extends Command
     public function __construct(
         private ContaoFramework $framework,
         private EntityCacheTags $entityCacheTags,
+        private readonly HandballnetGamestatsParser $gamestatsParser,
     ) {
         parent::__construct();
     }
@@ -56,13 +57,13 @@ class UpdateH4aScoresCommand extends Command
         $this->framework->initialize();
 
         $objEvents = CalendarEventsModel::findby(
-            ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'h4a_resultComplete = ?'],
+            ['DATE(FROM_UNIXTIME(startDate)) <= ?', 'hn_resultComplete = ?'],
             [date('Y-m-d'), true],
             ['eager' => true],
         );
 
         if (null === $objEvents) {
-            $output->writeln('<info>Es wurden keine Events mit ReportNo (sGID) gefunden.</info>');
+            $output->writeln('<info>Es wurden keine Events mit handball.net Spiel-ID gefunden.</info>');
 
             return Command::SUCCESS;
         }
@@ -76,16 +77,16 @@ class UpdateH4aScoresCommand extends Command
         foreach ($objEvents as $objEvent) {
             $output->writeln([
                 '',
-                Date::parse('d.m.Y', $objEvent->startDate).': Spiel '.$objEvent->gGameID.' '.$objEvent->title.':',
+                Date::parse('d.m.Y', $objEvent->startDate).': Spiel '.$objEvent->handballnet_game_id.' '.$objEvent->title.':',
                 '-----------------------------------------------------',
             ]);
 
-            if (isset($objEvent->sGID) && '' === $objEvent->sGID) {
-                $output->writeln('Keine ReportNo (sGID) vorhanden.');
+            if (!isset($objEvent->handballnet_game_id) || '' === $objEvent->handballnet_game_id) {
+                $output->writeln('Keine handball.net Spiel-ID vorhanden.');
                 continue;
             }
 
-            $output->writeln('Playerscores aus Spielbericht '.$objEvent->sGID.' abrufen...');
+            $output->writeln('Playerscores für Spiel '.$objEvent->handballnet_game_id.' abrufen...');
 
             // check, ob bereits Scores zum H4a-Event vorhanden sind:
             if (!$input->getOption('update-all')) {
@@ -97,25 +98,23 @@ class UpdateH4aScoresCommand extends Command
                 }
             }
 
-            $h4areportparser = new H4aReportParser($objEvent->sGID);
-
             try {
-                $h4areportparser->parseReport();
+                $this->gamestatsParser->parseGame($objEvent->handballnet_game_id);
             } catch (\Exception $e) {
-                $output->writeln('<error>Fehler beim Parsing des Spielberichts für Spiel '.$objEvent->gGameNo.' ['.$objEvent->title.']: '.$e->getMessage().'</error>');
+                $output->writeln('<error>Fehler beim Abrufen des Spielberichts für Spiel '.$objEvent->handballnet_game_id.' ['.$objEvent->title.']: '.$e->getMessage().'</error>');
 
                 continue;
             }
 
             // Spieler der Heim Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($h4areportparser->home_team, $objEvent->id, $h4areportparser->heim_name, $home_guest = 1);
+            H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->home_team, $objEvent->id, $this->gamestatsParser->heim_name, 1);
 
-            $output->writeln('<info>Playerscores für '.$h4areportparser->heim_name.' in Spiel '.$objEvent->gGameID.' gespeichert.</info>');
+            $output->writeln('<info>Playerscores für '.$this->gamestatsParser->heim_name.' in Spiel '.$objEvent->handballnet_game_id.' gespeichert.</info>');
 
             // Spieler der Gast Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($h4areportparser->guest_team, $objEvent->id, $h4areportparser->gast_name, $home_guest = 2);
+            H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->guest_team, $objEvent->id, $this->gamestatsParser->gast_name, 2);
 
-            $output->writeln('<info>Playerscores für '.$h4areportparser->gast_name.' in Spiel '.$objEvent->gGameID.' gespeichert.</info>');
+            $output->writeln('<info>Playerscores für '.$this->gamestatsParser->gast_name.' in Spiel '.$objEvent->handballnet_game_id.' gespeichert.</info>');
 
             $this->entityCacheTags->invalidateTagsFor($objEvent);
         }

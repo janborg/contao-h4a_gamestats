@@ -8,14 +8,16 @@ services:
         
     Janborg\H4aGamestats\Backend\LookupScoresController:
         public: true
-        arguments: 
+        arguments:
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.error'
             - '@router'
+            - '@Janborg\H4aGamestats\HandballNet\HandballnetGamestatsParser'
 
     Janborg\H4aGamestats\Backend\LookupTimelineController:
         public: true
-        arguments: 
+        arguments:
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.error'
             - '@router'
+            - '@Janborg\H4aGamestats\HandballNet\HandballnetGamestatsParser'
