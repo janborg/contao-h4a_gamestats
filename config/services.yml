@@ -9,6 +9,10 @@ services:
 
     Janborg\H4aGamestats\H4aEventGamestats: ~
 
+    Janborg\H4aGamestats\HandballNet\HandballnetGamestatsParser:
+        arguments:
+            - '@h4atabellen.handballnet.apiclient'
+
     h4agamestats.cron.updatescores:
         class: Janborg\H4aGamestats\Cron\UpdateH4aScoresCron
         arguments:
