@@ -28,7 +28,7 @@ use Janborg\H4aGamestats\Controller\ContentElement\H4aTimelineElement;
 
 $GLOBALS['TL_DCA']['tl_content']['palettes'][H4aGameScoreElement::TYPE] = '
     {type_legend},type,headline;
-    {h4a_legend},team_calendar,handballnet_club,handballnet_season,handballnet_game_id;
+    {h4a_legend},team_calendar,handballnet_game_season,handballnet_game_tournament,handballnet_game_id;
     {template_legend:hide},customTpl;
     {expert_legend:hide},cssID
 ';
@@ -40,7 +40,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes'][H4aSeasonScoreElement::TYPE] = '
 ';
 $GLOBALS['TL_DCA']['tl_content']['palettes'][H4aTimelineElement::TYPE] = '
     {type_legend},type,headline;
-    {h4a_legend},team_calendar,handballnet_club,handballnet_season,handballnet_game_id;
+    {h4a_legend},team_calendar,handballnet_game_season,handballnet_game_tournament,handballnet_game_id;
     {template_legend:hide},customTpl;
     {expert_legend:hide},cssID
 ';
@@ -57,9 +57,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['team_calendar'] = [
     'eval' => ['includeBlankOption' => true, 'mandatory' => true, 'maxlength' => 10, 'tl_class' => 'w50', 'chosen' => true, 'submitOnChange' => true],
     'sql' => 'int(10) unsigned NOT NULL default 0',
 ];
-$GLOBALS['TL_DCA']['tl_content']['fields']['handballnet_club'] = [
-    'foreignKey' => 'tl_hn_clubs.name',
-    'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
+$GLOBALS['TL_DCA']['tl_content']['fields']['handballnet_game_season'] = [
     'inputType' => 'select',
     'eval' => [
         'mandatory' => true,
@@ -70,33 +68,26 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['handballnet_club'] = [
     ],
     'sql' => "varchar(10) NOT NULL default ''",
 ];
-$GLOBALS['TL_DCA']['tl_content']['fields']['handballnet_season'] = [
-    'inputType' => 'select',
-    'eval' => [
-        'mandatory' => true,
-        'tl_class' => 'w50',
-        'includeBlankOption' => true,
-        'chosen' => true,
-        'submitOnChange' => true,
-    ],
-    'sql' => "varchar(10) NOT NULL default ''",
-];
-$GLOBALS['TL_DCA']['tl_content']['fields']['handballnet_tournament_id'] = [
+$GLOBALS['TL_DCA']['tl_content']['fields']['handballnet_game_tournament'] = [
     'inputType' => 'select',
     'eval' => [
         'mandatory' => false,
         'includeBlankOption' => true,
         'maxlength' => 255,
         'tl_class' => 'w50',
+        'chosen' => true,
+        'submitOnChange' => true,
     ],
     'sql' => "varchar(255) NOT NULL default ''",
 ];
 $GLOBALS['TL_DCA']['tl_content']['fields']['handballnet_game_id'] = [
-    'inputType' => 'text',
+    'inputType' => 'select',
     'eval' => [
         'mandatory' => false,
-        'unique' => true,
         'tl_class' => 'w50',
+        'includeBlankOption' => true,
+        'chosen' => true,
+        'submitOnChange' => true,
     ],
     'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
 ];
