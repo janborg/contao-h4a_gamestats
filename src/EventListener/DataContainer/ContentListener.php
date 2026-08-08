@@ -12,10 +12,11 @@ declare(strict_types=1);
 
 namespace Janborg\H4aGamestats\EventListener\DataContainer;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\DataContainer;
 use Doctrine\DBAL\Connection;
+use Janborg\H4aTabellen\Model\HandballnetSeasonsModel;
 
 /**
  * @property ContaoFramework $contaoFramework
@@ -26,67 +27,71 @@ class ContentListener
     public function __construct(
         public ContaoFramework $contaoFramework,
         public Connection $connection,
-    ) {
-    }
+    ) {}
+
 
     /**
-     * @Callback(table="tl_content", target="fields.h4a_event_id.options")
      *
      * @return array<mixed>
      */
-    public function H4aEventIdOptionsCallback(DataContainer $dc): array
+    #[AsCallback(table: 'tl_content', target: 'fields.handballnet_game_season.options')]
+    public function HandballnetGameSeasonOptionsCallback(DataContainer $dc): array
     {
         $stmt = $this->connection->executeQuery(
-            'SELECT
-                `id`, `title`, `startDate`
+            'SELECT DISTINCT
+                `handballnet_season`
+            FROM
+                `tl_calendar_events`
+            WHERE
+                `pid` = ?
+            ORDER BY `handballnet_season` DESC',
+            [$dc->activeRecord->team_calendar],
+        );
+
+        $options = [];
+
+        while ($row = $stmt->fetchAssociative()) {
+            $season = HandballnetSeasonsModel::findById($row['handballnet_season']);
+            $options[$row['handballnet_season']] = \sprintf('%s - %s', $season->season_name, $season->club_name);
+        }
+
+        return $options;
+    }
+
+    /**
+     *
+     * @return array<mixed>
+     */
+    #[AsCallback(table: 'tl_content', target: 'fields.handballnet_game_tournament.options')]
+    public function HandballnetGameTournamentOptionsCallback(DataContainer $dc): array
+    {
+        $stmt = $this->connection->executeQuery(
+            'SELECT DISTINCT
+                `handballnet_tournament_id`, `handballnet_tournament_name`
             FROM
                 `tl_calendar_events`
             WHERE
                 `pid` = ? AND
-                `h4a_season` = ?
-            ORDER BY `startDate`',
-            [$dc->activeRecord->team_calendar, $dc->activeRecord->h4a_season],
+                `handballnet_season` = ?
+            ORDER BY `handballnet_tournament_id`',
+            [$dc->activeRecord->team_calendar, $dc->activeRecord->handballnet_game_season],
         );
 
         $options = [];
 
         while ($row = $stmt->fetchAssociative()) {
-            $options[$row['id']] = date('d.m.Y', (int) $row['startDate']).' / '.$row['title'];
+            $options[$row['handballnet_tournament_id']] = $row['handballnet_tournament_name'];
         }
 
         return $options;
     }
 
+
     /**
-     * @Callback(table="tl_content", target="fields.h4a_season.options")
      *
      * @return array<mixed>
      */
-    public function h4aSeasonOptionsCallback(DataContainer $dc): array
-    {
-        $stmt = $this->connection->executeQuery(
-            'SELECT
-                `id`, `season`
-            FROM
-                `tl_h4a_seasons`
-            ORDER BY
-                `season` DESC',
-        );
-
-        $options = [];
-
-        while ($row = $stmt->fetchAssociative()) {
-            $options[$row['id']] = $row['season'];
-        }
-
-        return $options;
-    }
-
-    /**
-     * @Callback(table="tl_content", target="fields.handballnet_game_id.options")
-     *
-     * @return array<mixed>
-     */
+    #[AsCallback(table: 'tl_content', target: 'fields.handballnet_game_id.options')]
     public function HandballnetGameIdOptionsCallback(DataContainer $dc): array
     {
         $stmt = $this->connection->executeQuery(
@@ -98,16 +103,15 @@ class ContentListener
                 `pid` = ? AND
                 `handballnet_tournament_id` = ?
             ORDER BY `startDate`',
-            [$dc->activeRecord->team_calendar, $dc->activeRecord->handballnet_tournament_id],
+            [$dc->activeRecord->team_calendar, $dc->activeRecord->handballnet_game_tournament],
         );
 
         $options = [];
 
         while ($row = $stmt->fetchAssociative()) {
-            $options[$row['id']] = date('d.m.Y', (int) $row['startDate']).' / '.$row['title'];
+            $options[$row['id']] = date('d.m.Y', (int) $row['startDate']) . ' / ' . $row['title'];
         }
 
         return $options;
     }
-
 }
