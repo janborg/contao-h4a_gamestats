@@ -1,0 +1,5 @@
+# List operations for tl_calendar_events
+
+tl_calendar_events:
+    h4a_playerscores: 'Playerscores anzeigen'
+    h4a_timeline: 'Spielverlauf anzeigen'

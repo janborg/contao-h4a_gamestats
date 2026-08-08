@@ -1,0 +1,30 @@
+# Fields, legends and operations for tl_h4a_timeline
+
+tl_h4a_timeline:
+    timeline_legend: 'Game timeline'
+
+    lookup_timeline: 'Fetch game timeline'
+
+    matchtime:
+        0: 'Match time'
+        1: 'Match time of the action'
+
+    currentscore:
+        0: 'Current score'
+        1: 'Current score after the action'
+
+    action_team:
+        0: 'Team'
+        1: 'Team of the current action'
+
+    action_player:
+        0: 'Player'
+        1: 'Player of the current action'
+
+    action_player_number:
+        0: 'Player number'
+        1: 'Number of the player'
+
+    action_type:
+        0: 'Action type'
+        1: 'Type of the current action, e.g. "goal", "yellow card", "7m"'

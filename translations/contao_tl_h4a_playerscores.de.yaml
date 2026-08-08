@@ -1,0 +1,51 @@
+# Fields, legends and operations for tl_h4a_playerscores
+
+tl_h4a_playerscores:
+    player_legend: 'Spielerdaten'
+    score_legend: 'Tore, Strafen, Karten'
+
+    lookup_scores: 'Playerscores abrufen'
+
+    number:
+        0: 'Nummer des Spielers'
+        1: ''
+
+    team_name:
+        0: 'Name des Teams'
+        1: ''
+
+    name:
+        0: 'Name des Spielers'
+        1: ''
+
+    goals:
+        0: 'Tore'
+        1: ''
+
+    penalty_goals:
+        0: '7m Tore'
+        1: ''
+
+    penalty_tries:
+        0: '7m Versuche'
+        1: ''
+
+    suspensions:
+        0: 'Zeitstrafen'
+        1: ''
+
+    yellow_card:
+        0: 'Gelbe Karte'
+        1: ''
+
+    red_card:
+        0: 'Rote Karte'
+        1: ''
+
+    blue_card:
+        0: 'Blaue Karte'
+        1: ''
+
+    is_home_or_guest:
+        0: 'Heim oder Gast Team'
+        1: ''
