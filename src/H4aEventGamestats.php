@@ -19,7 +19,7 @@ class H4aEventGamestats
     {
         $hometeamscores = H4aPlayerscoresModel::findTeamScoresByCalendarEvent($event->id, '1');
 
-        $template->home_team = $event->gHomeTeam;
+        $template->home_team = $event->homeTeam_name;
 
         $template->home_players = $this->isPlayer($hometeamscores);
 
@@ -41,7 +41,7 @@ class H4aEventGamestats
     {
         $guestteamscores = H4aPlayerscoresModel::findTeamScoresByCalendarEvent($event->id, '2');
 
-        $template->guest_team = $event->gGuestTeam;
+        $template->guest_team = $event->awayTeam_name;
 
         $template->guest_players = $this->isPlayer($guestteamscores);
 
@@ -89,8 +89,8 @@ class H4aEventGamestats
 
         $template->chartData = $arrChartData;
         $template->timeline = $timeline;
-        $template->home_team = $objCalEvent->gHomeTeam;
-        $template->guest_team = $objCalEvent->gGuestTeam;
+        $template->home_team = $objCalEvent->homeTeam_name;
+        $template->guest_team = $objCalEvent->awayTeam_name;
     }
 
     /**
