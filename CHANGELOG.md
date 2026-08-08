@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.0.1](https://github.com/janborg/contao-h4a_gamestats/compare/v4.0.0...v4.0.1) (2026-08-08)
+
+
+### Bug Fixes
+
+* add readme ([#65](https://github.com/janborg/contao-h4a_gamestats/issues/65)) ([1217e91](https://github.com/janborg/contao-h4a_gamestats/commit/1217e91711de4a95bc151ae9d097caacae566eb3))
+* guard against null team in option callbacks ([#63](https://github.com/janborg/contao-h4a_gamestats/issues/63)) ([b6d2aa6](https://github.com/janborg/contao-h4a_gamestats/commit/b6d2aa65796b9979a6eebe9295fea9b1ee2e9606))
+
 ## [4.0.0](https://github.com/janborg/contao-h4a_gamestats/compare/v3.0.5...v4.0.0) (2026-08-08)
 
 
