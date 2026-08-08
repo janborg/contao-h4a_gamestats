@@ -21,12 +21,14 @@ use Contao\Input;
 use Contao\Message;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aTimelineModel;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class LookupTimelineController extends Backend
 {
     public function __construct(
         private EntityCacheTags $entityCacheTags,
         private readonly SystemLogger $systemLogger,
+        private UrlGeneratorInterface $urlGenerator,
     ) {
         parent::__construct();
         $this->import(BackendUser::class, 'User');
@@ -34,7 +36,7 @@ class LookupTimelineController extends Backend
 
     public function lookupTimeline(): void
     {
-        $id = [Input::get('id')];
+        $id = Input::get('id');
 
         $objCalendarEvent = CalendarEventsModel::findById($id);
 
@@ -44,7 +46,7 @@ class LookupTimelineController extends Backend
         } else {
             Message::addError('Spielberichtsnummer nicht vorhanden.');
 
-            $this->redirect($this->getReferer());
+        $this->redirect($this->urlGenerator->generate('contao_backend', ['do' => 'calendar', 'table' => 'tl_h4a_timeline', 'id' => $id]));
         }
 
         $h4areportparser = new H4aReportParser($sGID);
@@ -56,7 +58,7 @@ class LookupTimelineController extends Backend
 
             Message::addError('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
 
-            $this->redirect($this->getReferer());
+        $this->redirect($this->urlGenerator->generate('contao_backend', ['do' => 'calendar', 'table' => 'tl_h4a_timeline', 'id' => $id]));
         }
 
         H4aTimelineModel::saveTimeline($h4areportparser->timeline, $objCalendarEvent->id);
@@ -65,6 +67,7 @@ class LookupTimelineController extends Backend
 
         $this->entityCacheTags->invalidateTagsFor($objCalendarEvent);
 
-        $this->redirect($this->getReferer());
+        $this->redirect($this->urlGenerator->generate('contao_backend', ['do' => 'calendar', 'table' => 'tl_h4a_timeline', 'id' => $id]));
+
     }
 }

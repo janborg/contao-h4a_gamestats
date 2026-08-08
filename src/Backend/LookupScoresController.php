@@ -21,12 +21,14 @@ use Contao\Input;
 use Contao\Message;
 use Janborg\H4aGamestats\H4aReport\H4aReportParser;
 use Janborg\H4aGamestats\Model\H4aPlayerscoresModel;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class LookupScoresController extends Backend
 {
     public function __construct(
         private EntityCacheTags $entityCacheTags,
         private readonly SystemLogger $systemLogger,
+        private UrlGeneratorInterface $urlGenerator,
     ) {
         parent::__construct();
         $this->import(BackendUser::class, 'User');
@@ -34,7 +36,7 @@ class LookupScoresController extends Backend
 
     public function lookupScores(): void
     {
-        $id = [Input::get('id')];
+        $id = Input::get('id');
 
         $objCalendarEvent = CalendarEventsModel::findById($id);
 
@@ -44,7 +46,7 @@ class LookupScoresController extends Backend
         } else {
             Message::addError('Spielberichtsnummer für Spiel mit ID nicht vorhanden.');
 
-            $this->redirect($this->getReferer());
+        $this->redirect($this->urlGenerator->generate('contao_backend', ['do' => 'calendar', 'table' => 'tl_h4a_playerscores', 'id' => $id]));
         }
 
         $h4areportparser = new H4aReportParser($sGID);
@@ -56,7 +58,7 @@ class LookupScoresController extends Backend
 
             Message::addError('Fehler beim Abrufen des Spielberichts für Spiel '.$objCalendarEvent->gGameNo.' ['.$objCalendarEvent->title.']: '.$e->getMessage());
 
-            $this->redirect($this->getReferer());
+        $this->redirect($this->urlGenerator->generate('contao_backend', ['do' => 'calendar', 'table' => 'tl_h4a_playerscores', 'id' => $id]));
         }
 
         // Spieler der Heimmannschaft speichern
@@ -69,6 +71,7 @@ class LookupScoresController extends Backend
 
         $this->entityCacheTags->invalidateTagsFor($objCalendarEvent);
 
-        $this->redirect($this->getReferer());
+        $this->redirect($this->urlGenerator->generate('contao_backend', ['do' => 'calendar', 'table' => 'tl_h4a_playerscores', 'id' => $id]));
+
     }
 }

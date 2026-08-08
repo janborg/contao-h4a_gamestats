@@ -11,9 +11,11 @@ services:
         arguments: 
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.error'
+            - '@router'
 
     Janborg\H4aGamestats\Backend\LookupTimelineController:
         public: true
         arguments: 
             - '@contao.cache.entity_tags'
             - '@monolog.logger.contao.error'
+            - '@router'
