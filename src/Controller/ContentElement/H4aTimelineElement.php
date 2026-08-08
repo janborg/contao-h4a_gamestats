@@ -39,7 +39,7 @@ class H4aTimelineElement extends AbstractContentElementController
 
     public function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
     {
-        $event = CalendarEventsModel::findByIdOrAlias($model->h4a_event_id);
+        $event = CalendarEventsModel::findById($model->handballnet_game_id);
 
         if ($this->scopeMatcher->isBackendRequest($request)) {
             $template = new BackendTemplate('be_wildcard');

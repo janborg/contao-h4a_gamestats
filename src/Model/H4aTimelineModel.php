@@ -119,6 +119,6 @@ class H4aTimelineModel extends Model
             [$pid],
         );
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAllAssociative();
     }
 }

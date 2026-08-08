@@ -1,0 +1,10 @@
+# Fields for tl_module (h4a event report module)
+
+tl_module:
+    showGamescores:
+        0: 'Show game statistics'
+        1: 'Displays the game statistics (scorers, penalties, cards) in the event report'
+
+    showTimeline:
+        0: 'Show game timeline'
+        1: 'Displays the game timeline in the event report'

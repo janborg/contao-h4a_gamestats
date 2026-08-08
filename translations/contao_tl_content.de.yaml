@@ -1,0 +1,28 @@
+# Fields and legends for tl_content (h4a content elements)
+
+tl_content:
+    h4a_legend: 'handball4all Einstellungen'
+
+    team_calendar:
+        0: 'Kalender'
+        1: 'Wählen Sie den Kalender, in dem das Spiel angelegt ist'
+
+    handballnet_game_season:
+        0: 'Saison'
+        1: 'Wählen Sie die Saison, in der das Spiel stattfindet'
+
+    handballnet_game_tournament:
+        0: 'Wettbewerb'
+        1: 'Wählen Sie den Wettbewerb (Liga/Turnier), in dem das Spiel stattfindet'
+
+    handballnet_game_id:
+        0: 'Spiel'
+        1: 'Wählen Sie das Spiel, dessen Daten Sie anzeigen möchten'
+
+    my_team_id:
+        0: 'Team-ID'
+        1: 'Wählen Sie Ihr Team, für das die Saisonstatistik erstellt werden soll'
+
+    my_team_name:
+        0: 'Team-Name'
+        1: 'Wählen Sie den Namen Ihres Teams'

@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
         'sorting' => [
             'mode' => DataContainer::MODE_PARENT,
             'flag' => DataContainer::SORT_INITIAL_LETTERS_ASC,
-            'headerFields' => ['title', 'startDate', 'starttime', 'sGID', 'gHomeGoals', 'gGuestGoals'],
+            'headerFields' => ['title', 'startDate', 'startTime', 'homeGoals', 'awayGoals'],
             'fields' => ['matchtime'],
             'panelLayout' => 'sort;filter',
             'child_record_callback' => ['tl_h4a_timeline', 'listTimelineActions',
@@ -52,39 +52,19 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
         ],
 
         'global_operations' => [
-            'all' => [
-                'label' => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href' => 'act=select',
-                'class' => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
-            ],
+            'all',
             'lookup_timeline' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['lookup_timeline'],
                 'href' => 'key=lookup_timeline',
                 'class' => 'header_lookup_timeline',
                 'icon' => 'bundles/janborgh4agamestats/icon/data-update.svg',
-                'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
+                'primary' => true
             ],
         ],
 
         'operations' => [
-            'edit' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['edit'],
-                'href' => 'act=edit',
-                'icon' => 'edit.gif',
-            ],
-            'delete' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['delete'],
-                'href' => 'act=delete',
-                'icon' => 'delete.gif',
-                'attributes' => 'onclick="if(!confirm(\''.($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null).'\'))return false;Backend.getScrollOffset()"',
-            ],
-            'show' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['show'],
-                'href' => 'act=show',
-                'icon' => 'show.gif',
-                'attributes' => 'style="margin-right:3px"',
-            ],
+            'edit',
+            'delete',
+            'show',
         ],
     ],
 
@@ -105,40 +85,34 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
         'matchtime' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['matchtime'],
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50'],
             'sql' => "varchar(32) unsigned NOT NULL default ''",
         ],
         'currentscore' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['currentscore'],
             'inputType' => 'text',
             'eval' => ['maxlength' => 7, 'tl_class' => 'w50'],
             'sql' => "varchar(7) unsigned NOT NULL default ''",
         ],
         'action_team' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_team'],
             'filter' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 48, 'tl_class' => 'w50'],
             'sql' => "varchar(48) NOT NULL default ''",
         ],
         'action_player' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_player'],
             'filter' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 48, 'tl_class' => 'w50'],
             'sql' => "varchar(48) NOT NULL default ''",
         ],
         'action_player_number' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_player_number'],
             'filter' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 2, 'tl_class' => 'w50'],
             'sql' => "varchar(2) NOT NULL default ''",
         ],
         'action_type' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_timeline']['action_type'],
             'filter' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 32, 'tl_class' => 'w50'],

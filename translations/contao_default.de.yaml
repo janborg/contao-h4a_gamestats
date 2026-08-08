@@ -1,0 +1,17 @@
+# Content elements (CTE) and front end modules (FMD)
+
+CTE:
+    h4a_gamescore:
+        0: 'Spielstatistik Team'
+        1: 'Erzeugt die Spielstatistik für das angegebene Team'
+    h4a_seasonscore:
+        0: 'Saisonstatistik Team'
+        1: 'Erzeugt die Saisonstatistik für das angegebene Team'
+    h4a_timeline:
+        0: 'Spielverlauf'
+        1: 'Erzeugt die Grafik zum Spielverlauf für das angegebene Spiel'
+
+FMD:
+    h4a_event_report:
+        0: 'Event Report'
+        1: 'Fügt der Eventreader-Seite die Spielstatistiken hinzu.'

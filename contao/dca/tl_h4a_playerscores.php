@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
         'sorting' => [
             'mode' => DataContainer::MODE_PARENT,
             'flag' => DataContainer::SORT_ASC,
-            'headerFields' => ['title', 'startDate', 'starttime', 'sGID', 'gHomeGoals', 'gGuestGoals'],
+            'headerFields' => ['title', 'startDate', 'starttime', 'homeGoals', 'awayGoals'],
             'fields' => ['is_home_or_guest', 'goals'],
             'panelLayout' => 'sort;filter',
             'child_record_callback' => ['tl_h4a_playerscores', 'listPlayerScores',
@@ -52,39 +52,19 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
         ],
 
         'global_operations' => [
-            'all' => [
-                'label' => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href' => 'act=select',
-                'class' => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
-            ],
+            'all',
             'lookup_scores' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['lookup_scores'],
                 'href' => 'key=lookup_scores',
                 'class' => 'header_lookup_scores',
                 'icon' => 'bundles/janborgh4agamestats/icon/data-update.svg',
-                'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
+                'primary' => true
             ],
         ],
 
         'operations' => [
-            'edit' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['edit'],
-                'href' => 'act=edit',
-                'icon' => 'edit.gif',
-            ],
-            'delete' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['delete'],
-                'href' => 'act=delete',
-                'icon' => 'delete.gif',
-                'attributes' => 'onclick="if(!confirm(\''.($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null).'\'))return false;Backend.getScrollOffset()"',
-            ],
-            'show' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['show'],
-                'href' => 'act=show',
-                'icon' => 'show.gif',
-                'attributes' => 'style="margin-right:3px"',
-            ],
+            'edit',
+            'delete',
+            'show',
         ],
     ],
 
@@ -105,14 +85,12 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
         'number' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['number'],
             'sorting' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 2, 'tl_class' => 'w50'],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'team_name' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['team_name'],
             'sorting' => true,
             'filter' => true,
             'search' => true,
@@ -122,7 +100,6 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
         ],
 
         'name' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['name'],
             'sorting' => true,
             'search' => true,
             'inputType' => 'text',
@@ -131,56 +108,48 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
         ],
 
         'goals' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['goals'],
             'inputType' => 'text',
             'eval' => ['maxlength' => 2, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(2) unsigned NOT NULL default '0'",
         ],
 
         'penalty_goals' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['penalty_goals'],
             'inputType' => 'text',
             'eval' => ['maxlength' => 2, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(2) unsigned NOT NULL default '0'",
         ],
 
         'penalty_tries' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['penalty_tries'],
             'inputType' => 'text',
             'eval' => ['maxlength' => 2, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(2) unsigned NOT NULL default '0'",
         ],
 
         'yellow_card' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['yellow_card'],
             'inputType' => 'text',
             'eval' => ['maxlength' => 1, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(1) unsigned NOT NULL default '0'",
         ],
 
         'suspensions' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['suspensions'],
             'inputType' => 'text',
             'eval' => ['maxlength' => 1, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(1) unsigned NOT NULL default '0'",
         ],
 
         'red_card' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['red_card'],
             'inputType' => 'text',
             'eval' => ['maxlength' => 10, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
 
         'blue_card' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['blue_card'],
             'inputType' => 'text',
             'eval' => ['maxlength' => 1, 'rgxp' => 'natural', 'tl_class' => 'w50'],
             'sql' => "int(1) unsigned NOT NULL default '0'",
         ],
 
         'is_home_or_guest' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_h4a_playerscores']['home_or_guest'],
             'default' => 1,
             'search' => true,
             'inputType' => 'radio',

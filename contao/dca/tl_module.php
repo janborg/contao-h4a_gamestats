@@ -31,7 +31,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields'] = array_merge(
         'sql' => "char(1) NOT NULL default ''",
     ]],
     ['showTimeline' => [
-        'label' => &$GLOBALS['TL_LANG']['tl_table_name']['showTimeline'],
+        'label' => &$GLOBALS['TL_LANG']['tl_module']['showTimeline'],
         'default' => 1,
         'inputType' => 'checkbox',
         'eval' => ['tl_class' => 'w50 clr'],
