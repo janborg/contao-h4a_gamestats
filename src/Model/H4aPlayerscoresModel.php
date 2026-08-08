@@ -314,6 +314,6 @@ class H4aPlayerscoresModel extends Model
             [$pid, $home_guest],
         );
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAllAssociative();
     }
 }
