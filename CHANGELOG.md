@@ -1,5 +1,22 @@
 # Changelog
 
+## [4.0.0](https://github.com/janborg/contao-h4a_gamestats/compare/v3.0.5...v4.0.0) (2026-08-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* Make the bbundle compatible to h4a_tabellen v5 (handball.net) ([#59](https://github.com/janborg/contao-h4a_gamestats/issues/59))
+
+### Features
+
+* Make the bbundle compatible to h4a_tabellen v5 (handball.net) ([#59](https://github.com/janborg/contao-h4a_gamestats/issues/59)) ([5492c5d](https://github.com/janborg/contao-h4a_gamestats/commit/5492c5ddbb4f8bc434dba69bafe60ea1d8d8ac54))
+* use handballnet API instead pdf-report parser ([#61](https://github.com/janborg/contao-h4a_gamestats/issues/61)) ([29ed751](https://github.com/janborg/contao-h4a_gamestats/commit/29ed7518e0e88ef00199b00d23e6ab4852acdec7))
+
+
+### Bug Fixes
+
+* require contao-h4a_tabellen v5 ([#62](https://github.com/janborg/contao-h4a_gamestats/issues/62)) ([74c8e40](https://github.com/janborg/contao-h4a_gamestats/commit/74c8e4041545fce14616504b08aaa2d1d9301182))
+
 ## [3.0.5](https://github.com/janborg/contao-h4a_gamestats/compare/v3.0.4...v3.0.5) (2026-07-29)
 
 
