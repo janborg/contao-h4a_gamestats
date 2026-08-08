@@ -52,12 +52,11 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
         ],
 
         'global_operations' => [
-            'all' ,
+            'all',
             'lookup_scores' => [
                 'href' => 'key=lookup_scores',
                 'class' => 'header_lookup_scores',
                 'icon' => 'bundles/janborgh4agamestats/icon/data-update.svg',
-                'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
                 'primary' => true
             ],
         ],

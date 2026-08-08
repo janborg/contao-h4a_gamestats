@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
         'sorting' => [
             'mode' => DataContainer::MODE_PARENT,
             'flag' => DataContainer::SORT_INITIAL_LETTERS_ASC,
-            'headerFields' => ['title', 'startDate', 'starttime', 'homeGoals', 'awayGoals'],
+            'headerFields' => ['title', 'startDate', 'startTime', 'homeGoals', 'awayGoals'],
             'fields' => ['matchtime'],
             'panelLayout' => 'sort;filter',
             'child_record_callback' => ['tl_h4a_timeline', 'listTimelineActions',
@@ -57,7 +57,6 @@ $GLOBALS['TL_DCA']['tl_h4a_timeline'] = [
                 'href' => 'key=lookup_timeline',
                 'class' => 'header_lookup_timeline',
                 'icon' => 'bundles/janborgh4agamestats/icon/data-update.svg',
-                'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
                 'primary' => true
             ],
         ],
