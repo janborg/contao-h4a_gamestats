@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.0](https://github.com/janborg/contao-h4a_gamestats/compare/v4.0.1...v4.1.0) (2026-08-10)
+
+
+### Features
+
+* add migrations for content element field switch to handball.net ([#66](https://github.com/janborg/contao-h4a_gamestats/issues/66)) ([b53fad1](https://github.com/janborg/contao-h4a_gamestats/commit/b53fad10d50808add4d2cdeb2d705f4ec8515c87))
+
 ## [4.0.1](https://github.com/janborg/contao-h4a_gamestats/compare/v4.0.0...v4.0.1) (2026-08-08)
 
 
