@@ -1,0 +1,19 @@
+services:
+    _defaults:
+        autoconfigure: true
+
+    _instanceof:
+        Contao\CoreBundle\Framework\FrameworkAwareInterface:
+            calls:
+                - ['setFramework', ['@contao.framework']]
+
+    # Registriere die Migrationen für das Bundle
+    Janborg\H4aGamestats\Migration\Version400\MigrateGameScoreAndTimelineElementsMigration:
+        public: true
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    Janborg\H4aGamestats\Migration\Version400\MigrateSeasonScoreElementsMigration:
+        public: true
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
