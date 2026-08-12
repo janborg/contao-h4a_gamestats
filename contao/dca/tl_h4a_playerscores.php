@@ -70,7 +70,7 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{player_legend},team_name,name,is_home_or_guest,number;{score_legend},goals,penalty_goals,penalty_tries,yellow_card,suspensions,red_card,blue_card',
+        'default' => '{team_legend},team_name,team_id,is_home_or_guest;{player_legend},name,player_id,number;{score_legend},goals,penalty_goals,penalty_tries,yellow_card,suspensions,red_card,blue_card',
     ],
 
     // Fields
@@ -90,12 +90,29 @@ $GLOBALS['TL_DCA']['tl_h4a_playerscores'] = [
             'eval' => ['maxlength' => 2, 'tl_class' => 'w50'],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
+        'player_id' => [
+            'sorting' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'readonly' => true, 'tl_class' => 'w50'],
+            'sql' => "varchar(255) NOT NULL default ''",
+        ],
+
         'team_name' => [
             'sorting' => true,
             'filter' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => "varchar(255) NOT NULL default ''",
+        ],
+
+        'team_id' => [
+            'sorting' => true,
+            'filter' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'readonly' => true, 'tl_class' => 'w50'],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
 

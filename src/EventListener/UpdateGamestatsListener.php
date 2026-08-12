@@ -59,10 +59,10 @@ class UpdateGamestatsListener
         }
 
         // Spieler der Heim Mannschaft speichern
-        H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->home_team, $this->calendarEvent->id, $this->gamestatsParser->heim_name, 1);
+        H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->home_team, $this->calendarEvent->id, $this->gamestatsParser->heim_name, 1, $this->gamestatsParser->heim_id);
 
         // Spieler der Gast Mannschaft speichern
-        H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->guest_team, $this->calendarEvent->id, $this->gamestatsParser->gast_name, 2);
+        H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->guest_team, $this->calendarEvent->id, $this->gamestatsParser->gast_name, 2, $this->gamestatsParser->gast_id);
 
         // Timeline des Spiels speichern
         H4aTimelineModel::saveTimeline($this->gamestatsParser->timeline, $this->calendarEvent->id);
