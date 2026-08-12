@@ -20,7 +20,9 @@ use Contao\System;
  * @property int    $id
  * @property int    $pid
  * @property int    $tstamp
+ * @property string $player_id
  * @property string $number
+ * @property string $team_id
  * @property string $team_name
  * @property string $name
  * @property int    $goals
@@ -77,8 +79,9 @@ class H4aPlayerscoresModel extends Model
      * @param int          $pid
      * @param string       $teamname
      * @param int          $home_guest
+     * @param string       $team_id
      */
-    public static function savePlayerscores($players, $pid, $teamname, $home_guest): void
+    public static function savePlayerscores($players, $pid, $teamname, $home_guest, $team_id = ''): void
     {
         foreach ($players as $player) {
             $suspensions = (int) ($player['suspensions'] ?? 0);
@@ -95,7 +98,9 @@ class H4aPlayerscoresModel extends Model
             $objPlayerscore->pid = $pid;
             $objPlayerscore->tstamp = time();
             $objPlayerscore->team_name = $teamname;
+            $objPlayerscore->team_id = $team_id;
             $objPlayerscore->is_home_or_guest = $home_guest;
+            $objPlayerscore->player_id = $player['player_id'] ?? '';
             $objPlayerscore->number = $player['number'];
             $objPlayerscore->name = $player['name'];
             $objPlayerscore->goals = $player['goals'];

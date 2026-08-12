@@ -61,10 +61,10 @@ class LookupScoresController extends Backend
         }
 
         // Spieler der Heimmannschaft speichern
-        H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->home_team, $objCalendarEvent->id, $this->gamestatsParser->heim_name, 1);
+        H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->home_team, $objCalendarEvent->id, $this->gamestatsParser->heim_name, 1, $this->gamestatsParser->heim_id);
 
         // Spieler der Gastmannschaft speichern
-        H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->guest_team, $objCalendarEvent->id, $this->gamestatsParser->gast_name, 2);
+        H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->guest_team, $objCalendarEvent->id, $this->gamestatsParser->gast_name, 2, $this->gamestatsParser->gast_id);
 
         Message::addConfirmation('Playerscores für Spiel '.$objCalendarEvent->handballnet_game_id.' ['.$objCalendarEvent->title.'] gespeichert.');
 

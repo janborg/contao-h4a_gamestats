@@ -27,6 +27,8 @@ use Janborg\H4aTabellen\HandballnetApiClient;
  * @property array<int, array<string, mixed>> $timeline
  * @property string                           $heim_name
  * @property string                           $gast_name
+ * @property string                           $heim_id
+ * @property string                           $gast_id
  */
 class HandballnetGamestatsParser
 {
@@ -48,6 +50,10 @@ class HandballnetGamestatsParser
     public string $heim_name = '';
 
     public string $gast_name = '';
+
+    public string $heim_id = '';
+
+    public string $gast_id = '';
 
     /**
      * @var array<int, array<string, mixed>>
@@ -92,6 +98,9 @@ class HandballnetGamestatsParser
         $this->heim_name = (string) ($summary['homeTeam']['name'] ?? '');
         $this->gast_name = (string) ($summary['awayTeam']['name'] ?? '');
 
+        $this->heim_id = (string) ($summary['homeTeam']['id'] ?? '');
+        $this->gast_id = (string) ($summary['awayTeam']['id'] ?? '');
+
         $this->home_team = array_merge(
             $this->mapPlayers($lineup['home'] ?? [], $this->heim_name),
             $this->mapOfficials($lineup['homeOfficials'] ?? [], $this->heim_name),
@@ -119,6 +128,7 @@ class HandballnetGamestatsParser
         foreach ($players as $player) {
             $mapped[] = [
                 'team' => $teamName,
+                'player_id' => (string) ($player['id'] ?? ''),
                 'number' => (string) ($player['number'] ?? ''),
                 'name' => trim(($player['firstname'] ?? '').' '.($player['lastname'] ?? '')),
                 'goals' => (int) ($player['goals'] ?? 0),
@@ -146,6 +156,7 @@ class HandballnetGamestatsParser
         foreach ($officials as $official) {
             $mapped[] = [
                 'team' => $teamName,
+                'player_id' => (string) ($official['id'] ?? ''),
                 // position "OA".."OD" -> "A".."D"
                 'number' => substr((string) ($official['position'] ?? ''), -1),
                 'name' => trim(($official['firstname'] ?? '').' '.($official['lastname'] ?? '')),

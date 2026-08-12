@@ -1,6 +1,7 @@
 # Fields, legends and operations for tl_h4a_playerscores
 
 tl_h4a_playerscores:
+    team_legend: 'Team data'
     player_legend: 'Player data'
     score_legend: 'Goals, penalties, cards'
 
@@ -14,8 +15,16 @@ tl_h4a_playerscores:
         0: 'Team name'
         1: ''
 
+    team_id:
+        0: 'handball.net team ID'
+        1: ''
+
     name:
         0: 'Player name'
+        1: ''
+
+    player_id:
+        0: 'handball.net player ID'
         1: ''
 
     goals:

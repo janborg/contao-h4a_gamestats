@@ -62,10 +62,10 @@ class UpdateH4aScoresCron
             }
 
             // Spieler der Heim Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->home_team, $objEvent->id, $this->gamestatsParser->heim_name, 1);
+            H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->home_team, $objEvent->id, $this->gamestatsParser->heim_name, 1, $this->gamestatsParser->heim_id);
 
             // Spieler der Gast Mannschaft speichern
-            H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->guest_team, $objEvent->id, $this->gamestatsParser->gast_name, 2);
+            H4aPlayerscoresModel::savePlayerscores($this->gamestatsParser->guest_team, $objEvent->id, $this->gamestatsParser->gast_name, 2, $this->gamestatsParser->gast_id);
 
             $this->contaoCronLogger->info('Gamescores für Spiel '.$objEvent->handballnet_game_id
                     .' '.$this->gamestatsParser->heim_name.' - '.$this->gamestatsParser->gast_name
