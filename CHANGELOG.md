@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.0](https://github.com/janborg/contao-h4a_gamestats/compare/v4.1.0...v4.2.0) (2026-08-13)
+
+
+### Features
+
+* Spieler- und Team-ID der Playerscores erfassen ([311b03d](https://github.com/janborg/contao-h4a_gamestats/commit/311b03d76ca483149d13f8fb20a02c0dfff1ce5c))
+
 ## [4.1.0](https://github.com/janborg/contao-h4a_gamestats/compare/v4.0.1...v4.1.0) (2026-08-10)
 
 
